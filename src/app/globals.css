@@ -1,0 +1,9 @@
+.header_font_one{
+    font-size: clamp(12px, 4vw, 14px);
+}
+.header_font_two{
+    font-size: clamp(10px, 4vw, 12px);
+}
+.header_font_three{
+    font-size: clamp(13px, 4vw, 16px);
+}

@@ -1,48 +1,33 @@
- export default function StoriesThatMatters() {
-    const stories =[{
-        id:1,
-        name:"ajay",
-        description:"story 1",
-        image:"image1.jpg",
-        likes:100,
-        comments:50,
-        views:200 
-    },
-    {
-        id:2,
-        name:"ajay",
-        description:" ",
-        image:"image1.jpg",
-        likes:100,
-        comments:50,
-        views:200 
-    },
-    {
-        id:3,
-        name:"ajay",
-        description:"story 1",
-        image:"image1.jpg",
-        likes:100,
-        comments:50,
-        views:200 
-    }]
+ 
+ import {fetchStoriesMatters} from "../../../../services/Services"
+import avatar from "../../../../../public/a.png";
+import Image from "next/image";
+export default async function StoriesThatMatters() {
+  const res = await fetchStoriesMatters();
+  const stories = res.darkTruths;
+  console.log(stories,'stories');
   return (
     <>
-      <div className="container">
-        <h1>Stories That Matter</h1>
-          <div className="row g-3">
-          {stories.map((story) => (
-            <div className="col-4 card" key={story.id}>
-              <h2>{story.name}</h2>
-              <p>{story.description}</p>
-               <p>Likes: {story.likes}</p>
-              <p>Comments: {story.comments}</p>
-              <p>Views: {story.views}</p>
-            </div>
+         <div className="row mt-5">
+          {stories.map((items, index) => (
+            <div className="col-4" key={index}>
+              <div className="card oval border-0 py-2 m-2">
+                <div className="d-flex justify-content-between align-items-center" style={{zIndex:999}}>
+                  <div>
+                    <h1 className="header_font_one fw-semibold">{items.yourStoryTitle}</h1>
+                  </div>
+                  <div>
+                    <Image src={avatar} alt="Profile Pic" height={50} width={50} style={{ borderRadius:'50%'}} />
+                  </div>
+                </div>
+                <div></div>
+              </div>
+              <div className="card p-2 mt-3">
+                 <p className="header_font_three">{items.chroniclesOfYou}</p>
+              </div>
+            </div> 
           ))}
-          </div>
-      
-      </div>
-    </>
-  )
+        </div>
+     </>
+  );
 }
