@@ -2,8 +2,9 @@
 export default function Layout({ children }) {
     return (
     <>
-    hello
-    {children}
+    <div className="pt-5">
+     {children}
+    </div>
     </>
   )
 }

@@ -14,7 +14,6 @@ export async function GET(req){
       } else {
         return NextResponse.json({ message: "No token found" }, { status: 401 });
       }
-      console.log('const userData = await verifyToken(token);');
     const userData = await verifyToken(token);
     console.log(userData,'userData');
     const user = await User.findById(userData.userId);

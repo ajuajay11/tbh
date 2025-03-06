@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
+// import Cookies from 'js-cookie';
 
-const isAuthenticated = true;
+ 
 export function middleware(request) {
-  if (!isAuthenticated) {
-    if (["/login"].includes(request.nextUrl.pathname)) {
+  
+ const token = request.cookies.get('token')?.value; // Access the token from cookies
+  if (token) {
+    if (["/auth/login", "/auth/register"].includes(request.nextUrl.pathname) ) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
-  }  
-  if (isAuthenticated) {
+  }
+  if (token) {
     return NextResponse.next();
   }
-  if (isAuthenticated) {
+  if (!token) {
     if (["/dashboard"].includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL("/login", request.url));
     }

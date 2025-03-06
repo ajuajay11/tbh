@@ -17,13 +17,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Preloader>
-         <main style={{}}>
-         <Header/>
-          <div className="container">
-            <div className="row"></div>
-            {children}
-          </div>
-          <Footer/>
+         <main>
+          <Header/>
+              {children}
+           <Footer/>
          </main>
           </Preloader>
       </body>
