@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import ChroniclesSchema from "@/models/chroniclesSchema";
 
-export async function DELETE(request: NextRequest,
-  { params }: { params: { id: string } }
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
-console.log(request);
+    // Await the params since it's now a Promise
+    const { id } = await params;
+    console.log(request);
 
     const deleted = await ChroniclesSchema.findByIdAndDelete(id);
     if (!deleted) {
