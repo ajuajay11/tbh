@@ -28,7 +28,7 @@ export interface IUserStory extends Document {
   comments: boolean;
   emailAllowed: boolean;
   user: string;
-  likeCount: number, // ✅ New field
+  likeCount: number,
   createdAt?: Date;
 }
 
