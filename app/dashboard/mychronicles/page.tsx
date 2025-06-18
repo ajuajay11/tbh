@@ -30,6 +30,7 @@ export default async function page() {
             <div className="text-end mb-20">
                 <CreateChronicles />
             </div>
+            <div>sss</div>
             {posts.map((item) => (
                 <div className="card p-4 border mt-3" key={item._id}>
                     {item.yourStoryTitle}
