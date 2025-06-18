@@ -14,7 +14,9 @@ type Chronicle = {
 export default async function page() {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-    const res = await fetch('/api/getAllChroniclesByID', {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const res = await fetch(`${baseUrl}/api/getAllChronicles`, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
