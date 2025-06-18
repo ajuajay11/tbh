@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import UserComment from "@/app/components/chronicles/UserComments";
 import Userlikes from "./Userlikes";
  import { getBaseUrl } from "@/lib/getBaseUrl"; // adjust path as needed
-
+ 
 type Comment = {
     _id: string;
     comment?: string;
@@ -39,20 +39,22 @@ export default async function Chronicles() {
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
+  console.log(getBaseUrl(),'getBaseUrl()getBaseUrl()getBaseUrl()');
   
-    const res = await fetch(`${getBaseUrl()}/api/getAllChroniclesByID`, {
+    const res = await fetch(`${getBaseUrl()}/api/getAllChronicles`, {
         headers,
         cache: 'no-store',
     });
     const json = await res.json();
     const posts: Chronicle[] = json.allChronicles || json.limitedChronicles;
+  console.log(posts);
   
     return (
         <section className="min-h-screen bg-gray-950 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-3xl md:text-4xl font-bold text-center text-white mb-10 tracking-wide"> Share Your Story </h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {posts.map((item) => (
+                    {posts?.map((item) => (
                         <article key={item._id} className="bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                             <div className="p-5">
                                 <h2 className="text-lg font-semibold text-white mb-2 line-clamp-2"> {item.yourStoryTitle} </h2>

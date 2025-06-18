@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import CreateChronicles from "@/app/components/chronicles/CreateChronicles/index"
+import { getBaseUrl } from "@/lib/getBaseUrl";
 type Chronicle = {
     _id: string;
     yourStoryTitle: string;
@@ -14,9 +15,8 @@ type Chronicle = {
 export default async function page() {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-    const res = await fetch(`${baseUrl}/api/getAllChroniclesByID`, {
+ 
+    const res = await fetch(`${getBaseUrl()}/api/getAllChroniclesByID`, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
