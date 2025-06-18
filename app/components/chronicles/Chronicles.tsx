@@ -38,8 +38,9 @@ export default async function Chronicles() {
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
-
-    const res = await fetch('/api/getAllChronicles', {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+ 
+    const res = await fetch(`${baseUrl}/api/getAllChronicles`, {
         headers,
         cache: 'no-store',
     });

@@ -16,7 +16,7 @@ export default async function page() {
     const token = cookieStore.get('token')?.value;
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const res = await fetch(`${baseUrl}/api/getAllChronicles`, {
+    const res = await fetch(`${baseUrl}/api/getAllChroniclesByID`, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
