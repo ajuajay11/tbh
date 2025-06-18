@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import User from "@/models/users";
 import connectToDatabase from "@/lib/db";
+import bcrypt from "bcryptjs"; // or "bcrypt"
 
 // Define the shape of the expected request body
 interface RequestBody {
@@ -11,7 +12,7 @@ interface RequestBody {
   lastname: string;
   gender: string;
   profilePicture?: string;
-  age?: string;
+  age?: number;
 }
 
 export async function POST(request: NextRequest) {
@@ -31,14 +32,16 @@ export async function POST(request: NextRequest) {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
-        { message: "User alrdy exist " },
+        { message: "User already exist, Please try to register with a different Email address" },
         { status: 400 }
       );
     }
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
+
     // Create a new user
     const newUser = new User({
       email,
-      password,
+      password:hashedPassword,
       firstname,
       lastname,
       gender,

@@ -8,15 +8,13 @@ export async function GET(request: NextRequest) {
     await connectToDatabase();
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
-    console.log(token,'token ittitt illa');
+    console.log(token,'token');
     if (!token) {
-      const limitedChronicles = await UserVibesModel.find().sort({ createdAt: -1 }).limit(5);
       return NextResponse.json(
-        {message: "Please subscribe to get all conversations",limitedChronicles}, 
-        { status: 201 } 
+        {message: "Please login"}, 
+        { status: 400 } 
     );
     }
-
     const userData = await verifyToken(token);
     if (!userData) {
       return NextResponse.json(
@@ -24,8 +22,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Filter by user to avoid returning other users' data
-    const allChronicles = await UserVibesModel.find();
+    const allChronicles = await UserVibesModel.find({
+      user: userData.userId, // ✅ Correct field
+    });
     return NextResponse.json(
       {
         message: "Welcome back!",

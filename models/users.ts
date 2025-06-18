@@ -7,7 +7,8 @@ export interface IUser extends Document {
   lastname: string;
   gender: string;
   profilePicture?: string;
-  age?: string;
+  age?: number;
+  username?: string;
   role: 'unsubscribed' | 'subscribed';
   createdAt: Date;
 }
@@ -19,7 +20,8 @@ const UserSchema: Schema<IUser> = new Schema({
   lastname: { type: String, required: true },
   gender: { type: String, required: true },
   profilePicture: { type: String },
-  age: { type: String },
+  age: { type: Number },
+  username:{type:String},
   role: { type: String, enum: ['unsubscribed', 'subscribed'], default: 'unsubscribed' },
   createdAt: { type: Date, default: Date.now }
 });

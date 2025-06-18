@@ -49,7 +49,6 @@ export async function POST(
     const existingLikeIndex = findPost.UserLikes.findIndex(
       (likeEntry) => likeEntry.user.userId === getUser._id.toString()
     );
-    
     if (existingLikeIndex !== -1) {
       // Update existing like status
       findPost.UserLikes[existingLikeIndex].like = isLiked;
@@ -68,7 +67,7 @@ export async function POST(
     const likeCount = findPost.UserLikes.filter((e) => e.like === true).length;
     findPost.likeCount = likeCount;
     // ADD THIS LINE - Save the document to persist changes
-    await findPost.save();
+    await findPost.save({ validateBeforeSave: false });
     return NextResponse.json(
       { message: "Comment Added Succesfully", findPost,likeCount },
       { status: 200 }

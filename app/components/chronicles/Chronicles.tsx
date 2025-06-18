@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
-import UserComments from "./UserComments";
+import UserComment from "@/app/components/chronicles/UserComments";
 import Userlikes from "./Userlikes";
-
+ 
 type Comment = {
     _id: string;
     comment?: string;
@@ -30,7 +30,7 @@ type Chronicle = {
 };
 
 export default async function Chronicles() {
-    const headers: HeadersInit = {
+     const headers: HeadersInit = {
         'Content-Type': 'application/json',
     };
     const cookieStore = await cookies();
@@ -39,32 +39,23 @@ export default async function Chronicles() {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await fetch('http://localhost:3000/api/getAllChronicles', {
+    const res = await fetch('/api/getAllChronicles', {
         headers,
         cache: 'no-store',
     });
-    if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.status}`);
-    }
     const json = await res.json();
     const posts: Chronicle[] = json.allChronicles || json.limitedChronicles;
-
+console.log(posts,'posts');
+ 
     return (
         <section className="min-h-screen bg-gray-950 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl md:text-4xl font-bold text-center text-white mb-10 tracking-wide">
-                    Share Your Story
-                </h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-center text-white mb-10 tracking-wide"> Share Your Story </h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {posts.map((item) => (
-                        <article
-                            key={item._id}
-                            className="bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-                        >
+                        <article key={item._id} className="bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                             <div className="p-5">
-                                <h2 className="text-lg font-semibold text-white mb-2 line-clamp-2">
-                                    {item.yourStoryTitle}
-                                </h2>
+                                <h2 className="text-lg font-semibold text-white mb-2 line-clamp-2"> {item.yourStoryTitle} </h2>
                                 <p className="text-xs text-gray-500 mb-3">
                                     {new Date(item.createdAt).toLocaleDateString('en-US', {
                                         month: 'short',
@@ -79,7 +70,11 @@ export default async function Chronicles() {
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <Userlikes />
+                                         {item.UserComments && (
+                                    <div className="mt-4 pt-3 border-t border-gray-700">
+                                         <Userlikes Pid={item._id} likeCount={item.likeCount} likes={item.UserLikes}/>
+                                    </div>
+                                )}
                                         <span className="text-xs text-gray-400">
                                             {item.likeCount}
                                         </span>
@@ -90,9 +85,9 @@ export default async function Chronicles() {
                                         </span>
                                     )}
                                 </div>
-                                {item.comments && (
+                                {item.UserComments && (
                                     <div className="mt-4 pt-3 border-t border-gray-700">
-                                        <UserComments posts={posts} />
+                                        <UserComment Pid={item._id} comments={item.UserComments} />
                                     </div>
                                 )}
                             </div>
