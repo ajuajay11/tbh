@@ -3,10 +3,23 @@ import axios from "axios"
 import Cookies from "js-cookie";
 // import { useRouter } from "next/navigation"; // ✅ Correct client-side hook
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import Image from "next/image";
+interface User {
+    email: string;
+    firstname: string;
+    lastname: string;
+    gender: string;
+    age: number;
+    username: string;
+    profilePicture?: string; // <- ADD THIS LINE
+}
+interface UserResponse {
+    getUser: User;
+}
 
 export default function Page() {
-const [user, setUser] = useState<any>(null)
-    
+    const [user, setUser] = useState<UserResponse | null>(null);
+
     useEffect(() => {
         const fetchUser = async () => {
             const res = await fetch("/api/user", {
@@ -29,28 +42,30 @@ const [user, setUser] = useState<any>(null)
         gender: "",
         age: 0,
         username: "",
-        profilePicture: null as File | null
-    })
+        profilePicture: null as File | null,
+    });
 
     // Populate form with user data when loaded
     useEffect(() => {
-        if (user && user.getUser) {
-            setUpdateProfile({
-                email: user.getUser.email || "",
-                firstname: user.getUser.firstname || "",
-                lastname: user.getUser.lastname || "",
-                gender: user.getUser.gender || "",
-                age: user.getUser.age || 0,
-                username: user.getUser.username || "",
-                profilePicture: null
-            });
-            
-            // Show existing profile picture as preview
-            if (user.getUser.profilePicture) {
-                setPreviewUrl(user.getUser.profilePicture);
+        const userData = user?.getUser;
+        if (userData) {
+            setUpdateProfile(prev => ({
+            ...prev,
+            email: userData.email || "",
+            firstname: userData.firstname || "",
+            lastname: userData.lastname || "",
+            gender: userData.gender || "",
+            age: userData.age || 0,
+            username: userData.username || "",
+            profilePicture: null  // keep this null unless user uploads a new file
+            }));
+
+            if (userData.profilePicture) {
+            setPreviewUrl(userData.profilePicture); // string URL
             }
         }
-    }, [user]);
+        }, [user]);
+
 
     // State for image preview
     const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -146,9 +161,10 @@ const [user, setUser] = useState<any>(null)
                     </label>
                     {previewUrl && (
                         <div className="mb-3 flex justify-center">
-                            <img
+                            <Image
                                 src={previewUrl}
                                 alt="Profile preview"
+                                width={100} height={100}
                                 className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
                             />
                         </div>

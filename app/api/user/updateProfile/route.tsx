@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     await getUser.save();
 
     // Return updated user (exclude sensitive data)
-    const { password, ...userResponse } = getUser.toObject();
+    const { ...userResponse } = getUser.toObject();
     
     return NextResponse.json({ 
       message: "User updated successfully", 
