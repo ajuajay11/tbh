@@ -1,7 +1,8 @@
 import { cookies } from "next/headers";
 import UserComment from "@/app/components/chronicles/UserComments";
 import Userlikes from "./Userlikes";
- 
+ import { getBaseUrl } from "@/lib/getBaseUrl"; // adjust path as needed
+
 type Comment = {
     _id: string;
     comment?: string;
@@ -38,16 +39,14 @@ export default async function Chronicles() {
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
- 
-    const res = await fetch(`${baseUrl}/api/getAllChronicles`, {
+  
+    const res = await fetch(`${getBaseUrl()}/api/getAllChroniclesByID`, {
         headers,
         cache: 'no-store',
     });
     const json = await res.json();
     const posts: Chronicle[] = json.allChronicles || json.limitedChronicles;
-console.log(posts,'posts');
- 
+  
     return (
         <section className="min-h-screen bg-gray-950 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
