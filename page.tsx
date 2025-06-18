@@ -22,7 +22,6 @@ export default function Page() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            
             const res = await fetch("/api/user", {
                 headers: {
                     Authorization: `Bearer ${Cookies.get("token")}`,
