@@ -17,6 +17,7 @@ interface RequestBody {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log(connectToDatabase(),'connectToDatabaseconnectToDatabaseconnectToDatabase');
     await connectToDatabase();
     const body: RequestBody = await request.json();
     const {
