@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useState, FormEvent } from "react";
 import Cookies from 'js-cookie';
-
+ 
 export default function Login() {
   const [login, setLogin] = useState({
     email: "",
@@ -33,6 +33,7 @@ export default function Login() {
     <>
       <section>
         <div>
+           
           <form onSubmit={handleSubmit}>
             <div>
               <input value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })} type="text" placeholder="name" />

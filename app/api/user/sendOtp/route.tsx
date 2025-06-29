@@ -11,10 +11,17 @@ interface RequestBody {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('hei fucker asyncasyncasyncasync');
+  
   try {
     await connectToDatabase();
-    const body: RequestBody = await request.json();
-    const { email} = body;
+   const body = await request.json();
+
+if (!body || typeof body.email !== "string") {
+  return NextResponse.json({ message: "Invalid request body" }, { status: 400 });
+}
+
+const { email } = body as RequestBody;
     // for the existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -24,23 +31,20 @@ export async function POST(request: NextRequest) {
         );
     }
     await OtpManager.deleteMany({ email });
-    const otp = Math.floor(1000 + Math.random() * 900000).toString();
+const otp = Math.floor(1000 + Math.random() * 9000).toString();
     // ✅ Save OTP to database
     const newOtp = new OtpManager({
       email,
       otp,
       createdAt: new Date(), // optional: for expiration logic
     });
-
-    
-    // ✅ Optionally, send OTP via email
-    // Setup your email transport (You need to configure this properly in production)
     await newOtp.save();
 
-    const transporter = await nodemailer.createTransport({
+    // const transporter = await nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
         user: "chronicleofstrangers@gmail.com",
         pass: "dyes fyxm bamg eidx",

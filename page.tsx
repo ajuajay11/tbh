@@ -150,7 +150,7 @@ export default function Page() {
         <div>
             <form
                 onSubmit={submitProfile}
-                className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg space-y-5"
+                className="max-w-md mx-auto p-6 rounded-2xl shadow-lg space-y-5"
             >
                 <h2 className="text-2xl font-bold text-center text-gray-800">Update Profile</h2>
 

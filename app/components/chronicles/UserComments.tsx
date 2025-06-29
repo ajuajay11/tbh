@@ -2,14 +2,16 @@
 import axios from "axios";
 import { useState, FormEvent } from "react";
 import Cookies from "js-cookie";
-type Comment = {
-  _id: string;
-  comment?: string;
-  createdAt: string;
-  user?: { name?: string };
-};
+// import { Comment } from "@/app/types/chronicle";
+
+ export type Comment = {
+   _id: string;
+   comment?: string;
+   createdAt: string;
+   user?: { name?: string };
+ };
 type UserCommentsProps = {
-  Pid: string;       // use `string` — since `_id` is a MongoDB ID
+  Pid: string;  
   comments: Comment[];
 };
 function  UserComments({ Pid, comments }: UserCommentsProps) {
@@ -37,12 +39,14 @@ const token = Cookies.get('token');
       <div>UserComments</div>
       <div>
         <form onSubmit={addCommentsFn}>
-          <input type="text" placeholder="add Comments" value={addcomments} onChange={(e) => setComments(e.target.value)} />
+          <input type="text" placeholder="add Comments" value={addcomments} onChange={(e) => setComments(e.target.value)} required/>
           <input type="submit"className="button bg-dark" value="submit" />
         </form>
       </div>
-      {comments.map((e) => (
-        <div key={e._id}>{e._id}</div>
+      {/* {console.log(comments)} */}
+      
+      {comments?.map((e) => (
+        <div key={e._id}>{e.comment}</div>
       ))}
     </>
   )

@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import Logout from "@/app/components/logout"
 export default function page() {
   return (
     <>
@@ -12,6 +12,7 @@ export default function page() {
         </div>
         <div className="card p-4 border">Settings</div>
         <div className="card p-4 border">Inclusion</div>
+        <Logout/>
     </section>
     </>
   )

@@ -1,4 +1,5 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
+import { IUser } from "@/models/users"; // if using path aliases
 
 export interface IUserComment  {
   user: {
@@ -12,7 +13,7 @@ export interface IUserComment  {
 export interface IUserLikes  {
   user: {
     userId: string;
-    name?: string;
+    name?: string;  
   };
   like: boolean;
   createdAt?: Date;
@@ -27,7 +28,7 @@ export interface IUserStory extends Document {
   UserLikes: IUserLikes[];
   comments: boolean;
   emailAllowed: boolean;
-  user: string;
+  user: Types.ObjectId | IUser;
   likeCount: number,
   createdAt?: Date;
 }
@@ -66,7 +67,7 @@ const DarkTruth: Schema<IUserStory> = new Schema({
   },
   likeCount: { type: Number, default: 0 }, // ✅ New field
   emailAllowed: { type: Boolean, required: true },
-  user: { type: String },
+  user: { type: Schema.Types.ObjectId, ref: 'Users' },
   createdAt: { type: Date, default: Date.now }
 });
 

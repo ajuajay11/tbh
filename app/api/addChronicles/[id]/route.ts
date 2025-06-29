@@ -33,7 +33,6 @@ export async function PUT( request: NextRequest, { params }: { params: Promise<{
     const getUser = await User.findById(userData?.userId);
     const getID = getUser?._id?.toString();
      const existingStory = await UserVibesModel.findById(id);
-
     if (!existingStory) {
       return NextResponse.json(
         { message: "Story not found" },

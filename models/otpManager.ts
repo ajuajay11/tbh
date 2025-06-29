@@ -6,7 +6,6 @@ export interface IotpManager extends Document {
   createdAt: Date;
   expiredAt: Date;
 }
-
 const OtpSchema: Schema<IotpManager> = new Schema({
   otp: { type: String, required: true, unique: true },
   email: { type: String, required: true },
@@ -17,7 +16,5 @@ const OtpSchema: Schema<IotpManager> = new Schema({
   }
 });
 
-// 3. Export the model with type safety
 const Otp: Model<IotpManager> = mongoose.models.OtpManager || mongoose.model<IotpManager>("OtpManager", OtpSchema);
-
 export default Otp;

@@ -17,6 +17,7 @@ interface RequestBody {
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
+
     const body: RequestBody = await request.json();
     const {
       yourStoryTitle,
@@ -24,20 +25,24 @@ export async function POST(request: NextRequest) {
       emailAllowed,
       replyAllowed,
       comments,
-      incidentFrom
+      incidentFrom,
     } = body;
+
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ message: "No token found" }, { status: 401 });
     }
-    const token = authHeader.slice(7); // Remove 'Bearer ' prefix
-    console.log(token, "token");
+
+    const token = authHeader.slice(7);
     const userData = await verifyToken(token);
-    const userDetail = await User.findById(userData?.userId);
-    const userConnection = {
-      email: userDetail?.email,
-      userId: userDetail?._id,
-    };
+    if (!userData?.userId) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    }
+
+    const userDetail = await User.findById(userData.userId);
+    if (!userDetail) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
 
     const newdarktruth = new UserVibesModel({
       yourStoryTitle,
@@ -46,22 +51,37 @@ export async function POST(request: NextRequest) {
       emailAllowed,
       comments,
       incidentFrom,
-      user: userDetail?._id,
+      user: userDetail._id,
     });
+
     await newdarktruth.save();
+
     return NextResponse.json(
       {
         message: "Congragulation you done it",
-        ...newdarktruth.toObject(),
-        userConnection,
+        story: {
+          _id: newdarktruth._id,
+          yourStoryTitle,
+          chroniclesOfYou,
+          replyAllowed,
+          emailAllowed,
+          comments,
+          incidentFrom,
+          createdAt: newdarktruth.createdAt,
+          user: {
+            userId: userDetail._id,
+            email: userDetail.email,
+          },
+        },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error, "error");
+    console.error("POST error:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -79,7 +99,7 @@ export async function GET(request: NextRequest) {
     const getUser = await User.findById(userData?.userId);
     const getID = getUser?._id?.toString();
     console.log(getID, "getID");
-    const userStories = await UserVibesModel.find({ user: getID });
+    const userStories = await UserVibesModel.find({ user: getID }).populate("user","firstname lastname email role");    
     console.log("User Story Title:", userStories);
     return NextResponse.json(
       { message: "Congragulation you done it",userStories },
