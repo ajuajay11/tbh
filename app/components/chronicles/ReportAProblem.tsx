@@ -42,6 +42,8 @@ export default function ReportAProblem({ Pid }: MyComponentProps) {
       setgetReason("");
       // Optionally show a toast or confirmation here
     } catch (error) {
+      console.error(error);
+      
       // Handle error, show message if needed
     }
   };
