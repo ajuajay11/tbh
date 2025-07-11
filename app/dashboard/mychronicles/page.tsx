@@ -16,7 +16,7 @@ export default async function page() {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
  
-    const res = await fetch(`${getBaseUrl()}/api/getAllChroniclesByID`, {
+    const res = await fetch(`${getBaseUrl()}/api/getChroniclesByID`, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
