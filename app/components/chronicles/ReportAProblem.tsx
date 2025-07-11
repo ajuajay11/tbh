@@ -2,8 +2,7 @@
 import axios from "axios";
 import { FormEvent, useState, useRef, useEffect } from "react";
 import Cookies from "js-cookie";
-// import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'; // Example icon import
-
+ 
 interface MyComponentProps {
   Pid: string
 }
