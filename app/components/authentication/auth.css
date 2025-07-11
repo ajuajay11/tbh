@@ -1,0 +1,9 @@
+.otpBox{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+    width: 100%;
+    z-index: 9;
+    height: 100%;
+}

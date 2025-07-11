@@ -65,74 +65,87 @@ export default function CreateChronicleForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded shadow space-y-4">
-      <h2 className="text-xl font-semibold text-black">Create Chronicle</h2>
+    <form
+  onSubmit={handleSubmit}
+  className="max-w-lg mx-auto mt-10 p-8 rounded-3xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl space-y-6"
+>
+  <h2 className="text-2xl font-bold text-white text-center drop-shadow mb-2">Create Chronicle</h2>
 
+  <input
+    type="text"
+    name="yourStoryTitle"
+    placeholder="Title"
+    value={formData.yourStoryTitle}
+    onChange={handleChange}
+    required
+    className="w-full px-4 py-3 rounded-lg bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition"
+  />
+
+  <textarea
+    name="chroniclesOfYou"
+    placeholder="Your story..."
+    value={formData.chroniclesOfYou}
+    onChange={handleChange}
+    required
+    rows={5}
+    className="w-full px-4 py-3 rounded-lg bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition resize-none"
+  />
+
+  <input
+    type="text"
+    name="incidentFrom"
+    placeholder="Location (e.g., India)"
+    value={formData.incidentFrom}
+    onChange={handleChange}
+    required
+    className="w-full px-4 py-3 rounded-lg bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition"
+  />
+
+  <div className="flex flex-wrap gap-4">
+    <label className="flex items-center gap-2 text-white/90">
       <input
-        type="text"
-        name="yourStoryTitle"
-        placeholder="Title"
-        value={formData.yourStoryTitle}
+        type="checkbox"
+        name="replyAllowed"
+        checked={formData.replyAllowed}
         onChange={handleChange}
-        required
-        className="w-full p-2 border rounded"
+        className="accent-pink-400"
       />
-
-      <textarea
-        name="chroniclesOfYou"
-        placeholder="Your story..."
-        value={formData.chroniclesOfYou}
-        onChange={handleChange}
-        required
-        className="w-full p-2 border rounded"
-      />
-
+      Allow Replies
+    </label>
+    <label className="flex items-center gap-2 text-white/90">
       <input
-        type="text"
-        name="incidentFrom"
-        placeholder="Location (e.g., India)"
-        value={formData.incidentFrom}
+        type="checkbox"
+        name="comments"
+        checked={formData.comments}
         onChange={handleChange}
-        required
-        className="w-full p-2 border rounded"
+        className="accent-pink-400"
       />
+      Enable Comments
+    </label>
+    <label className="flex items-center gap-2 text-white/90">
+      <input
+        type="checkbox"
+        name="emailAllowed"
+        checked={formData.emailAllowed}
+        onChange={handleChange}
+        className="accent-pink-400"
+      />
+      Allow Email
+    </label>
+  </div>
 
-      <div className="flex gap-4">
-        <label className="text-black">
-          <input
-            type="checkbox"
-            name="replyAllowed"
-            checked={formData.replyAllowed}
-            onChange={handleChange}
-          /> Allow Replies
-        </label>
-        <label className="text-black">
-          <input
-            type="checkbox"
-            name="comments"
-            checked={formData.comments}
-            onChange={handleChange}
-          /> Enable Comments
-        </label>
-        <label className="text-black">
-          <input
-            type="checkbox"
-            name="emailAllowed"
-            checked={formData.emailAllowed}
-            onChange={handleChange}
-          /> Allow Email
-        </label>
-      </div>
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full py-3 rounded-lg bg-gradient-to-r from-pink-400 to-violet-400 text-white font-semibold shadow hover:from-pink-500 hover:to-violet-500 transition"
+  >
+    {loading ? "Submitting..." : "Submit Chronicle"}
+  </button>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        {loading ? "Submitting..." : "Submit Chronicle"}
-      </button>
+  {responseMsg && (
+    <p className="text-white/90 text-center mt-2">{responseMsg}</p>
+  )}
+</form>
 
-      {responseMsg && <p className="text-black mt-2">{responseMsg}</p>}
-    </form>
   );
 }
