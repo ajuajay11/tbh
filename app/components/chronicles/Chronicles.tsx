@@ -45,13 +45,12 @@ export default async function Chronicles() {
   const data: Chronicle[] = json.limitedChronicles || json.data || [];
 
   return (
-     <section className="min-h-screen bg-gradient-to-br from-[#22223b] via-[#4a4e69] to-[#9a8c98] flex flex-col items-center py-10">
+     <section className="min-h-screen bg-gradient-to-br from-[#22223b] via-[#000] to-[#9a8c98] flex flex-col items-center py-10">
         <div className="w-full max-w-7xl px-4">
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-bold text-white drop-shadow">Chronicles Gallery</h1>
           <p className="text-white/70 mt-2">Discover real stories from around the world</p>
         </div>
-
         {data.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">

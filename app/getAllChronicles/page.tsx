@@ -80,7 +80,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
 
   return (
     <>
-      <section className="min-h-screen bg-gradient-to-br from-[#22223b] via-[#4a4e69] to-[#9a8c98] flex flex-col items-center py-10">
+      <section className="min-h-screen bg-gradient-to-br from-[#22223b] via-[#000] to-[#333] flex flex-col items-center py-10">
         <div className="w-full max-w-7xl px-4">
           <div className="mb-10 text-center">
             <h1 className="text-4xl font-bold text-white drop-shadow">Chronicles Gallery</h1>
