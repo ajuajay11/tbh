@@ -14,7 +14,7 @@ import OtpBox from "@/app/components/authentication/OtpBox"
         password: ""
     });
     const closeButton = ()=>{        
-        setModalOpen(false);
+        setModalOpen(true);
     }
     const [steps, setSteps] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
@@ -50,7 +50,7 @@ import OtpBox from "@/app/components/authentication/OtpBox"
         try {
             const response = await axios.post('/api/user/register', register, {
                 headers: {
-                    "Content-Type": "application/json",
+                  "Content-Type": "application/json",
                 }
             });
             console.log(response);
@@ -65,11 +65,7 @@ import OtpBox from "@/app/components/authentication/OtpBox"
        <>
   {/* OTP Modal */}
   {modalOpen && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-      <div className="relative w-full max-w-sm mx-auto p-6 rounded-2xl backdrop-blur-lg bg-white/10 border border-white/30 shadow-2xl">
         <OtpBox closeBtn={closeButton} email={register.email} setSteps={setSteps} />
-      </div>
-    </div>
   )}
 
   {/* Registration Form */}
