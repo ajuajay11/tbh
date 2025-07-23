@@ -11,7 +11,7 @@ export default function index() {
     }
   return (
     <>
-       <div onClick={logout} className="card p-4 border">Logout</div>
+       <div onClick={logout} className="card p-4">Logout</div>
     </>
   )
 }
