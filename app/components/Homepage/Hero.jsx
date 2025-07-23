@@ -13,7 +13,7 @@ export default function Hero() {
     const emailRegistration = (e) => {
         e.preventDefault();
         if (email) {
-router.push('/login');
+           router.push(`/register?e=${encodeURIComponent(email)}`)
         }
     }
     useEffect(() => {
