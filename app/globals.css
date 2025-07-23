@@ -65,7 +65,7 @@
 }
 
 body {
-  background: #000000f7 !important;
+  background: rgb(3 3 3) !important;
   color: #fff;
 }
 
@@ -144,5 +144,27 @@ body {
 @media (max-width: 768px) {
   .hero-text {
     font-size: 2rem;
+  }
+}
+
+/* //button */
+.tbh_button {
+  background-color: #b10202;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem; /* py-3 px-6 */
+  white-space: nowrap;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #e50924;
+}
+
+@media (min-width: 640px) {
+  .button {
+    width: auto;
   }
 }

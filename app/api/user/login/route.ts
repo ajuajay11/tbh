@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import connectToDatabase from "@/lib/db";
 import User from "@/models/users";
 import * as jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 // Define the shape of the expected request body
 interface RequestBody {
@@ -27,7 +28,14 @@ export async function POST(request: NextRequest) {
     }
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ message: "user not found" }, { status: 404 });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+if (!isPasswordValid) {
+      return NextResponse.json(
+        { message: "Invalid password" },
+        { status: 401 }
+      );
     }
     const generateToken = (user: TokenUser): string => {
       if (!process.env.JWT_SECRET) {
