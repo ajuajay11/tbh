@@ -149,87 +149,36 @@ export default function Page() {
 
     return (
         <div>
-            <form
-                onSubmit={submitProfile}
-                className="max-w-md mx-auto p-6 rounded-2xl shadow-lg space-y-5"
-            >
+            <form onSubmit={submitProfile} className="max-w-md mx-auto p-6 rounded-2xl shadow-lg space-y-5" >
                 <h2 className="text-2xl font-bold text-center text-gray-800">Update Profile</h2>
-
-                {/* Profile Picture Upload */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Profile Picture
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2"> Profile Picture </label>
                     {previewUrl && (
                         <div className="mb-3 flex justify-center">
-                            <Image
-                                src={previewUrl}
-                                alt="Profile preview"
-                                width={100} height={100}
-                                className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
-                            />
+                            <img src={previewUrl} alt="Profile preview" width={100} height={100} className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"  />
                         </div>
                     )}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    />
+                    <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                     <p className="text-xs text-gray-500 mt-1">Max size: 5MB</p>
                 </div>
-
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={updateProfile.email}
-                        onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
-                        required
-                    />
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email </label>
+                    <input type="email" name="email" value={updateProfile.email} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
                 </div>
 
                 <div>
-                    <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">
-                        First Name
-                    </label>
-                    <input
-                        type="text"
-                        name="firstname"
-                        value={updateProfile.firstname}
-                        onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
-                        required
-                    />
+                    <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">First Name </label>
+                    <input type="text" name="firstname" value={updateProfile.firstname} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
                 </div>
 
                 <div>
-                    <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">
-                        Last Name
-                    </label>
-                    <input
-                        type="text"
-                        name="lastname"
-                        value={updateProfile.lastname}
-                        onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
-                        required
-                    />
+                    <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">Last Name </label>
+                    <input type="text" name="lastname" value={updateProfile.lastname} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
                 </div>
 
                 <div>
-                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-                        Gender
-                    </label>
-                    <select
-                        name="gender"
-                        value={updateProfile.gender}
-                        onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
+                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700"> Gender </label>
+                    <select name="gender" value={updateProfile.gender} onChange={handleChange}  className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
                     >
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>

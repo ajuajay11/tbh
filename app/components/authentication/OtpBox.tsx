@@ -1,21 +1,24 @@
 'use client'
+import axios from "axios";
 import "./auth.css";
 import { useState, FormEvent, useRef, Dispatch, SetStateAction } from "react";
+import SuccessMsg from "../SuccessMsg";
+import ErrorMessage from "../ErrorMessage";
  
-type OtpBoxProps = {
-  closeBtn: () => void;
+type OtpBoxProps = { closeBtn: () => void; 
   email: string;
   setSteps: Dispatch<SetStateAction<number>>;
 };
 export default function OtpBox(props: OtpBoxProps) {
-
+  // const [timer, seTimer] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [fillOtp, setFillOtp] = useState({
     one: "",
     two: "",
     three: "",
     four: "",
   })
-  // Create refs for each input
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key: string, index: number) => {
@@ -28,10 +31,30 @@ export default function OtpBox(props: OtpBoxProps) {
       inputsRef.current[index + 1]?.focus();
     }
   };
+ 
+    const resendOtp = async () => {
+     try {
+      const response = await axios.post('/api/user/sendOtp', { email: props.email });
+      console.log(response,'responseresponse');
+      
+      if (response.status === 200) {
+        const successMsg = response?.data?.message;
+        setSuccess(successMsg)
+        console.log(successMsg,'response');
+      }
+    } catch (err: unknown) {
+       let message = 'Unexpected error';
+       if (axios.isAxiosError(err)) {
+         message = err.response?.data?.message || err.message;
+       } else if (err instanceof Error) {
+         message = err.message;
+       }
+       setError(message);
+     }
+  };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('hei');
-
+ 
     // Combine OTP digits
     const otp = fillOtp.one + fillOtp.two + fillOtp.three + fillOtp.four;
 
@@ -41,7 +64,7 @@ export default function OtpBox(props: OtpBoxProps) {
     }
 
     try {
-      const response = await fetch("/api/user/sendOtp", {
+      const response = await fetch("/api/user/verifyOtp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,31 +90,31 @@ export default function OtpBox(props: OtpBoxProps) {
   };
 
   return (
+    <>
+     <SuccessMsg successMsg={success}/>
     <div className="otpBox ease-in-expo">
       <div className="flex items-center justify-end">
         <button onClick={props?.closeBtn}>handleClose</button>
       </div>
-      <div className="flex justify-center items-center h-full text-dark">
+      <div className="flex flex-col justify-center items-center h-full text-dark">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-          <div className="flex gap-3">
+          <div className="flex gap-3 justify-center">
             {Object.entries(fillOtp).map(([key, value], index) => (
-            <input
-              key={key}
-              ref={(el: HTMLInputElement | null) => {
-                inputsRef.current[index] = el;
-              }}
-              type="text"
-              maxLength={1}
-              value={value}
-              inputMode="numeric"
-              onChange={(e) => handleChange(e, key, index)}
-              className="bg-transparent border p-4 text-center w-12 rounded"
-            />
+            <input key={key} ref={(el: HTMLInputElement | null) => { inputsRef.current[index] = el;  }} type="text"
+              maxLength={1}  value={value} inputMode="numeric" onChange={(e) => handleChange(e, key, index)} className="bg-transparent border p-4 text-center w-12 rounded"  required/>
           ))}
           </div>
-          <button className="btn">hello</button>
+          <span className="text-green-700 capitalize">{success}</span>
+          <button className="tbh_button">Submit</button>
         </form>
+         <div className="flex justify-between">
+            <span>timer</span>
+            <button onClick={resendOtp}>Resend</button>
+          </div>
+          <ErrorMessage message={error} />
       </div>
+      
     </div>
+    </>
   )
 }

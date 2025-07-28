@@ -5,6 +5,7 @@ import { verifyToken } from "@/utils/auth";
 import { FilterQuery } from "mongoose";
 import BadWordsNext from "bad-words-next";
 import en from "bad-words-next/lib/en";
+import "@/models/users"; // ✅ Register the Users model
 
 export async function GET(request: NextRequest) {
   const badwords = new BadWordsNext({ data: en });
@@ -21,9 +22,7 @@ export async function GET(request: NextRequest) {
   const skip = (page - 1) * limit;
 
   try {
-    console.log(country, "countrycountry", search, "searchsearchsearch");
-    await connectToDatabase();
-    
+     await connectToDatabase();
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
     
@@ -47,13 +46,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (!token) {
-      // For non-authenticated users: apply same filtering but limit to 6 results
-      const limitedChronicles = await UserVibesModel.find(baseQuery)
-        .sort(sortObj)
-        .limit(6);
+       const limitedChronicles = await UserVibesModel.find(baseQuery).sort(sortObj).limit(6);
         
-      // Count total for pagination info (optional)
-      const total = await UserVibesModel.countDocuments(baseQuery);
+       const total = await UserVibesModel.countDocuments(baseQuery);
       
       return NextResponse.json(
         {
@@ -83,12 +78,14 @@ export async function GET(request: NextRequest) {
 
     // Count total documents matching query for pagination meta
     const total = await UserVibesModel.countDocuments(query);
+ 
+const filtered = await UserVibesModel.find(query)
+  .sort(sortObj)
+  .skip(skip)
+  .limit(limit)
+.populate("user", "firstname lastname username")
+  .lean();
 
-    // Fetch paginated results
-    const filtered = await UserVibesModel.find(query)
-      .sort(sortObj)
-      .skip(skip)
-      .limit(limit);
 
     return NextResponse.json(
       {

@@ -106,14 +106,12 @@ body {
 /* Alternative version with different timing */
 .btn-shine-alt {
   position: relative;
-  background: linear-gradient(
-    90deg,
+  background: linear-gradient( 90deg,
     #e50914 0%,
     #e50914 30%,
-    #ff5a5a5a 50%,
+    #ffffffb0 50%,
     #e50914 70%,
-    #e50914 100%
-  );
+    #e50914 100% );
   background-size: 300% 100%;
   background-position: 100% 0;
   -webkit-background-clip: text;
@@ -140,7 +138,6 @@ body {
   text-align: center;
 }
 
- 
 @media (max-width: 768px) {
   .hero-text {
     font-size: 2rem;
@@ -154,7 +151,6 @@ body {
   font-weight: 600;
   padding: 0.75rem 1.5rem; /* py-3 px-6 */
   white-space: nowrap;
-  width: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
   transition: background-color 0.2s;
 }
@@ -166,5 +162,11 @@ body {
 @media (min-width: 640px) {
   .button {
     width: auto;
+  }
+}
+.scrollYTBH {
+  /* Hide scrollbar for Webkit browsers */
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

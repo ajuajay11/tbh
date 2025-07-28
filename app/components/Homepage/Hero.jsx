@@ -28,11 +28,10 @@ router.push('/login');
              <div className="flex flex-col md:flex-row h-full w-full max-w-[1600px]">
                  {showImage && (
                     <motion.div initial={{ x: -1500, opacity: 0 }} animate={{ x: 0, opacity: 1 }}  transition={{ duration: 1 }} className="hidden md:block w-full md:w-1/3 h-64 md:h-full"  >
-                        <Image src={pImage} alt="Profile preview" className="object-cover w-full h-full" />
+                       <Image src={pImage} alt="Profile preview" className="object-cover w-full h-full" />
                     </motion.div>
                 )}
                  <motion.div initial={{ width: "100%" }} animate={{ width: showImage ? "66.66%" : "100%" }} transition={{ duration: 1 }} className="h-full bg-[#030303] text-center text-white flex flex-col items-center justify-center gap-4 px-4" >
-
                     <div className="demo-section">
                         <h1 className="hero-text text-3xl sm:text-4xl md:text-5xl font-bold">  Share Your Story. <br />
                             <span className="btn-shine-alt">Anonymously. Fearlessly.</span>

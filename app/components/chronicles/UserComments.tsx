@@ -50,7 +50,7 @@ function UserComments({ Pid, comments }: UserCommentsProps) {
         <h3 className="text-lg font-semibold text-white mb-2">User Comments</h3>
         <form
           onSubmit={addCommentsFn}
-          className="flex items-center gap-2 mb-4 backdrop-blur-md bg-white/10 border border-white/20 rounded-xl px-3 py-2 shadow"
+          className="flex items-center gap-2 mb-4"
         >
           <input
             type="text"
@@ -58,11 +58,11 @@ function UserComments({ Pid, comments }: UserCommentsProps) {
             value={addcomments}
             onChange={(e) => setComments(e.target.value)}
             required
-            className="flex-1 px-3 py-2 rounded-lg bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition"
+            className="flex-1 px-3 py-3  rounded-null bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition"
           />
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-pink-400 to-violet-400 text-white font-semibold shadow hover:from-pink-500 hover:to-violet-500 transition"
+            className="tbh_button w-22"
           >
             Submit
           </button>

@@ -79,7 +79,7 @@ const DarkTruth: Schema<IUserStory> = new Schema(
     },
     likeCount: { type: Number, default: 0 },
     emailAllowed: { type: Boolean, required: true },
-    user: { type: Schema.Types.ObjectId, ref: "Users" },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     createdAt: { type: Date, default: Date.now },
     status: { type: Number, default: 1 },
     reportedBy: {
@@ -99,7 +99,6 @@ const DarkTruth: Schema<IUserStory> = new Schema(
   { timestamps: true }
 );
 
-const UserVibesModel: Model<IUserStory> =
-  mongoose.models.DarkTruth ||
-  mongoose.model<IUserStory>("DarkTruth", DarkTruth);
+const UserVibesModel = mongoose.models?.DarkTruth || mongoose.model<IUserStory>("DarkTruth", DarkTruth);
+
 export default UserVibesModel;

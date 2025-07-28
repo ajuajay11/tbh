@@ -32,8 +32,11 @@ function RegisterForm() {
     }));
   };
 
-  const closeButton = () => setModalOpen(true);
-
+  const closeButton = () => {
+    setModalOpen(false);
+    console.log('dd');
+    
+  }
   const sendMail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
@@ -42,10 +45,15 @@ function RegisterForm() {
       if (res.status === 200) {
         setModalOpen(true);
       }
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ message?: string }>;
-      setError(err.response?.data?.message || err.message || 'Unexpected error');
-    } finally {
+    } catch (err: unknown) {
+       let message = 'Unexpected error';
+       if (axios.isAxiosError(err)) {
+         message = err.response?.data?.message || err.message;
+       } else if (err instanceof Error) {
+         message = err.message;
+       }
+       setError(message);
+     } finally {
       setLoader(false);
     }
   };
@@ -88,7 +96,11 @@ function RegisterForm() {
   return (
     <>
       {modalOpen && (
-        <OtpBox closeBtn={closeButton} email={register.email} setSteps={setSteps} />
+        <div>
+
+          <OtpBox closeBtn={closeButton} email={register.email} setSteps={setSteps} />
+           
+        </div>
       )}
 
       <div className="p-8 bg-white/10 border border-white/30 shadow-2xl text-black">

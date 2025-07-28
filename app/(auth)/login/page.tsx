@@ -57,10 +57,10 @@ export default function Login() {
         <h2 className="text-2xl font-bold text-white mb-6 drop-shadow text-start">Sign In</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
            <div className="text-white">
-            <input value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })} type="text" placeholder="Email" className="w-full px-4 py-3 rounded-xl bg-white/10  placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-white" autoComplete="email"  required />
+            <input value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })} type="text" placeholder="Email" className="w-full px-4 py-3 rounded-null bg-white/10  placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-white" autoComplete="email"  required />
           </div>
            <div className="text-white">
-            <input value={login.password} onChange={(e) => setLogin({ ...login, password: e.target.value })}  type="password" placeholder="Password" className="w-full px-4 py-3 rounded-xl bg-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300" autoComplete="current-password" required />
+            <input value={login.password} onChange={(e) => setLogin({ ...login, password: e.target.value })}  type="password" placeholder="Password" className="w-full px-4 py-3 rounded-null bg-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300" autoComplete="current-password" required />
           </div>
           <button type="submit" className="tbh_button w-full"> Login </button>
         </form>
