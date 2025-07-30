@@ -7,7 +7,7 @@ import ReportAProblem from "@/app/components/chronicles/ReportAProblem";
 import { truncatedDesc } from '@/utils/truncatedText'; // adjust path as needed
 import LeftPanel from "@/app/components/chronicles/LeftPanel";
 import Link from "next/link";
-// import Image from "next/image";
+import Image from "next/image";
 
 type Chronicle = {
   _id: string,
@@ -105,8 +105,8 @@ export default async function Chronicles({ searchParams }: PageProps) {
               {data?.map((chronicle) => (
                 <div key={chronicle._id} className=" border border-white/20 rounded-null shadow-xl p-6 flex flex-col justify-between transition hover:shadow-lg">
                   <div className="flex gap-3 pb-3">
-                    <Link href={`/chronicles/${chronicle?._id}`}>hello</Link>
-                    <div>{chronicle?.user?.profilePicture?<img width={40} height={40} className="rounded-xxl" src={chronicle.user.profilePicture} alt={chronicle?.user?.firstname} />:(
+                    <Link href={`/chronicles/s?id=${chronicle?._id}`}>hello</Link>
+                    <div>{chronicle?.user?.profilePicture?<Image width={40} height={40} className="rounded-xxl" src={chronicle.user.profilePicture} alt={chronicle?.user?.firstname} />:(
                     <div className="w-10 h-10 rounded-xl bg-pink-500 text-white flex items-center justify-center font-semibold uppercase">
                       {(chronicle?.user?.firstname?.[0] || '')}
                       {(chronicle?.user?.lastname?.[0] || '')}

@@ -155,7 +155,7 @@ export default function Page() {
                     <label className="block text-sm font-medium text-gray-700 mb-2"> Profile Picture </label>
                     {previewUrl && (
                         <div className="mb-3 flex justify-center">
-                            <img src={previewUrl} alt="Profile preview" width={100} height={100} className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"  />
+                            <Image src={previewUrl} alt="Profile preview" width={100} height={100} className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"  />
                         </div>
                     )}
                     <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />

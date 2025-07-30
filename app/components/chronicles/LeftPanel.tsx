@@ -1,7 +1,8 @@
-
-export default function () {
+ 
+ 
+export default function LeftPanel() {
   return (
-    <>
+       <>
         <section className="w-1/5 pt-20 p-4 border-r border-zinc-700">
           <h2 className="text-xl font-bold mb-4">Sidebar</h2>
           <ul className="space-y-2">
@@ -14,3 +15,5 @@ export default function () {
       </>
   )
 }
+
+ 

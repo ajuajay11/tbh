@@ -3,16 +3,16 @@ import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
 import { verifyToken } from "@/utils/auth";
 import { FilterQuery } from "mongoose";
-import BadWordsNext from "bad-words-next";
-import en from "bad-words-next/lib/en";
+// import BadWordsNext from "bad-words-next";
+// import en from "bad-words-next/lib/en";
 import "@/models/users"; // ✅ Register the Users model
 
 export async function GET(request: NextRequest) {
-  const badwords = new BadWordsNext({ data: en });
-  console.log(badwords);
-
-  const { searchParams } = new URL(request.url);
+  // const badwords = new BadWordsNext({ data: en });
+  // console.log(badwords);
+   const { searchParams } = new URL(request.url);
   const country = searchParams.get("country");
+  const id = searchParams.get("id");
   const search = searchParams.get("search");
   const sort = searchParams.get("sort");
 
@@ -22,23 +22,25 @@ export async function GET(request: NextRequest) {
   const skip = (page - 1) * limit;
 
   try {
-     await connectToDatabase();
+    await connectToDatabase();
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
-    
+
     // Build base query for both authenticated and non-authenticated users
     const baseQuery: FilterQuery<typeof UserVibesModel> = {
       status: 1,
     };
-    
+
     if (country) {
       baseQuery.incidentFrom = country.replace(/^"+|"+$/g, "");
     }
-    
+
     if (search) {
       baseQuery.$or = [{ yourStoryTitle: { $regex: search, $options: "i" } }];
     }
-    
+    if (id) {
+      baseQuery._id = id;
+    }
     // Optionally, apply sorting
     let sortObj: Record<string, 1 | -1> = { createdAt: -1 };
     if (sort === "mostLiked") {
@@ -46,18 +48,21 @@ export async function GET(request: NextRequest) {
     }
 
     if (!token) {
-       const limitedChronicles = await UserVibesModel.find(baseQuery).sort(sortObj).limit(6);
-        
-       const total = await UserVibesModel.countDocuments(baseQuery);
-      
+      const limitedChronicles = await UserVibesModel.find(baseQuery)
+      .populate("user", "username firstname lastname" )
+        .sort(sortObj)
+        .limit(6);
+
+      const total = await UserVibesModel.countDocuments(baseQuery);
+
       return NextResponse.json(
         {
           message: "Please subscribe to get all conversations",
           limitedChronicles,
           pagination: {
             total,
-            page: 1, // Always page 1 for limited results
-            limit: 6, // Always limit to 6
+            page: 1, 
+            limit: 6,  
             totalPages: Math.ceil(total / 6), // Total pages if they had full access
           },
         },
@@ -78,14 +83,13 @@ export async function GET(request: NextRequest) {
 
     // Count total documents matching query for pagination meta
     const total = await UserVibesModel.countDocuments(query);
- 
-const filtered = await UserVibesModel.find(query)
-  .sort(sortObj)
-  .skip(skip)
-  .limit(limit)
-.populate("user", "firstname lastname username")
-  .lean();
 
+    const filtered = await UserVibesModel.find(query)
+      .sort(sortObj)
+      .skip(skip)
+      .limit(limit)
+      .populate("user", "firstname lastname username")
+      .lean();
 
     return NextResponse.json(
       {
@@ -108,3 +112,5 @@ const filtered = await UserVibesModel.find(query)
     );
   }
 }
+
+ 
