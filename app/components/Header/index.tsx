@@ -7,9 +7,9 @@ export default async function Index() {
 
   return (
     <>
-      <div className="w-full">
-        <header className="absolute w-full">
-          <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="w-full z-50">
+        <header className="absolute w-full z-50 bg-black/20 backdrop-blur-md shadow-lg">
+          <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between z-50 ">
             {/* LOGO */}
             <Link href="/" className="flex items-center">
               <span className="text-white text-2xl font-bold tracking-wide px-4 py-1 rounded-lg bg-white/10 backdrop-blur-md shadow">TBH</span>
@@ -36,11 +36,11 @@ export default async function Index() {
           </nav>
 
           {/* Mobile version */}
-          <div className="md:hidden flex justify-center pb-2">
+          {/* <div className="md:hidden flex justify-center pb-2">
             <Link href="/chronicles" className="text-white/90 hover:text-pink-300 text-lg font-semibold transition px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md shadow">
               Get All Chronicles
             </Link>
-          </div>
+          </div> */}
         </header>
       </div>
 

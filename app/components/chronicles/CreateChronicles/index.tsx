@@ -67,7 +67,7 @@ export default function CreateChronicleForm() {
   return (
     <form
   onSubmit={handleSubmit}
-  className="max-w-lg mx-auto mt-10 p-8 rounded-3xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl space-y-6"
+  className="max-w-lg mx-1 mt-10 rounded-3xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl space-y-6"
 >
   <h2 className="text-2xl font-bold text-white text-center drop-shadow mb-2">Create Chronicle</h2>
 

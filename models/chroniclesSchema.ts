@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model, Types } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 import { IUser } from "@/models/users"; // Adjust path as needed
 
 export interface IUserComment {

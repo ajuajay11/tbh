@@ -18,7 +18,14 @@ type Chronicle = {
   comments: boolean;
   likeCount: number;
   emailAllowed: boolean;
-  user: User;
+  user: {
+    _id: string;
+    profilePicture: string;
+    lastname: string;
+    username: string;
+    email: string;
+    firstname: string;
+  };
   createdAt: string;
   UserComments: {
     _id: string;
@@ -29,12 +36,7 @@ type Chronicle = {
       name: string;
     };
   }[];
-   User: {
-    _id: string;
-    profilePicture: string;
-    lastname: string;
-    firstname: string;
-  }[];
+ 
   UserLikes: {
     _id: string;
     like: boolean;
@@ -94,7 +96,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
 
         <LeftPanel />
         {/* Center Panel */}
-        <div className="flex-1 p-6 overflow-y-auto scrollYTBH">
+        <div className="flex-1 p-6 overflow-y-auto scrollYTBH mt-20">
           <div className="w-full max-w-7xl px-4">
             {/* <div className="mb-10 text-center">
               <h1 className="text-4xl font-bold text-white drop-shadow">Chronicles Gallery</h1>
@@ -127,23 +129,22 @@ export default async function Chronicles({ searchParams }: PageProps) {
                   </div>
                   
                   <div>
-                    <ReportAProblem Pid={chronicle._id} />
+                    <ReportAProblem Pid={chronicle?._id} />
                   </div>
                   <div className="flex items-center justify-between mt-4">
                     <span className="flex items-center gap-1 text-pink-300 font-bold">
-                      <Userlikes Pid={chronicle._id} likeCount={chronicle.likeCount} likes={chronicle.UserLikes} />
+                      <Userlikes Pid={chronicle?._id} likeCount={chronicle.likeCount} likes={chronicle?.UserLikes} />
                     </span>
                     <span className="flex items-center gap-1 text-blue-200">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 8h2a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2h2"></path><path d="M15 3h-6a2 2 0 00-2 2v3a2 2 0 002 2h6a2 2 0 002-2V5a2 2 0 00-2-2z"></path></svg>
                       {chronicle.UserComments?.length ?? 0}
                     </span>
                     <span className="flex items-center gap-1 text-green-200">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
-                      {chronicle.replyAllowed ? "Replies Allowed" : "No Replies"}
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg> {chronicle.replyAllowed ? "Replies Allowed" : "No Replies"}
                     </span>
                   </div>
                   <div>
-                    {chronicle?.comments ?<UserCommentsComponent Pid={chronicle._id} comments={chronicle.UserComments} />:null}
+                    {chronicle?.comments ?<UserCommentsComponent Pid={chronicle?._id} comments={chronicle?.UserComments} />:null}
                   </div>
                 </div>
               ))}

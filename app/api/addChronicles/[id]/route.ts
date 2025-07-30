@@ -17,7 +17,6 @@ export async function PUT( request: NextRequest, { params }: { params: Promise<{
   try {
     await connectToDatabase();
     const { id } = await params;
-  await connectToDatabase();
     const body: RequestBody = await request.json();
     const { yourStoryTitle, chroniclesOfYou, emailAllowed, replyAllowed, comments} = body;
     const authHeader = request.headers.get("authorization");
