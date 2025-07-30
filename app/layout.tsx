@@ -21,19 +21,19 @@ export const metadata: Metadata = {
 };
 export const dynamic = "force-dynamic"; // <- Add this line
 
- export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let data = { mode: false };
+ export default function RootLayout({ children }: { children: React.ReactNode }) {
+ const data = { mode: false };
 
-  try {
-    const res = await fetch('http://localhost:3000/api/maintenance', { method: 'GET', cache: 'no-store' });
-    if (res.ok) {
-      const jsonData = await res.json();
-      data = jsonData.maintenance|| {};
-      console.log(data);
-    }
-  } catch (error) {
-    console.error('Maintenance status fetch failed:', error);
-  }
+  // try {
+  //   const res = await fetch('http://localhost:3000/api/maintenance', { method: 'GET', cache: 'no-store' });
+  //   if (res.ok) {
+  //     const jsonData = await res.json();
+  //     data = jsonData.maintenance|| {};
+  //     console.log(data);
+  //   }
+  // } catch (error) {
+  //   console.error('Maintenance status fetch failed:', error);
+  // }
 
   return (
     <html lang="en">
