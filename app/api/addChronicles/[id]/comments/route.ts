@@ -24,6 +24,12 @@ export async function POST(
     const { id } = await params;  // <-- fixed this line only
     const body: RequestBody = await request.json();
     const {comment}= body;
+    if (!comment) {
+      return NextResponse.json({ message: "Please enter a comment" }, { status: 400 });
+    }
+    if (!id) {
+      return NextResponse.json({ message: "Post ID is required" }, { status: 400 });
+    }
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
     if (!token) {

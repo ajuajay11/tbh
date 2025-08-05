@@ -1,12 +1,14 @@
 'use client';
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import pImage from "../../../public/pexels-phael-2401442.png";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import AOS from "aos";
+
 
 export default function Hero() {
+     
     const router = useRouter()
     const [showImage, setShowImage] = useState(false);
     const [email, setEmail] = useState("");
@@ -16,6 +18,13 @@ export default function Hero() {
 router.push('/login');
         }
     }
+     useEffect(() => {
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+        AOS.refresh();
+  }, []);
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowImage(true);
@@ -27,11 +36,11 @@ router.push('/login');
         <div className="h-screen w-full overflow-hidden flex justify-center">
              <div className="flex flex-col md:flex-row h-full w-full max-w-[1600px]">
                  {showImage && (
-                    <motion.div initial={{ x: -1500, opacity: 0 }} animate={{ x: 0, opacity: 1 }}  transition={{ duration: 1 }} className="hidden md:block w-full md:w-1/3 h-64 md:h-full"  >
+                    <div data-aos="fade-in" className="hidden md:block w-full md:w-1/3 h-64 md:h-full"  >
                        <Image src={pImage} alt="Profile preview" className="object-cover w-full h-full" />
-                    </motion.div>
+                    </div>
                 )}
-                 <motion.div initial={{ width: "100%" }} animate={{ width: showImage ? "66.66%" : "100%" }} transition={{ duration: 1 }} className="h-full bg-[#030303] text-center text-white flex flex-col items-center justify-center gap-4 px-4" >
+                 <div className="h-full bg-[#030303] text-center text-white flex flex-col items-center justify-center gap-4 px-4" >
                     <div className="demo-section">
                         <h1 className="hero-text text-3xl sm:text-4xl md:text-5xl font-bold">  Share Your Story. <br />
                             <span className="btn-shine-alt">Anonymously. Fearlessly.</span>
@@ -44,7 +53,7 @@ router.push('/login');
                             <button type="submit" className="tbh_button w-full sm:w-auto px-4 py-3 whitespace-nowrap" > Submit </button>
                         </form>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </div>
 

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import { Toaster } from 'react-hot-toast';
-
+import 'aos/dist/aos.css'; // Import AOS styles globally
+import AosInit from "./components/AosInit";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -38,10 +39,9 @@ export const dynamic = "force-dynamic"; // <- Add this line
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}>
-        
+        <AosInit />
         {data?.mode ?  (
           <main className="flex justify-center items-center min-h-screen text-white">
-           
             <p>Site is currently under maintenance.</p>
           </main>
         ):(

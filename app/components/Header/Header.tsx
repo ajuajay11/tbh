@@ -1,14 +1,14 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-
-export default async function Index() {
+import DropDown from './DropDown';
+ export default async function Index() {
   const cookieStore = await cookies();
   const isAuth = cookieStore.get('isAuthenticated')?.value;
-
+ 
   return (
     <>
       <div className="w-full z-50">
-        <header className="absolute w-full z-50 bg-black/20 backdrop-blur-md shadow-lg">
+        <header className="absolute w-full z-50 bg-black/20 backdrop-blur-sm shadow-lg">
           <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between z-50 ">
             {/* LOGO */}
             <Link href="/" className="flex items-center">
@@ -24,9 +24,8 @@ export default async function Index() {
             {/* AUTH ACTION */}
             <div className="flex items-center gap-2">
               {isAuth === 'true' ? (
-                <Link href="/dashboard" className="px-5 py-2 rounded-lg bg-[#e50914] text-white font-semibold shadow transition hover:bg-red-700">
-                  Dashboard
-                </Link>
+                // <Link href="/dashboard" className="px-5 py-2 rounded-lg  text-white font-semibold shadow transition hover:bg-red-900"></Link>
+                  <DropDown />
               ) : (
                 <Link href="/login" className="tbh_button">
                   Login

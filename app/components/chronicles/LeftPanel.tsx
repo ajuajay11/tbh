@@ -1,9 +1,14 @@
-import Link from "next/link";
+ import Link from "next/link";
 
 export default function LeftPanel() {
   return (
     <>
-      <section className="w-1/5 pt-20 p-4 border-r border-zinc-700 hidden lg:block">
+      <section className="w-1/5 pt-20 p-4 border-r border-zinc-700 hidden lg:block" style={{
+    backgroundImage: `url('/boy.png')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    opacity: 0.3,
+  }}>
         <h2 className="text-xl font-bold mb-4">Sidebar</h2>
         <ul className="space-y-2">
           <li className="hover:text-pink-400 cursor-pointer"> Home</li>
@@ -12,7 +17,7 @@ export default function LeftPanel() {
           <li className="hover:text-pink-400 cursor-pointer"> Settings</li>
         </ul>
       </section>
-      <section className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-red-600 text-white p-4 rounded-full z-50 shadow-lg lg:hidden">
+      <section className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-red-100 text-white p-4 rounded-full z-50 shadow-lg lg:hidden">
         <div className="flex justify-between items-center px-6 py-3 text-white">
           
           <button className="flex flex-col items-center hover:text-pink-400">
