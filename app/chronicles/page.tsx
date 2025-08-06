@@ -127,7 +127,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
                               </h3>
                               <span className="text-gray-500 text-sm">•</span>
                               <span className="text-gray-500 text-sm">
-                                {formatDate(chronicle.createdAt)}
+                                {formatDate(chronicle?.createdAt)}
                               </span>
                             </div>
                             <div className="flex items-center space-x-2 text-xs text-gray-400 mt-1">
@@ -137,25 +137,25 @@ export default async function Chronicles({ searchParams }: PageProps) {
                           </div>
                         </div>
                         <div className=" ">
-    <a
-      href={`/chronicles/s?id=${chronicle?._id}`}
-      className="group flex items-center space-x-2 px-3 py-2 rounded-full text-sm text-gray-300 bg-gray-900/50 hover:bg-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-white relative overflow-hidden"
-    >
-      <span className="absolute inset-0 bg-blue-500/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></span>
-      <BookOpen className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors duration-300 ease-in-out" />
-      <span className="relative z-10">Read full story</span>
-    </a>
-  </div>
+                          <a
+                            href={`/chronicles/s?id=${chronicle?._id}`}
+                            className="group flex items-center space-x-2 px-3 py-2 rounded-full text-sm text-gray-300 bg-gray-900/50 hover:bg-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-white relative overflow-hidden"
+                          >
+                            <span className="absolute inset-0 bg-blue-500/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></span>
+                            <BookOpen className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors duration-300 ease-in-out" />
+                            <span className="relative z-10">Read full story</span>
+                          </a>
+                        </div>
 
                       </div>
 
                       {/* Post Content */}
-                      <div className="px-4 mb-4">
-                        <h2 className="text-xl font-semibold mb-3 text-white leading-tight">
+                      <div className="px-4 mb-4 py-10">
+                        <h2 className="text-center merienda mb-3 text-white leading-tight">
                           {chronicle.yourStoryTitle}
                         </h2>
                         <div className="prose prose-invert max-w-none">
-                          <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                          <p className="text-center merienda-small text-gray-300 leading-relaxed whitespace-pre-wrap">
                             {truncatedDesc(chronicle.chroniclesOfYou, 500)}
                           </p>
                         </div>
@@ -252,18 +252,18 @@ export default async function Chronicles({ searchParams }: PageProps) {
               </div>
             </div>
             {/* Right Panel */}
-            <div className="w-1/5 p-4 border-l pt-20 border-zinc-700 hidden lg:block transform scale-x-[-1]" style={{
+            <div className="w-1/5 p-4 pt-20 transform" style={{
               backgroundImage: `url('/girl.png')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               opacity: 0.5,
             }}>
-              <h2 className="text-xl font-bold mb-4">Right Panel</h2>
+              {/* <h2 className="text-xl font-bold mb-4">Right Panel</h2>
               <div className="space-y-4">
                 <div className="bg-zinc-700 p-3 rounded-lg">Notification</div>
                 <div className="bg-zinc-700 p-3 rounded-lg">Profile</div>
                 <div className="bg-zinc-700 p-3 rounded-lg">Updates</div>
-              </div>
+              </div> */}
             </div>
 
           </div>

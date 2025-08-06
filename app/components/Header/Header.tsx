@@ -20,8 +20,7 @@ import DropDown from './DropDown';
               {/* Example: Add links here */}
               {/* <Link href="/getAllChronicles" className="text-white/90 hover:text-pink-300 text-lg font-semibold transition px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md shadow">Get All Chronicles</Link> */}
             </div>
-{isAuth}
-            {/* AUTH ACTION */}
+             {/* AUTH ACTION */}
             <div className="flex items-center gap-2">
               {isAuth == 'true' ? (
                  // <Link href="/dashboard" className="px-5 py-2 rounded-lg  text-white font-semibold shadow transition hover:bg-red-900"></Link>

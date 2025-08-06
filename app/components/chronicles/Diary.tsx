@@ -293,13 +293,13 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   };
 
   return (
-    <div className="pt-20 lg:pt-0 min-h-screen bg-black flex items-center justify-center px-4 py-12 font-serif relative overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4 py-12 font-serif relative overflow-hidden">
       <Fireflies />
       <div className="relative z-10 max-w-3xl w-full" data-aos="fade-up" data-aos-duration="1000">
-        <h1 className="text-center text-4xl md:text-5xl font-bold text-white mb-8 tracking-wider animate-fade-in">
+        <h1 className="mt-10 merienda lg:pt-0  text-center text-4xl md:text-3xl font-bold text-white mb-8">
           {chronicle.yourStoryTitle}
         </h1>
-        <div className="text-gray-200 text-lg md:text-xl leading-relaxed tracking-wide whitespace-pre-wrap min-h-[200px] animate-slide-up">
+        <div className="fs-1 caveat text-gray-200 tracking-wide whitespace-pre-wrap min-h-[700px] ">
           {slides[currentIndex]}
         </div>
         <div className="flex justify-between items-center mt-8">
@@ -310,9 +310,7 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
           >
             Previous
           </button>
-          <span className="text-sm text-gray-400">
-            Page {currentIndex + 1} of {slides.length}
-          </span>
+           
           <button
             onClick={goNext}
             disabled={currentIndex === slides.length - 1}

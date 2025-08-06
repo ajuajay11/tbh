@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Merienda:wght@300..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
+ @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -63,6 +64,30 @@
     @apply border-border;
   }
 }
+.caveat{
+  font-family: "Caveat", cursive !important;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-size: clamp(22px, 4vw, 26px);
+}
+.merienda {
+  font-family: "Merienda", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(22px, 4vw, 26px);
+
+}
+.merienda-small {
+  font-family: "Merienda", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(12px, 4vw, 14px);
+
+}
+
 
 body {
   background: rgb(3 3 3) !important;
@@ -129,6 +154,9 @@ body {
   }
 }
 
+.fs-1{
+  font-family: 'Courier New', Courier, monospace;
+}
 .demo-container {
   max-width: 800px;
 }
