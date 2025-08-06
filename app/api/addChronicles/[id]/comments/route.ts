@@ -58,7 +58,13 @@ export async function POST(
     });
 
     await findPost.save();
-    return NextResponse.json({ message: "Comment Added Succesfully" , findPost}, { status: 200 });
+    return NextResponse.json({ message: "Comment Added Succesfully" ,  user: {
+        userId: getUser._id,
+        name: getUser.email,
+        comment: comment,
+      createdAt: body.createdAt || new Date(),
+      },
+    }, { status: 200 });
    } catch (error) {
     console.error(error);
     return NextResponse.json({ message: "server error" }, { status: 500 });

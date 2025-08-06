@@ -1,27 +1,274 @@
 'use client';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-type Chronicle = {
+interface Firefly {
+  x: number;
+  y: number;
+  targetX: number;
+  targetY: number;
+  radius: number;
+  vx: number;
+  vy: number;
+  opacity: number;
+  targetOpacity: number;
+  flickerPhase: number;
+  flickerSpeed: number;
+  glowRadius: number;
+  hue: number;
+  wanderAngle: number;
+  restTime: number;
+  maxRestTime: number;
+  energy: number;
+  trailPoints: Array<{ x: number; y: number; opacity: number }>;
+}
+
+const Fireflies: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    let animationFrameId: number;
+
+    const createFirefly = (): Firefly => {
+      const x = Math.random() * (canvas.width - 100) + 50;
+      const y = Math.random() * (canvas.height - 100) + 50;
+      return {
+        x,
+        y,
+        targetX: Math.random() * (canvas.width - 100) + 50,
+        targetY: Math.random() * (canvas.height - 100) + 50,
+        radius: Math.random() * 1.5 + 0.8,
+        vx: 0,
+        vy: 0,
+        opacity: 0,
+        targetOpacity: Math.random() * 0.4 + 0.1,
+        flickerPhase: Math.random() * Math.PI * 2,
+        flickerSpeed: Math.random() * 0.02 + 0.01,
+        glowRadius: Math.random() * 15 + 10,
+        hue: Math.random() * 30 + 45,
+        wanderAngle: Math.random() * Math.PI * 2,
+        restTime: 0,
+        maxRestTime: Math.random() * 120 + 60,
+        energy: Math.random() * 0.5 + 0.5,
+        trailPoints: []
+      };
+    };
+
+    const fireflies: Firefly[] = Array.from({ length: 25 }, () => createFirefly());
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      fireflies.forEach(firefly => {
+        // Update trail
+        firefly.trailPoints.push({ 
+          x: firefly.x, 
+          y: firefly.y, 
+          opacity: firefly.opacity * 0.3 
+        });
+        
+        // Limit trail length
+        if (firefly.trailPoints.length > 8) {
+          firefly.trailPoints.shift();
+        }
+        
+        // Decrease trail opacity
+        firefly.trailPoints.forEach((point ) => {
+          point.opacity *= 0.85;
+        });
+
+        // Rest behavior
+        if (firefly.restTime > 0) {
+          firefly.restTime--;
+          firefly.vx *= 0.95;
+          firefly.vy *= 0.95;
+          firefly.targetOpacity = 0.1;
+        } else {
+          // Wander behavior with occasional direction changes
+          if (Math.random() < 0.02) {
+            firefly.wanderAngle += (Math.random() - 0.5) * 0.5;
+            const wanderDistance = 50 + Math.random() * 150;
+            firefly.targetX = firefly.x + Math.cos(firefly.wanderAngle) * wanderDistance;
+            firefly.targetY = firefly.y + Math.sin(firefly.wanderAngle) * wanderDistance;
+            
+            // Clamp targets to canvas bounds with margin
+            firefly.targetX = Math.max(50, Math.min(canvas.width - 50, firefly.targetX));
+            firefly.targetY = Math.max(50, Math.min(canvas.height - 50, firefly.targetY));
+          }
+
+          // Occasionally pick completely random targets to ensure full coverage
+          if (Math.random() < 0.005) {
+            firefly.targetX = Math.random() * (canvas.width - 100) + 50;
+            firefly.targetY = Math.random() * (canvas.height - 100) + 50;
+          }
+
+          // Smooth movement toward target
+          const dx = firefly.targetX - firefly.x;
+          const dy = firefly.targetY - firefly.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance > 5) {
+            const force = Math.min(distance * 0.001, 0.15) * firefly.energy;
+            firefly.vx += (dx / distance) * force;
+            firefly.vy += (dy / distance) * force;
+          } else {
+            // Reached target, rest or pick new target
+            if (Math.random() < 0.3) {
+              firefly.restTime = firefly.maxRestTime;
+            }
+          }
+
+          // Add some organic floating motion
+          firefly.vx += (Math.random() - 0.5) * 0.05;
+          firefly.vy += (Math.random() - 0.5) * 0.05;
+          
+          firefly.targetOpacity = Math.random() * 0.6 + 0.2;
+        }
+
+        // Apply velocity damping
+        firefly.vx *= 0.98;
+        firefly.vy *= 0.98;
+        
+        // Limit maximum speed
+        const maxSpeed = 1.2;
+        const speed = Math.sqrt(firefly.vx * firefly.vx + firefly.vy * firefly.vy);
+        if (speed > maxSpeed) {
+          firefly.vx = (firefly.vx / speed) * maxSpeed;
+          firefly.vy = (firefly.vy / speed) * maxSpeed;
+        }
+
+        // Update position
+        firefly.x += firefly.vx;
+        firefly.y += firefly.vy;
+
+        // Soft boundary handling
+        const margin = 50;
+        if (firefly.x < margin) {
+          firefly.x = margin;
+          firefly.vx = Math.abs(firefly.vx);
+        }
+        if (firefly.x > canvas.width - margin) {
+          firefly.x = canvas.width - margin;
+          firefly.vx = -Math.abs(firefly.vx);
+        }
+        if (firefly.y < margin) {
+          firefly.y = margin;
+          firefly.vy = Math.abs(firefly.vy);
+        }
+        if (firefly.y > canvas.height - margin) {
+          firefly.y = canvas.height - margin;
+          firefly.vy = -Math.abs(firefly.vy);
+        }
+
+        // Update flickering
+        firefly.flickerPhase += firefly.flickerSpeed;
+        const flicker = Math.sin(firefly.flickerPhase) * 0.3 + 0.7;
+        
+        // Smooth opacity transition
+        firefly.opacity += (firefly.targetOpacity - firefly.opacity) * 0.05;
+        const currentOpacity = firefly.opacity * flicker;
+
+        // Draw trail
+        firefly.trailPoints.forEach((point, index) => {
+          if (point.opacity > 0.01) {
+            const size = firefly.radius * 0.3 * (index / firefly.trailPoints.length);
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${firefly.hue}, 100%, 60%, ${point.opacity})`;
+            ctx.fill();
+          }
+        });
+
+        // Draw outer glow
+        const gradient = ctx.createRadialGradient(
+          firefly.x, firefly.y, 0,
+          firefly.x, firefly.y, firefly.glowRadius
+        );
+        gradient.addColorStop(0, `hsla(${firefly.hue}, 100%, 70%, ${currentOpacity * 0.8})`);
+        gradient.addColorStop(0.3, `hsla(${firefly.hue}, 100%, 60%, ${currentOpacity * 0.4})`);
+        gradient.addColorStop(1, `hsla(${firefly.hue}, 100%, 50%, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(firefly.x, firefly.y, firefly.glowRadius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Draw inner bright core
+        ctx.beginPath();
+        ctx.arc(firefly.x, firefly.y, firefly.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${firefly.hue}, 100%, 90%, ${currentOpacity})`;
+        ctx.fill();
+
+        // Draw very bright center
+        ctx.beginPath();
+        ctx.arc(firefly.x, firefly.y, firefly.radius * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${firefly.hue}, 100%, 100%, ${currentOpacity * 1.2})`;
+        ctx.fill();
+
+        // Occasionally change energy levels
+        if (Math.random() < 0.001) {
+          firefly.energy = Math.random() * 0.5 + 0.5;
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      // Update firefly positions to stay within bounds and redistribute if needed
+      fireflies.forEach(firefly => {
+        firefly.x = Math.min(Math.max(firefly.x, 50), canvas.width - 50);
+        firefly.y = Math.min(Math.max(firefly.y, 50), canvas.height - 50);
+        firefly.targetX = Math.min(Math.max(firefly.targetX, 50), canvas.width - 50);
+        firefly.targetY = Math.min(Math.max(firefly.targetY, 50), canvas.height - 50);
+        
+        // If firefly is too close to edges after resize, give it a new random position
+        if (firefly.x < 100 && Math.random() < 0.5) {
+          firefly.x = Math.random() * (canvas.width - 200) + 100;
+          firefly.y = Math.random() * (canvas.height - 200) + 100;
+        }
+      });
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none"
+      style={{ zIndex: 0 }}
+    />
+  );
+};
+
+interface Chronicle {
   yourStoryTitle: string;
   chroniclesOfYou: string;
-  incidentFrom: string;
-  likeCount: number;
-  comments: boolean;
-  emailAllowed: boolean;
-  user?: {
-    firstname: string;
-    lastname: string;
-    username: string;
-  };
-};
+}
 
-type Props = {
+interface DiaryProps {
   chronicle: Chronicle;
-};
+}
 
-export default function Diary({ chronicle }: Props) {
+const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const [slides, setSlides] = useState<string[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   useEffect(() => {
     if (chronicle.chroniclesOfYou.length > 0) {
@@ -46,34 +293,37 @@ export default function Diary({ chronicle }: Props) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 font-serif">
-      <div className="relative max-w-3xl w-full bg-white border-[12px] border-double border-yellow-700 shadow-lg rounded-xl p-6 sm:p-10 before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-6 before:bg-gradient-to-r before:from-[#dfc88e] before:to-[#f3e5ab] before:rounded-t-xl">
-
-        {/* Heading */}
-        <h1 className="text-center text-3xl sm:text-4xl font-cursive text-[#5e3d2c] mb-6 tracking-wider">
+    <div className="pt-20 lg:pt-0 min-h-screen bg-black flex items-center justify-center px-4 py-12 font-serif relative overflow-hidden">
+      <Fireflies />
+      <div className="relative z-10 max-w-3xl w-full" data-aos="fade-up" data-aos-duration="1000">
+        <h1 className="text-center text-4xl md:text-5xl font-bold text-white mb-8 tracking-wider animate-fade-in">
           {chronicle.yourStoryTitle}
         </h1>
-
-        {/* Page Content */}
-        <div className="bg-[#f5e6b3] p-6 rounded-xl border border-yellow-400 shadow-inner text-gray-800 leading-relaxed tracking-wide whitespace-pre-wrap min-h-[200px]">
+        <div className="text-gray-200 text-lg md:text-xl leading-relaxed tracking-wide whitespace-pre-wrap min-h-[200px] animate-slide-up">
           {slides[currentIndex]}
         </div>
-
-        {/* Slide Navigation */}
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex justify-between items-center mt-8">
           <button
             onClick={goPrev}
             disabled={currentIndex === 0}
-            className="px-4 py-2 bg-yellow-700 text-white rounded disabled:opacity-30"
+            className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30"
           >
-            Prev
+            Previous
           </button>
-
-          <span className="text-sm text-gray-600"> Page {currentIndex + 1} of {slides.length} </span>
-
-          <button onClick={goNext} disabled={currentIndex === slides.length - 1} className="px-4 py-2 bg-yellow-700 text-white rounded disabled:opacity-30" > Next </button>
+          <span className="text-sm text-gray-400">
+            Page {currentIndex + 1} of {slides.length}
+          </span>
+          <button
+            onClick={goNext}
+            disabled={currentIndex === slides.length - 1}
+            className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Diary;

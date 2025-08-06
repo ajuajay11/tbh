@@ -7,9 +7,9 @@ import ReportAProblem from "@/app/components/chronicles/ReportAProblem";
 import { truncatedDesc, formatDate } from '@/utils/truncatedText'; // adjust path as needed
 import LeftPanel from "@/app/components/chronicles/LeftPanel";
 // import Link from "next/link";
-// import Image from "next/image";
-import { MessageCircle, Send, MoreHorizontal, MapPin, Bookmark, } from 'lucide-react';
- 
+import Image from "next/image";
+import { Send, BookOpen, MapPin, Bookmark, } from 'lucide-react';
+import CommentPopup from "@/app/components/CommentPopup"
 type Chronicle = {
   _id: string,
   yourStoryTitle: string;
@@ -88,13 +88,13 @@ export default async function Chronicles({ searchParams }: PageProps) {
     cache: 'no-store',
   });
   const json = await res.json();
-  const data: Chronicle[] = json.limitedChronicles || json.data || [];
+  const data: Chronicle[] = json?.limitedChronicles || json?.data || [];
   console.log(data, 'data');
 
 
   return (
     <>
-      <div  className="h-screen w-full overflow-hidden flex justify-center">
+      <div className="h-screen w-full overflow-hidden flex justify-center">
         <div className="flex flex-col md:flex-row h-full w-full max-w-[1600px]">
           <div className="h-screen w-full text-white flex">
             <LeftPanel />
@@ -104,11 +104,11 @@ export default async function Chronicles({ searchParams }: PageProps) {
                 {data?.length > 0 ? <div className="grid grid-cols-1 gap-8 mt-10">
                   {data?.map((chronicle) => (
                     <article key={chronicle._id} className="py-6">
-                      <div className="flex items-center justify-between px-4 mb-10">
+                      <div className="flex items-center justify-between mb-10">
                         <div className="flex items-center space-x-3">
                           <div>
                             {chronicle?.user?.profilePicture ? (
-                              <img width={40} height={40} className="rounded-full" src={chronicle?.user?.profilePicture} alt={chronicle?.user?.firstname} />
+                              <Image width={40} height={40} className="rounded-full" src={chronicle?.user?.profilePicture} alt={chronicle?.user?.firstname} />
                             ) : (
                               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center text-white font-semibold uppercase">
                                 {(chronicle?.user?.firstname?.[0] || 'A')}
@@ -116,7 +116,6 @@ export default async function Chronicles({ searchParams }: PageProps) {
                               </div>
                             )}
                           </div>
-
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center space-x-2">
                               <h3 className="font-semibold text-white">
@@ -137,9 +136,17 @@ export default async function Chronicles({ searchParams }: PageProps) {
                             </div>
                           </div>
                         </div>
-                        <button className="p-2 hover:bg-gray-800 rounded-full transition-colors">
-                          <MoreHorizontal className="w-5 h-5" />
-                        </button>
+                        <div className=" ">
+    <a
+      href={`/chronicles/s?id=${chronicle?._id}`}
+      className="group flex items-center space-x-2 px-3 py-2 rounded-full text-sm text-gray-300 bg-gray-900/50 hover:bg-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-white relative overflow-hidden"
+    >
+      <span className="absolute inset-0 bg-blue-500/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></span>
+      <BookOpen className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors duration-300 ease-in-out" />
+      <span className="relative z-10">Read full story</span>
+    </a>
+  </div>
+
                       </div>
 
                       {/* Post Content */}
@@ -154,23 +161,18 @@ export default async function Chronicles({ searchParams }: PageProps) {
                         </div>
 
                         {/* Read More Link */}
-                        <div className="mt-3">
-                          <a href={`/chronicles/s?id=${chronicle?._id}`} className="text-blue-400 text-sm hover:text-blue-300 transition-colors">
-                            Read full story
-                          </a>
-                        </div>
+
                       </div>
 
                       {/* Post Actions */}
                       <div className="px-4">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-1">
-
                             <Userlikes Pid={chronicle?._id} likeCount={chronicle.likeCount} likes={chronicle?.UserLikes} />
 
-                            <div className="flex items-center space-x-2 p-2 hover:bg-gray-800 rounded-full transition-all group">
-                              <MessageCircle className="w-6 h-6 group-hover:text-blue-400 transition-colors" />
-                            </div>
+                            {chronicle.replyAllowed && (
+                              <CommentPopup Pid={chronicle?._id} comments={chronicle?.UserComments} />
+                            )}
                             <div className="flex items-center space-x-2 hover:bg-gray-800 rounded-full transition-all group">
                               <div className="tooltip-container">
                                 <div className="button-content">
@@ -236,39 +238,6 @@ export default async function Chronicles({ searchParams }: PageProps) {
                               {chronicle.likeCount} {chronicle.likeCount === 1 ? 'person found this helpful' : 'people found this helpful'}
                             </p>
                           )}
-
-                          {/* {chronicle.UserComments && chronicle.UserComments.length > 0 && (
-                          <div className="space-y-3">
-                            {chronicle.UserComments.length > 2 && (
-                              <button className="text-gray-400 text-sm hover:text-white transition-colors">
-                                View all {chronicle.UserComments.length} supportive messages
-                              </button>
-                            )}
-                            
-                            <div className="space-y-2">
-                              {chronicle.UserComments.slice(0, 2).map((comment) => (
-                                <div key={comment._id} className="flex space-x-3">
-                                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                                    <span className="text-xs text-white font-semibold">
-                                      {comment.user?.name?.[0]?.toUpperCase() || 'A'}
-                                    </span>
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-start space-x-2">
-                                      <span className="font-semibold text-sm text-white">
-                                        {comment.user?.name || 'Anonymous'}
-                                      </span>
-
-                                      <span className="text-sm text-gray-300 flex-1">
-                                        {comment.comment}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )} */}
 
                           {/* Add Comment */}
                           {chronicle.replyAllowed && (
