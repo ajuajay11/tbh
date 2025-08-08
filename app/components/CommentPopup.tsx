@@ -54,46 +54,34 @@ export default function CommentPopup({ Pid, comments }: UserCommentsProps) {
     return (
         <>
             {/* Toggle Icon */}
-            <div
-                onClick={() => setIsModelOpen(!isModelOpen)}
-                className="flex items-center space-x-2 p-2 hover:bg-gray-800 rounded-full transition-all group cursor-pointer"
-            >
+            <div onClick={() => setIsModelOpen(!isModelOpen)} className="flex items-center space-x-2 p-2 hover:bg-gray-800 rounded-full transition-all group cursor-pointer" >
                 <MessageCircle className="w-6 h-6 group-hover:text-blue-400 transition-colors" />
             </div>
-
-            {/* Modal with Portal */}
+ 
             {isModelOpen &&
                 createPortal(
                     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
-                        <div
-                            data-aos="fade-up"
-                            className="w-full max-w-4xl h-[80vh] max-h-[80vh] bg-black rounded-t-lg flex flex-col"
-                        >
+                        <div data-aos="fade-up" className="w-full max-w-4xl h-[80vh] max-h-[80vh] bg-black rounded-t-lg flex flex-col" >
                             {/* Header */}
                             <div className="flex justify-between items-center px-4 py-2 border-b border-gray-700">
                                 <span className="text-white font-semibold">Comments</span>
-                                <X
-                                    onClick={() => setIsModelOpen(false)}
-                                    className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-200 transition-colors"
-                                />
+                                <X onClick={() => setIsModelOpen(false)} className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-200 transition-colors" />
                             </div>
 
                             {/* Scrollable Comment List */}
-                            <div className="flex-1 overflow-y-auto px-4 py-10 space-y-4">
+                            <div className="flex-1 overflow-y-auto px-4 py-10 space-y-4 scrollYTBH">
                                 {allComments.map((comment, i) => (
                                     <div key={i} className="flex space-x-3">
                                         <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                                        <span className="text-xs text-white font-semibold">
-                                            {comment.user?.name?.[0]?.toUpperCase() || 'A'}
-                                        </span>
+                                            <span className="text-xs text-white font-semibold"> {comment.user?.name?.[0]?.toUpperCase() || 'A'} </span>
                                         </div>
                                         <div className="flex-1 min-w-0">
                                         <div className="flex flex-col items-start space-x-2">
                                             <span className="font-semibold text-sm text-white">
-                                            {comment.user?.name || 'Anonymous'}
+                                                {comment?.user?.name || 'Anonymous'}
                                             </span>
                                             <span className="text-sm text-gray-300 flex-1">
-                                            {comment.comment} - {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : ''}
+                                                {comment.comment} - {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : ''}
                                             </span>
                                         </div>
                                         </div>

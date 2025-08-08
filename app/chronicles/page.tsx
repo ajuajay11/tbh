@@ -125,8 +125,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
                                   <span className="text-gray-500">Anonymous</span>
                                 )}
                               </h3>
-                              <span className="text-gray-500 text-sm">•</span>
-                              <span className="text-gray-500 text-sm">
+                               <span className="text-gray-500 text-sm font_five">
                                 {formatDate(chronicle?.createdAt)}
                               </span>
                             </div>
@@ -137,13 +136,12 @@ export default async function Chronicles({ searchParams }: PageProps) {
                           </div>
                         </div>
                         <div className=" ">
-                          <a
-                            href={`/chronicles/s?id=${chronicle?._id}`}
+                          <a href={`/chronicles/s?id=${chronicle?._id}`}
                             className="group flex items-center space-x-2 px-3 py-2 rounded-full text-sm text-gray-300 bg-gray-900/50 hover:bg-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:text-white relative overflow-hidden"
                           >
                             <span className="absolute inset-0 bg-blue-500/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></span>
                             <BookOpen className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors duration-300 ease-in-out" />
-                            <span className="relative z-10">Read full story</span>
+                            <span className="relative z-10 hidden lg:block">Read full story</span>
                           </a>
                         </div>
 
@@ -155,7 +153,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
                           {chronicle.yourStoryTitle}
                         </h2>
                         <div className="prose prose-invert max-w-none">
-                          <p className="text-center merienda-small text-gray-300 leading-relaxed whitespace-pre-wrap">
+                          <p className="text-center merienda-small text-gray-300 leading-relaxed whitespace-pre-wrap lg:px-20">
                             {truncatedDesc(chronicle.chroniclesOfYou, 500)}
                           </p>
                         </div>
@@ -224,21 +222,13 @@ export default async function Chronicles({ searchParams }: PageProps) {
                             <div className="p-2 hover:bg-gray-800 rounded-full transition-colors group">
                               <Bookmark className="w-5 h-5 group-hover:text-yellow-400 transition-colors" />
                             </div>
-
                             <ReportAProblem Pid={chronicle?._id} />
-                            {/* <Flag className="w-5 h-5 text-gray-400 group-hover:text-red-400 transition-colors" /> */}
-
                           </div>
                         </div>
 
                         {/* Likes and Comments */}
                         <div className="space-y-3">
-                          {chronicle.likeCount > 0 && (
-                            <p className="font-semibold text-sm">
-                              {chronicle.likeCount} {chronicle.likeCount === 1 ? 'person found this helpful' : 'people found this helpful'}
-                            </p>
-                          )}
-
+                          {chronicle.likeCount > 0 && ( <p className="font-semibold text-sm"> {chronicle.likeCount} {chronicle.likeCount === 1 ? 'person found this helpful' : 'people found this helpful'} </p> )}
                           {/* Add Comment */}
                           {chronicle.replyAllowed && (
                             <UserCommentsComponent Pid={chronicle?._id} comments={chronicle?.UserComments} />
@@ -252,12 +242,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
               </div>
             </div>
             {/* Right Panel */}
-            <div className="w-1/5 p-4 pt-20 transform" style={{
-              backgroundImage: `url('/girl.png')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              opacity: 0.5,
-            }}>
+            <div className="hidden lg:block w-1/5 p-4 pt-20 transform" style={{ backgroundImage: `url('/girl.png')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.5 }}>
               {/* <h2 className="text-xl font-bold mb-4">Right Panel</h2>
               <div className="space-y-4">
                 <div className="bg-zinc-700 p-3 rounded-lg">Notification</div>

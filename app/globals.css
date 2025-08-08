@@ -3,6 +3,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background: rgb(3 3 3) !important;
+  color: #fff;
+}
+.font_one{
+  font-size: clamp(12px, 4vw, 22px);
+}
+.font_two{
+  font-size: clamp(16px, 4vw, 30px);
+}
+.font_three{
+  font-size: clamp(12px, 4vw, 16px);
+}
+.font_four{
+  font-size: clamp(14px, 4vw, 24px);
+}
+.font_four{
+  font-size: clamp(14px, 4vw, 24px);
+}
+.font_five{
+  font-size: 10px;
+}
  @layer base {
   :root {
     --background: 0 0% 100%;
@@ -58,7 +81,6 @@
     --chart-5: 340 75% 55%;
   }
 }
-
 @layer base {
   * {
     @apply border-border;
@@ -87,20 +109,12 @@
   font-size: clamp(12px, 4vw, 14px);
 
 }
-
-
-body {
-  background: rgb(3 3 3) !important;
-  color: #fff;
-}
-
 .hero-text {
   font-size: 3rem;
   font-weight: bold;
   text-align: center;
   line-height: 1.2;
 }
-
 .btn-shine {
   position: relative;
   background: linear-gradient(
@@ -153,19 +167,7 @@ body {
     background-position: -100% 0;
   }
 }
-
-.fs-1{
-  font-family: 'Courier New', Courier, monospace;
-}
-.demo-container {
-  max-width: 800px;
-}
-
-.demo-section {
-  margin: 60px 0 10px 0px;
-  text-align: center;
-}
-
+ 
 @media (max-width: 768px) {
   .hero-text {
     font-size: 2rem;
@@ -200,13 +202,7 @@ body {
 }
 /* From Uiverse.io by Mohammad-Rahme-576 */ 
 /* Container Styles */
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-  font-family: "Arial", sans-serif;
-  overflow: visible;
-}
-
+ 
 /* Button Styles */
 .button-content {
   display: flex;
@@ -355,11 +351,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0) 70%
-  );
+  background: radial-gradient( circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70% );
   opacity: 0;
   transition: opacity 0.3s ease;
 }

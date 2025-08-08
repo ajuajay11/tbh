@@ -14,14 +14,14 @@ interface User {
 }
 
 export default async function Page() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
 
-  const cookieStore = cookies();
   const baseUrl = getBaseUrl();
 
-  const token = cookieStore.get('token')?.value;
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
