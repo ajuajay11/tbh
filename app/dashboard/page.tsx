@@ -2,6 +2,7 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import MyChronicles from "@/app/components/chronicles/MyChronicles";
+import Link from "next/link";
 
 interface User {
   email: string;
@@ -37,7 +38,8 @@ export default async function Page() {
   return (
     <main className="max-w-4xl mx-auto pt-49">
       {/* 👤 Profile Section */}
-      <div className="flex items-center gap-4 mb-8">
+     <div className="flex justify-between px-4 items-start py-3">
+       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 relative rounded-full overflow-hidden border">
           {user?.profilePicture ? (
             <Image
@@ -57,6 +59,10 @@ export default async function Page() {
           <p className="text-sm text-gray-500">@{user.username}</p>
         </div>
       </div>
+      <div>
+        <Link href="/dashboard/my-profile">Edit Profile</Link>
+      </div>
+     </div>
 
       {/* 📝 My Chronicles Section */}
       <section>

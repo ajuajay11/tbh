@@ -22,7 +22,7 @@ export default function Page() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            
+
             const res = await fetch("/api/user", {
                 headers: {
                     Authorization: `Bearer ${Cookies.get("token")}`,
@@ -46,32 +46,28 @@ export default function Page() {
         profilePicture: null as File | null,
     });
 
-    // Populate form with user data when loaded
     useEffect(() => {
         const userData = user?.getUser;
         if (userData) {
             setUpdateProfile(prev => ({
-            ...prev,
-            email: userData.email || "",
-            firstname: userData.firstname || "",
-            lastname: userData.lastname || "",
-            gender: userData.gender || "",
-            age: userData.age || 0,
-            username: userData.username || "",
-            profilePicture: null  // keep this null unless user uploads a new file
+                ...prev,
+                email: userData.email || "",
+                firstname: userData.firstname || "",
+                lastname: userData.lastname || "",
+                gender: userData.gender || "",
+                age: userData.age || 0,
+                username: userData.username || "",
+                profilePicture: null  // keep this null unless user uploads a new file
             }));
 
             if (userData.profilePicture) {
-            setPreviewUrl(userData.profilePicture); // string URL
+                setPreviewUrl(userData.profilePicture); // string URL
             }
         }
-        }, [user]);
+    }, [user]);
 
-
-    // State for image preview
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const [loading, setLoading] = useState(false);
-
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setUpdateProfile(prev => ({
@@ -148,79 +144,132 @@ export default function Page() {
     }
 
     return (
-        <div>
-            <form onSubmit={submitProfile} className="max-w-md mx-auto p-6 rounded-2xl shadow-lg space-y-5" >
-                <h2 className="text-2xl font-bold text-center text-gray-800">Update Profile</h2>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2"> Profile Picture </label>
-                    {previewUrl && (
-                        <div className="mb-3 flex justify-center">
-                            <Image src={previewUrl} alt="Profile preview" width={100} height={100} className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"  />
-                        </div>
-                    )}
-                    <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                    <p className="text-xs text-gray-500 mt-1">Max size: 5MB</p>
-                </div>
-                <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email </label>
-                    <input type="email" name="email" value={updateProfile.email} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
-                </div>
-
-                <div>
-                    <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">First Name </label>
-                    <input type="text" name="firstname" value={updateProfile.firstname} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
-                </div>
-
-                <div>
-                    <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">Last Name </label>
-                    <input type="text" name="lastname" value={updateProfile.lastname} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
-                </div>
-
-                <div>
-                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700"> Gender </label>
-                    <select name="gender" value={updateProfile.gender} onChange={handleChange}  className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
-                    >
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age</label>
-                    <input
-                        type="number"
-                        name="age"
-                        value={updateProfile.age || ""}
-                        onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
-                        min="1"
-                        max="120"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={updateProfile.username}
-                        onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
-                    />
-                </div>
-
-                <div className="text-center">
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="bg-blue-600 hover:bg-blue-700 text white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Updating...' : 'Submit'}
-                    </button>
-                </div>
-            </form>
-        </div>
+        <div>             
+    <form onSubmit={submitProfile} className="p-6 rounded-2xl shadow-lg flex gap-6" >                 
+        <div className="flex-shrink-0">                     
+            {/* <label className="mb-2"> Profile Picture </label> */}                     
+            {previewUrl && (                         
+                <div className="mb-3 flex justify-center">                             
+                    <Image 
+                        src={previewUrl} 
+                        alt="Profile preview" 
+                        width={100} 
+                        height={100} 
+                        className="w-24 h-24 rounded-full object-cover border-2 border-gray-200" 
+                    />                         
+                </div>                     
+            )}                     
+            <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleFileChange} 
+                className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" 
+            />                     
+            <p className="text-xs text-gray-500 mt-1">Max size: 5MB</p>                 
+        </div>                 
+        
+        <div className="flex-1 space-y-4">                         
+            <div>                             
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                </label>                             
+                <input 
+                    type="email" 
+                    name="email" 
+                    value={updateProfile.email} 
+                    onChange={handleChange} 
+                    className="w-full p-3 bg-transparent border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" 
+                    required 
+                />                         
+            </div>                     
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">                         
+                <div>                             
+                    <label htmlFor="firstname" className="block text-sm font-medium text-gray-700 mb-1">
+                        First Name
+                    </label>                             
+                    <input 
+                        type="text" 
+                        name="firstname" 
+                        value={updateProfile.firstname} 
+                        onChange={handleChange} 
+                        className="w-full p-3 bg-transparent border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" 
+                        required 
+                    />                         
+                </div>                         
+                <div>                             
+                    <label htmlFor="lastname" className="block text-sm font-medium text-gray-700 mb-1">
+                        Last Name
+                    </label>                             
+                    <input 
+                        type="text" 
+                        name="lastname" 
+                        value={updateProfile.lastname} 
+                        onChange={handleChange} 
+                        className="w-full p-3 bg-transparent border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" 
+                        required 
+                    />                         
+                </div>                                             
+            </div>                     
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">                          
+                <div>                             
+                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+                        Gender
+                    </label>                             
+                    <select 
+                        name="gender" 
+                        value={updateProfile.gender} 
+                        onChange={handleChange} 
+                        className="w-full p-3 bg-transparent border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    >                                 
+                        <option value="">Select Gender</option>                                 
+                        <option value="male">Male</option>                                 
+                        <option value="female">Female</option>                                 
+                        <option value="other">Other</option>                             
+                    </select>                         
+                </div>                     
+                
+                <div>                         
+                    <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
+                        Age
+                    </label>                         
+                    <input 
+                        type="number" 
+                        name="age" 
+                        value={updateProfile.age || ""} 
+                        onChange={handleChange} 
+                        className="w-full p-3 bg-transparent border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" 
+                        min="1" 
+                        max="120" 
+                    />                     
+                </div>                      
+                
+                <div>                         
+                    <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                        Username
+                    </label>                         
+                    <input 
+                        type="text" 
+                        name="username" 
+                        value={updateProfile.username} 
+                        onChange={handleChange} 
+                        className="w-full p-3 bg-transparent border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" 
+                    />                     
+                </div>                     
+            </div>                       
+            
+            <div className="pt-4">                         
+                <button 
+                    type="submit" 
+                    disabled={loading} 
+                    className="tbh_button w-full"
+                >                             
+                    {loading ? 'Updating...' : 'Submit'}                         
+                </button>                     
+            </div>                 
+        </div>              
+    </form>         
+</div>
     )
 }

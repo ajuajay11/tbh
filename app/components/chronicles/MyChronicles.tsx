@@ -30,12 +30,10 @@ export default async function page() {
     <>
       <div className="grid grid-cols-3">
         {posts.map((item: Chronicle) => (
-          <div key={item._id} className="p-10 text-[10px] leading-tight border border-[#111111]" >
-            <h2 className="font_four mb-4 text-center capitalize">{item.yourStoryTitle}</h2>
+          <div key={item._id} className="p-5 text-[10px] leading-tight border border-[#111111]" >
+            <h2 className="font_one mb-4 text-center capitalize">{truncatedDesc(item.yourStoryTitle, 15)}</h2>
             <p className="text-gray-600 font_three">{truncatedDesc(item.chroniclesOfYou, 250)}</p>
-            <div className="mt-1 text-gray-400 text-[9px] mt-5">
-              ❤️ {item?.likeCount>0? item?.likeCount: null}
-            </div>
+             
           </div>
         ))}
       </div>
