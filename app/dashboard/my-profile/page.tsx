@@ -22,7 +22,7 @@ export default function Page() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            
+
             const res = await fetch("/api/user", {
                 headers: {
                     Authorization: `Bearer ${Cookies.get("token")}`,
@@ -46,32 +46,28 @@ export default function Page() {
         profilePicture: null as File | null,
     });
 
-    // Populate form with user data when loaded
     useEffect(() => {
         const userData = user?.getUser;
         if (userData) {
             setUpdateProfile(prev => ({
-            ...prev,
-            email: userData.email || "",
-            firstname: userData.firstname || "",
-            lastname: userData.lastname || "",
-            gender: userData.gender || "",
-            age: userData.age || 0,
-            username: userData.username || "",
-            profilePicture: null  // keep this null unless user uploads a new file
+                ...prev,
+                email: userData.email || "",
+                firstname: userData.firstname || "",
+                lastname: userData.lastname || "",
+                gender: userData.gender || "",
+                age: userData.age || 0,
+                username: userData.username || "",
+                profilePicture: null  // keep this null unless user uploads a new file
             }));
 
             if (userData.profilePicture) {
-            setPreviewUrl(userData.profilePicture); // string URL
+                setPreviewUrl(userData.profilePicture); // string URL
             }
         }
-        }, [user]);
+    }, [user]);
 
-
-    // State for image preview
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const [loading, setLoading] = useState(false);
-
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setUpdateProfile(prev => ({

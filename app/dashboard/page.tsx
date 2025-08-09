@@ -56,7 +56,7 @@ export default async function Page() {
       <div className="flex gap-2">
         <Edit/><Link href="/dashboard/my-profile">Edit Profile</Link>
       </div>
-      </div>
+     </div>
 
       <section className="lg:mt-10">
         <h3 className="text-xl font-bold mb-4">My Chronicles</h3>
