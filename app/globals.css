@@ -8,7 +8,7 @@ body {
   background: rgb(3 3 3) !important;
   color: #fff;
 }
-.font_one{
+ .font_one{
   font-size: clamp(12px, 4vw, 22px);
 }
 .font_two{
@@ -25,6 +25,15 @@ body {
 }
 .font_five{
   font-size: 10px;
+}
+.font_clr1{
+  color: #005e94;
+}
+.font_clr2{
+  color: #b10202;
+}
+.font_clr3{
+  color: #000;
 }
  @layer base {
   :root {
@@ -494,7 +503,7 @@ body {
 
 @media (max-width: 480px) {
   .button-content {
-    padding: 10px 20px;
+    padding: 0px;
   }
 
   .text {

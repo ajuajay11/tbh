@@ -2,6 +2,7 @@ import { truncatedDesc  } from '@/utils/truncatedText'; // adjust path as needed
 import { cookies } from "next/headers";
 // import CreateChronicles from "@/app/components/chronicles/CreateChronicles/index"
 import { getBaseUrl } from "@/lib/getBaseUrl";
+import Link from 'next/link';
 type Chronicle = {
   _id: string;
   yourStoryTitle: string;
@@ -28,15 +29,12 @@ export default async function page() {
   const posts: Chronicle[] = json.allChronicles || json.limitedChronicles;
   return (
     <>
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-2 lg:grid-cols-3">
         {posts.map((item: Chronicle) => (
-          <div key={item._id} className="p-10 text-[10px] leading-tight border border-[#111111]" >
-            <h2 className="font_four mb-4 text-center capitalize">{item.yourStoryTitle}</h2>
+          <Link href={`/chronicles/s?id=item?._id`} key={item._id} className="p-5 text-[10px] leading-tight border border-[#111111]" >
+            <h2 className="font_four mb-4 text-center capitalize font_clr1">{truncatedDesc(item.yourStoryTitle, 20)}</h2>
             <p className="text-gray-600 font_three">{truncatedDesc(item.chroniclesOfYou, 250)}</p>
-            <div className="mt-1 text-gray-400 text-[9px] mt-5">
-              ❤️ {item?.likeCount>0? item?.likeCount: null}
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
 

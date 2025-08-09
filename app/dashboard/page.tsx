@@ -2,6 +2,8 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import MyChronicles from "@/app/components/chronicles/MyChronicles";
+import { Edit } from 'lucide-react';
+import Link from "next/link";
 
 interface User {
   email: string;
@@ -37,19 +39,13 @@ export default async function Page() {
   return (
     <main className="max-w-4xl mx-auto pt-49">
       {/* 👤 Profile Section */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 relative rounded-full overflow-hidden border">
           {user?.profilePicture ? (
-            <Image
-              src={user.profilePicture}
-              alt="Profile Picture"
-              fill
-              className="object-cover"
-            />
+            <Image src={user.profilePicture} alt="Profile Picture" fill className="object-cover" />
           ) : (
-            <div className="w-full h-full bg-gray-300 flex items-center justify-center text-white text-xs">
-              {user.firstname[0]}{user.lastname[0]}
-            </div>
+            <div className="w-full h-full bg-gray-300 flex items-center justify-center text-white text-xs"> {user.firstname[0]}{user.lastname[0]} </div>
           )}
         </div>
         <div>
@@ -57,9 +53,12 @@ export default async function Page() {
           <p className="text-sm text-gray-500">@{user.username}</p>
         </div>
       </div>
+      <div className="flex gap-2">
+        <Edit/><Link href="/dashboard/my-profile">Edit Profile</Link>
+      </div>
+      </div>
 
-      {/* 📝 My Chronicles Section */}
-      <section>
+      <section className="lg:mt-10">
         <h3 className="text-xl font-bold mb-4">My Chronicles</h3>
         <MyChronicles />
       </section>

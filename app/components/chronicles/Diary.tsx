@@ -1,6 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from "react";
-
+import Cookies from "js-cookie";
+import axios from "axios";
+import SuccessMsg from "@/app/components/SuccessMsg";
+import { Edit, CircleX, Reply } from "lucide-react";
+import Link from "next/link";
 interface Firefly {
   x: number;
   y: number;
@@ -21,17 +25,16 @@ interface Firefly {
   energy: number;
   trailPoints: Array<{ x: number; y: number; opacity: number }>;
 }
-
 const Fireflies: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     let animationFrameId: number;
 
     const createFirefly = (): Firefly => {
@@ -63,22 +66,22 @@ const Fireflies: React.FC = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       fireflies.forEach(firefly => {
         // Update trail
-        firefly.trailPoints.push({ 
-          x: firefly.x, 
-          y: firefly.y, 
-          opacity: firefly.opacity * 0.3 
+        firefly.trailPoints.push({
+          x: firefly.x,
+          y: firefly.y,
+          opacity: firefly.opacity * 0.3
         });
-        
+
         // Limit trail length
         if (firefly.trailPoints.length > 8) {
           firefly.trailPoints.shift();
         }
-        
+
         // Decrease trail opacity
-        firefly.trailPoints.forEach((point ) => {
+        firefly.trailPoints.forEach((point) => {
           point.opacity *= 0.85;
         });
 
@@ -95,7 +98,7 @@ const Fireflies: React.FC = () => {
             const wanderDistance = 50 + Math.random() * 150;
             firefly.targetX = firefly.x + Math.cos(firefly.wanderAngle) * wanderDistance;
             firefly.targetY = firefly.y + Math.sin(firefly.wanderAngle) * wanderDistance;
-            
+
             // Clamp targets to canvas bounds with margin
             firefly.targetX = Math.max(50, Math.min(canvas.width - 50, firefly.targetX));
             firefly.targetY = Math.max(50, Math.min(canvas.height - 50, firefly.targetY));
@@ -111,7 +114,7 @@ const Fireflies: React.FC = () => {
           const dx = firefly.targetX - firefly.x;
           const dy = firefly.targetY - firefly.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance > 5) {
             const force = Math.min(distance * 0.001, 0.15) * firefly.energy;
             firefly.vx += (dx / distance) * force;
@@ -126,14 +129,14 @@ const Fireflies: React.FC = () => {
           // Add some organic floating motion
           firefly.vx += (Math.random() - 0.5) * 0.05;
           firefly.vy += (Math.random() - 0.5) * 0.05;
-          
+
           firefly.targetOpacity = Math.random() * 0.6 + 0.2;
         }
 
         // Apply velocity damping
         firefly.vx *= 0.98;
         firefly.vy *= 0.98;
-        
+
         // Limit maximum speed
         const maxSpeed = 1.2;
         const speed = Math.sqrt(firefly.vx * firefly.vx + firefly.vy * firefly.vy);
@@ -168,7 +171,7 @@ const Fireflies: React.FC = () => {
         // Update flickering
         firefly.flickerPhase += firefly.flickerSpeed;
         const flicker = Math.sin(firefly.flickerPhase) * 0.3 + 0.7;
-        
+
         // Smooth opacity transition
         firefly.opacity += (firefly.targetOpacity - firefly.opacity) * 0.05;
         const currentOpacity = firefly.opacity * flicker;
@@ -222,14 +225,14 @@ const Fireflies: React.FC = () => {
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      
+
       // Update firefly positions to stay within bounds and redistribute if needed
       fireflies.forEach(firefly => {
         firefly.x = Math.min(Math.max(firefly.x, 50), canvas.width - 50);
         firefly.y = Math.min(Math.max(firefly.y, 50), canvas.height - 50);
         firefly.targetX = Math.min(Math.max(firefly.targetX, 50), canvas.width - 50);
         firefly.targetY = Math.min(Math.max(firefly.targetY, 50), canvas.height - 50);
-        
+
         // If firefly is too close to edges after resize, give it a new random position
         if (firefly.x < 100 && Math.random() < 0.5) {
           firefly.x = Math.random() * (canvas.width - 200) + 100;
@@ -260,6 +263,13 @@ const Fireflies: React.FC = () => {
 interface Chronicle {
   yourStoryTitle: string;
   chroniclesOfYou: string;
+  incidentFrom: string;
+  user: string;
+  _id: string;
+  emailAllowed: string;
+  comments: string;
+  replyAllowed: string;
+
 }
 
 interface DiaryProps {
@@ -269,8 +279,39 @@ interface DiaryProps {
 const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const [slides, setSlides] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [userId, setUserId] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [editable, setEditable] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    yourStoryTitle: chronicle.yourStoryTitle,
+    chroniclesOfYou: chronicle?.chroniclesOfYou,
+    incidentFrom: chronicle?.incidentFrom,
+    replyAllowed: chronicle?.replyAllowed,
+    comments: chronicle?.comments,
+    emailAllowed: chronicle?.emailAllowed,
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
 
+    if (type === "checkbox") {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData(prev => ({
+        ...prev,
+        [name]: checked,
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
   useEffect(() => {
+    const id = Cookies.get("userId");
+    if (id) {
+      setUserId(id);
+    }
     if (chronicle.chroniclesOfYou.length > 0) {
       const parts: string[] = [];
       for (let i = 0; i < chronicle.chroniclesOfYou.length; i += 1000) {
@@ -279,7 +320,39 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
       setSlides(parts);
     }
   }, [chronicle]);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = Cookies.get("token");
 
+    if (!token) {
+      alert("You must be logged in.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.put(`/api/addChronicles/${chronicle?._id}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res);
+      const successMsg = res?.data?.message;
+      setSuccess(successMsg)
+      // alert(res.data.message || "Chronicle created!");
+      setLoading(false);
+    } catch (error: unknown) {
+      setLoading(false);
+
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        alert(err.response?.data?.message || "Something went wrong");
+      } else {
+        alert("Unexpected error");
+      }
+    }
+  };
   const goNext = () => {
     if (currentIndex < slides.length - 1) {
       setCurrentIndex(prev => prev + 1);
@@ -293,34 +366,72 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4 py-12 font-serif relative overflow-hidden">
-      <Fireflies />
-      <div className="relative z-10 max-w-3xl w-full" data-aos="fade-up" data-aos-duration="1000">
-        <h1 className="mt-10 merienda lg:pt-0  text-center text-4xl md:text-3xl font-bold text-white mb-8">
-          {chronicle.yourStoryTitle}
-        </h1>
-        <div className="fs-1 caveat text-gray-200 tracking-wide whitespace-pre-wrap min-h-[700px] ">
-          {slides[currentIndex]}
+    <> <SuccessMsg successMsg={success} />
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12 font-serif relative overflow-hidden">
+        <Fireflies />
+        <div className="flex justify-between w-full lg:px-20 mt-10 lg:mt-0 ">
+          <Link href="/" className="flex gap-2">
+            <Reply /> go back
+          </Link>
+          <div>
+            {!editable ? (chronicle?.user === userId ? (<button onClick={() => setEditable(true)} className="flex gap-2" > <Edit /> Edit Chronicles </button>) : null) : (<button onClick={() => setEditable(false)}>&nbsp;&nbsp;<CircleX /></button>)}
+          </div>
         </div>
-        <div className="flex justify-between items-center mt-8">
-          <button
-            onClick={goPrev}
-            disabled={currentIndex === 0}
-            className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30"
+
+        <form onSubmit={handleSubmit} className="relative z-10 max-w-3xl w-full" data-aos="fade-up" data-aos-duration="1000">
+          <div className="flex justify-between items-center">
+
+          </div>
+          {editable ? <input type="text" name="yourStoryTitle" className="font_clr2 mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300 font_one text-white bg-transparent" value={formData.yourStoryTitle} onChange={handleChange} /> : <h1 className="mt-10 merienda lg:pt-0  text-center text-4xl md:text-3xl font-bold font_clr2 mb-8"> {chronicle.yourStoryTitle} </h1>}
+          {editable ? <textarea name="chroniclesOfYou" className="border w-full mt-10 bg-transparent font_one scrollYTBH h-[400px]" value={formData?.chroniclesOfYou} onChange={handleChange}>
+            {formData.chroniclesOfYou}
+          </textarea> : <div className="fs-1 caveat text-gray-200 tracking-wide whitespace-pre-wrap min-h-[700px] "> {slides[currentIndex]} </div>}
+          {editable ? <div className="flex flex-wrap gap-4">
+            <label className="flex items-center gap-2 text-white/90">
+              <input
+                type="checkbox"
+                name="replyAllowed"
+                checked={!!formData.replyAllowed}
+                onChange={handleChange}
+                className="accent-pink-400"
+              />
+              Allow Replies
+            </label>
+            <label className="flex items-center gap-2 text-white/90">
+              <input
+                type="checkbox"
+                name="comments"
+                checked={!!formData.comments}
+                onChange={handleChange}
+                className="accent-pink-400"
+              />
+              Enable Comments
+            </label>
+            <label className="flex items-center gap-2 text-white/90">
+              <input
+                type="checkbox"
+                name="emailAllowed"
+                checked={!!formData.emailAllowed}
+                onChange={handleChange}
+                className="accent-pink-400"
+              />
+              Allow Email
+            </label>
+          </div> : null}
+          {editable ? <button
+            type="submit"
+            disabled={loading}
+            className="tbh_button capitalize font_one mt-10"
           >
-            Previous
-          </button>
-           
-          <button
-            onClick={goNext}
-            disabled={currentIndex === slides.length - 1}
-            className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-    </div>
+            {loading ? "Submitting..." : "Submit Chronicle"}
+          </button> : <div className="flex justify-between items-center mt-8">
+            <button onClick={goPrev} disabled={currentIndex === 0} className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30" >
+              Previous
+            </button>
+            <button onClick={goNext} disabled={currentIndex === slides.length - 1} className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30"> Next </button>
+          </div>}
+        </form>
+      </div></>
   );
 };
 

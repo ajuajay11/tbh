@@ -149,7 +149,7 @@ export default function Page() {
 
     return (
         <div>
-            <form onSubmit={submitProfile} className="max-w-md mx-auto p-6 rounded-2xl shadow-lg space-y-5" >
+            <form onSubmit={submitProfile} className=" p-6  shadow-lg space-y-5" >
                 <h2 className="text-2xl font-bold text-center text-gray-800">Update Profile</h2>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2"> Profile Picture </label>
@@ -163,22 +163,22 @@ export default function Page() {
                 </div>
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email </label>
-                    <input type="email" name="email" value={updateProfile.email} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
+                    <input type="email" name="email" value={updateProfile.email} onChange={handleChange} className="mt-1 w-full p-2 " required />
                 </div>
 
                 <div>
                     <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">First Name </label>
-                    <input type="text" name="firstname" value={updateProfile.firstname} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
+                    <input type="text" name="firstname" value={updateProfile.firstname} onChange={handleChange} className="mt-1 w-full p-2 " required />
                 </div>
 
                 <div>
                     <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">Last Name </label>
-                    <input type="text" name="lastname" value={updateProfile.lastname} onChange={handleChange} className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300" required />
+                    <input type="text" name="lastname" value={updateProfile.lastname} onChange={handleChange} className="mt-1 w-full p-2 " required />
                 </div>
 
                 <div>
                     <label htmlFor="gender" className="block text-sm font-medium text-gray-700"> Gender </label>
-                    <select name="gender" value={updateProfile.gender} onChange={handleChange}  className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
+                    <select name="gender" value={updateProfile.gender} onChange={handleChange}  className="mt-1 w-full p-2 "
                     >
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
@@ -194,7 +194,7 @@ export default function Page() {
                         name="age"
                         value={updateProfile.age || ""}
                         onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
+                        className="mt-1 w-full p-2 "
                         min="1"
                         max="120"
                     />
@@ -207,7 +207,7 @@ export default function Page() {
                         name="username"
                         value={updateProfile.username}
                         onChange={handleChange}
-                        className="mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300"
+                        className="mt-1 w-full p-2 "
                     />
                 </div>
 
