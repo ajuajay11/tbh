@@ -1,5 +1,5 @@
 
- import ImageVariation from "../components/authentication/ImageVariation";
+import ImageVariation from "../components/authentication/ImageVariation";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
  
   return (
@@ -8,8 +8,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="w-1/3 hidden lg:block">
         <ImageVariation />
         </div>
-        <div className="w-3/3 lg:w-2/3 h-full px-2 lg:px-0">
-          <main className="flex mt-20 justify-start h-full">
+        <div className="w-full lg:w-2/3 h-full px-4 lg:px-8">
+          <main className="flex items-center justify-center min-h-full ">
             {children}
           </main>
         </div>

@@ -29,14 +29,14 @@ export default async function page() {
   const posts: Chronicle[] = json.allChronicles || json.limitedChronicles;
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-3">
+      {posts?<div className="grid grid-cols-1 lg:grid-cols-3">
         {posts.map((item: Chronicle) => (
           <Link href={`/chronicles/s?id=item?._id`} key={item._id} className="p-5 text-[10px] leading-tight border border-[#111111]" >
             <h2 className="font_four mb-4 text-center capitalize font_clr1">{truncatedDesc(item.yourStoryTitle, 20)}</h2>
             <p className="text-gray-600 font_three text-center ">{truncatedDesc(item.chroniclesOfYou, 250)}</p>
           </Link>
         ))}
-      </div>
+      </div>:<Link href="/dashboard/add-chronicle" className='tbh_button'>Create Chronicles</Link>}
 
     </>
   )

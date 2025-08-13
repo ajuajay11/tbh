@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import pImage from "../../../public/pexels-phael-2401442.png";
 import pImageOne from "../../../public/openeyes.png";
 import Image from "next/image";
-
+// text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6
 export default function ImageVariation() {
   const [eyes, setEyes] = useState<boolean>(false);
 

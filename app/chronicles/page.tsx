@@ -98,10 +98,10 @@ export default async function Chronicles({ searchParams }: PageProps) {
         <div className="flex flex-col md:flex-row h-full w-full max-w-[1600px]">
           <div className="h-screen w-full text-white flex">
             <LeftPanel />
-            <div className="flex-1 lg:p-6 overflow-y-auto scrollYTBH">
+            <div className="flex-1 lg:p-2 overflow-y-auto scrollYTBH">
               <div className="w-full max-w-7xl lg:px-4">
                 {/* {data?.length > 0 ? <FilterChronicles initialFilters={query} /> : null} */}
-                {data?.length > 0 ? <div className="grid grid-cols-1 gap-8 mt-10">
+                {data?.length > 0 ? <div className="grid grid-cols-1 gap-8 ">
                   {data?.map((chronicle) => (
                     <article key={chronicle._id} className="flex flex-col justify-between rounded-2xl shadow-lg overflow-hidden" style={{height:"90vh"}}>
                       <header className="flex items-center justify-between p-4  ">
@@ -144,7 +144,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
                         </div>
                       </header>
                       {/* Post Content */}
-                      <div className="flex-1 px-4 flex flex-col justify-center bg-[#dae9da] py-10 lg:py-3">
+                      <div className="flex-1 px-4 flex flex-col justify-center bg-[#333] py-10 lg:py-3">
                         <h2 className="text-center eb-garamond text-[#000] fw-bold leading-tight font_seven">
                           {chronicle?.yourStoryTitle}
                         </h2>

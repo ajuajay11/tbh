@@ -9,6 +9,7 @@
 body {
   background: rgb(3 3 3) !important;
   color: #fff;
+
 }
  .font_one{
   font-size: clamp(12px, 4vw, 22px);
@@ -196,10 +197,21 @@ body {
     font-size: clamp(2.5rem, 4vw, 3vw);
   }
 }
-
+@keyframes bounceSlow {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+    .animate-bounce-slow {
+      animation: bounceSlow 2.5s ease-in-out infinite;
+    }
 /* //button */
 .tbh_button {
-  background-color: #b10202;
+   
+  background: linear-gradient(to right, #2563eb, #9333ea); /* from-blue-600 to-purple-600 */
   color: white;
   font-weight: 600;
   padding: 0.75rem 1.5rem; /* py-3 px-6 */
@@ -208,6 +220,9 @@ body {
   transition: background-color 0.2s;
 }
 
+.tbh_button:hover {
+  background: linear-gradient(to right, #1d4ed8, #7e22ce);  
+}
 .button:hover {
   background-color: #e50924;
 }

@@ -37,7 +37,7 @@ export default async function Page() {
   const user: User = json?.getUser;
 
   return (
-    <main className="max-w-4xl mx-auto pt-49">
+    <main className="max-w-4xl mx-auto ">
       {/* 👤 Profile Section */}
       <div className="flex justify-between">
         <div className="flex items-center gap-4 mb-8">

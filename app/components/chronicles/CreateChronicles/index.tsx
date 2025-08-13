@@ -65,84 +65,89 @@ export default function CreateChronicleForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-1 mt-10 rounded-3xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl space-y-6" >
-      <h2 className="text-2xl font-bold text-white text-center drop-shadow mb-2">Create Chronicle</h2>
+<form
+  onSubmit={handleSubmit}
+  className="max-w-lg mx-auto mt-12 p-8 rounded-2xl bg-gray-900/90 backdrop-blur-xl border border-gray-700 shadow-xl space-y-6"
+>
+  <h2 className="text-3xl font-extrabold text-white text-center tracking-tight drop-shadow-md mb-4">
+    Create Your Chronicle
+  </h2>
 
+  <input
+    type="text"
+    name="yourStoryTitle"
+    placeholder="Title"
+    value={formData.yourStoryTitle}
+    onChange={handleChange}
+    required
+    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:bg-gray-700/50 transition-all duration-300"
+  />
+
+  <textarea
+    name="chroniclesOfYou"
+    placeholder="Share your story..."
+    value={formData.chroniclesOfYou}
+    onChange={handleChange}
+    required
+    rows={5}
+    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:bg-gray-700/50 transition-all duration-300 resize-none"
+  />
+
+  <input
+    type="text"
+    name="incidentFrom"
+    placeholder="Location (e.g., India)"
+    value={formData.incidentFrom}
+    onChange={handleChange}
+    required
+    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 hover:bg-gray-700/50 transition-all duration-300"
+  />
+
+  <div className="flex flex-wrap gap-6 justify-center">
+    <label className="flex items-center gap-3 text-gray-200 cursor-pointer">
       <input
-        type="text"
-        name="yourStoryTitle"
-        placeholder="Title"
-        value={formData.yourStoryTitle}
+        type="checkbox"
+        name="replyAllowed"
+        checked={formData.replyAllowed}
         onChange={handleChange}
-        required
-        className="w-full px-4 py-3  "
+        className="w-5 h-5 accent-purple-500 rounded focus:ring-2 focus:ring-purple-400 transition"
       />
-
-      <textarea
-        name="chroniclesOfYou"
-        placeholder="Your story..."
-        value={formData.chroniclesOfYou}
-        onChange={handleChange}
-        required
-        rows={5}
-        className="w-full px-4 py-3 rounded-lg bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition resize-none"
-      />
-
+      <span className="text-sm font-medium">Allow Replies</span>
+    </label>
+    <label className="flex items-center gap-3 text-gray-200 cursor-pointer">
       <input
-        type="text"
-        name="incidentFrom"
-        placeholder="Location (e.g., India)"
-        value={formData.incidentFrom}
+        type="checkbox"
+        name="comments"
+        checked={formData.comments}
         onChange={handleChange}
-        required
-        className="w-full px-4 py-3 rounded-lg bg-white/70 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition"
+        className="w-5 h-5 accent-purple-500 rounded focus:ring-2 focus:ring-purple-400 transition"
       />
+      <span className="text-sm font-medium">Enable Comments</span>
+    </label>
+    <label className="flex items-center gap-3 text-gray-200 cursor-pointer">
+      <input
+        type="checkbox"
+        name="emailAllowed"
+        checked={formData.emailAllowed}
+        onChange={handleChange}
+        className="w-5 h-5 accent-purple-500 rounded focus:ring-2 focus:ring-purple-400 transition"
+      />
+      <span className="text-sm font-medium">Allow Email</span>
+    </label>
+  </div>
 
-      <div className="flex flex-wrap gap-4">
-        <label className="flex items-center gap-2 text-white/90">
-          <input
-            type="checkbox"
-            name="replyAllowed"
-            checked={formData.replyAllowed}
-            onChange={handleChange}
-            className="accent-pink-400"
-          />
-          Allow Replies
-        </label>
-        <label className="flex items-center gap-2 text-white/90">
-          <input
-            type="checkbox"
-            name="comments"
-            checked={formData.comments}
-            onChange={handleChange}
-            className="accent-pink-400"
-          />
-          Enable Comments
-        </label>
-        <label className="flex items-center gap-2 text-white/90">
-          <input
-            type="checkbox"
-            name="emailAllowed"
-            checked={formData.emailAllowed}
-            onChange={handleChange}
-            className="accent-pink-400"
-          />
-          Allow Email
-        </label>
-      </div>
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full tbh_button rounded-md"
+  >
+    {loading ? "Submitting..." : "Submit Chronicle"}
+  </button>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-3 rounded-lg bg-gradient-to-r from-pink-400 to-violet-400 text-white font-semibold shadow hover:from-pink-500 hover:to-violet-500 transition"
-      >
-        {loading ? "Submitting..." : "Submit Chronicle"}
-      </button>
-
-      {responseMsg && (
-        <p className="text-white/90 text-center mt-2">{responseMsg}</p>
-      )}
-    </form>
+  {responseMsg && (
+    <p className="text-gray-200 text-center text-sm mt-4">{responseMsg}</p>
+  )}
+</form>
 
   );
 }
