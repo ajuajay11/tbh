@@ -55,13 +55,14 @@ export default function CommentPopup({ Pid, comments }: UserCommentsProps) {
         <>
             {/* Toggle Icon */}
             <div onClick={() => setIsModelOpen(!isModelOpen)} className="flex items-center space-x-2 p-2 hover:bg-gray-800 rounded-full transition-all group cursor-pointer" >
-                <MessageCircle className="w-6 h-6 group-hover:text-blue-400 transition-colors" />
+                <MessageCircle className="w-6 h-6 group-hover:text-blue-400 transition-colors" /> 
+                {comments.length>0 ? comments.length :null}
             </div>
  
             {isModelOpen &&
                 createPortal(
                     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
-                        <div data-aos="fade-up" className="w-full max-w-4xl h-[80vh] max-h-[80vh] bg-black rounded-t-lg flex flex-col" >
+                        <div data-aos="fade-up" className="w-full max-w-4xl h-[80vh] max-h-[80vh] bg-[#333] rounded-t-lg flex flex-col" >
                             {/* Header */}
                             <div className="flex justify-between items-center px-4 py-2 border-b border-gray-700">
                                 <span className="text-white font-semibold">Comments</span>

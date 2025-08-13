@@ -40,14 +40,14 @@ export default function DropDown() {
       </button>
 
       {open && (
-        <div className="absolute right-0 w-48 bg-white rounded-md shadow-lg ring-1 ring-black/5 z-10">
-          <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:text-blue-900" onClick={() => setOpen(false)} >
+        <div className="absolute right-0 w-48 bg-[#333] rounded-sm shadow-lg ring-1 ring-black/5 z-10 py-4">
+          <Link href="/dashboard" className="block px-4 py-2 " onClick={() => setOpen(false)} >
             Profile
           </Link>
-          <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:text-blue-900" onClick={() => setOpen(false)} >
+          <Link href="/settings" className="block px-4 py-2 " onClick={() => setOpen(false)} >
             Settings
           </Link>
-          <button onClick={() => { Cookies.remove('token'); Cookies.remove('avatar'); setOpen(false); window.location.href = '/login'; }} className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:text-blue-900">
+          <button onClick={() => { Cookies.remove('token'); Cookies.remove('avatar'); setOpen(false); window.location.href = '/login'; }} className="w-full text-left block px-4 py-2 ">
             Logout
           </button>
         </div>

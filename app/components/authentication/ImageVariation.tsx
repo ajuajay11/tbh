@@ -15,19 +15,26 @@ export default function ImageVariation() {
   }, []);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Closed eyes image */}
       <Image
         src={pImageOne}
         alt="Profile preview closed eyes"
-        className={`object-cover w-full h-full transition-opacity duration-700 ease-out ${
+        fill
+        sizes="(max-width: 1024px) 100vw, 50vw"
+        className={`object-cover transition-opacity duration-700 ease-out ${
           eyes ? "opacity-0" : "opacity-100"
         }`}
         priority
       />
+      
+      {/* Open eyes image */}
       <Image
         src={pImage}
         alt="Profile preview open eyes"
-        className={`object-cover w-full h-full transition-opacity duration-700 ease-out absolute inset-0 ${
+        fill
+        sizes="(max-width: 1024px) 100vw, 50vw"
+        className={`object-cover transition-opacity duration-700 ease-out ${
           eyes ? "opacity-100" : "opacity-0"
         }`}
         priority

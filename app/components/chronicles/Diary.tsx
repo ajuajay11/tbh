@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import SuccessMsg from "@/app/components/SuccessMsg";
-import { Edit, CircleX, Reply } from "lucide-react";
+import { Edit, CircleX, Reply,ArrowBigLeftDash, ArrowBigRightDash } from "lucide-react";
 import Link from "next/link";
 interface Firefly {
   x: number;
@@ -382,10 +382,10 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
           <div className="flex justify-between items-center">
 
           </div>
-          {editable ? <input type="text" name="yourStoryTitle" className="font_clr2 mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300 font_one text-white bg-transparent" value={formData.yourStoryTitle} onChange={handleChange} /> : <h1 className="mt-10 merienda lg:pt-0  text-center text-4xl md:text-3xl font-bold font_clr2 mb-8"> {chronicle.yourStoryTitle} </h1>}
-          {editable ? <textarea name="chroniclesOfYou" className="border w-full mt-10 bg-transparent font_one scrollYTBH h-[400px]" value={formData?.chroniclesOfYou} onChange={handleChange}>
+          {editable ? <input type="text" name="yourStoryTitle" className="font_clr2 mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300 eb-garamond text-white bg-transparent" value={formData.yourStoryTitle} onChange={handleChange} /> : <h1 className="mt-10 eb-garamond lg:pt-0 text-center text-4xl font-bold mb-8"> {chronicle.yourStoryTitle} </h1>}
+          {editable ? <textarea name="chroniclesOfYou" className="border w-full mt-10 bg-transparent font_two scrollYTBH h-[400px]" value={formData?.chroniclesOfYou} onChange={handleChange}>
             {formData.chroniclesOfYou}
-          </textarea> : <div className="fs-1 caveat text-gray-200 tracking-wide whitespace-pre-wrap min-h-[700px] "> {slides[currentIndex]} </div>}
+          </textarea> : <div className="font_one eb-garamond text-gray-200 tracking-wide whitespace-pre-wrap min-h-[700px] "> {slides[currentIndex]} </div>}
           {editable ? <div className="flex flex-wrap gap-4">
             <label className="flex items-center gap-2 text-white/90">
               <input
@@ -426,9 +426,10 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
             {loading ? "Submitting..." : "Submit Chronicle"}
           </button> : <div className="flex justify-between items-center mt-8">
             <button onClick={goPrev} disabled={currentIndex === 0} className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30" >
-              Previous
+                <ArrowBigLeftDash/>
             </button>
-            <button onClick={goNext} disabled={currentIndex === slides.length - 1} className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30"> Next </button>
+            <button onClick={goNext} disabled={currentIndex === slides.length - 1} className="px-6 py-3 bg-gray-800 text-white 
+            rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-30">   <ArrowBigRightDash/></button>
           </div>}
         </form>
       </div></>

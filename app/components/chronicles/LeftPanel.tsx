@@ -5,8 +5,9 @@ export default async function LeftPanel() {
   // const avatar = cookieStore.get('avatar')?.value;
   return (
     <>
-      <section className="relative w-1/5 pt-20 p-4 hidden lg:block">
-        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('/boy.png')` }} />
+      <section className="relative w-1/5 pt-20 p-4 hidden lg:block" data-aos="fade-left">
+        <div className="absolute inset-0 bg-cover bg-center opacity-30" />
+        {/* <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('/boy.png')` }} /> */}
         <div className="relative z-10">
           {/* <img src={avatar} alt="Boy" width={100} height={50} /> */}
           {/* <ul className="space-y-2">

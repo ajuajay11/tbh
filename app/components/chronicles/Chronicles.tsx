@@ -1,8 +1,11 @@
- 
+'use client';
+  
 export default function Chronicles() {
   return (
     <>
-      <div>Chronicles</div>
+      hei
     </>
   )
+
+ 
 }

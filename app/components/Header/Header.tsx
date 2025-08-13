@@ -9,7 +9,7 @@ import DropDown from './DropDown';
     <>
       <div className="w-full z-50">
         <header className="absolute w-full z-50 bg-black/20 backdrop-blur-sm shadow-lg">
-          <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between z-50 ">
+          <nav className="max-w-7xl mx-auto px-4 py-2 lg:py-4 flex items-center justify-between z-50 ">
             {/* LOGO */}
             <Link href="/" className="flex items-center">
               <span className="text-white text-2xl font-bold tracking-wide px-4 py-1 rounded-lg bg-white/10 backdrop-blur-md shadow">TBH</span>

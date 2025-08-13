@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Merienda:wght@300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,8 +25,14 @@ body {
 .font_four{
   font-size: clamp(14px, 4vw, 24px);
 }
+.font_four{
+  font-size: clamp(14px, 4vw, 20px);
+}
 .font_five{
   font-size: 10px;
+}
+.font_seven{
+  font-size: 30px ;
 }
 .font_clr1{
   color: #005e94;
@@ -32,6 +40,7 @@ body {
 .font_clr2{
   color: #b10202;
 }
+
 .font_clr3{
   color: #000;
 }
@@ -118,6 +127,7 @@ body {
   font-size: clamp(12px, 4vw, 14px);
 
 }
+
 .hero-text {
   font-size: 3rem;
   font-weight: bold;
@@ -141,7 +151,11 @@ body {
   background-clip: text;
   animation: shine 3s ease-in-out infinite;
 }
-
+.eb-garamond{
+  font-family: "EB Garamond", serif;
+  font-optical-sizing: auto;
+ 
+}
 @keyframes shine {
   0% {
     background-position: 200% 0;
@@ -179,7 +193,7 @@ body {
  
 @media (max-width: 768px) {
   .hero-text {
-    font-size: 2rem;
+    font-size: clamp(2.5rem, 4vw, 3vw);
   }
 }
 
@@ -473,7 +487,10 @@ body {
 .button-content:focus:not(:focus-visible) {
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
-
+.storytmodeBg{
+   background: url('/story.jpg') no-repeat bottom right;
+  background-size: cover;
+ }
 /* Responsive Design */
 @media (max-width: 768px) {
   .button-content {
@@ -592,3 +609,35 @@ body {
 .animate-pulse {
   animation: pulse 0.6s ease-in-out;
 }
+.smooth-scroll-container {
+          scroll-snap-type: y mandatory;
+          scroll-behavior: smooth;
+          overflow-y: auto;
+          height: 100vh;
+        }
+        
+        .scroll-snap-item {
+          scroll-snap-align: start;
+          scroll-snap-stop: always;
+       
+          height: 90vh;
+          min-height: 100vh;
+        }
+        
+        /* Enhanced smooth scrolling for webkit browsers */
+        .smooth-scroll-container::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .smooth-scroll-container::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .smooth-scroll-container::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 3px;
+        }
+        
+        .smooth-scroll-container::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.5);
+        }
