@@ -191,7 +191,28 @@ body {
     background-position: -100% 0;
   }
 }
- 
+ .evil-eye {
+    background: radial-gradient(circle, #1e3a8a 60%, #000 61%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .evil-eye::before {
+    content: "";
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    background: radial-gradient(circle, white 50%, #2563eb 51%);
+    position: absolute;
+  }
+  .evil-eye::after {
+    content: "";
+    width: 25%;
+    height: 25%;
+    border-radius: 50%;
+    background: black;
+    position: absolute;
+  }
 @media (max-width: 768px) {
   .hero-text {
     font-size: clamp(2.5rem, 4vw, 3vw);
@@ -208,6 +229,8 @@ body {
     .animate-bounce-slow {
       animation: bounceSlow 2.5s ease-in-out infinite;
     }
+
+    
 /* //button */
 .tbh_button {
    

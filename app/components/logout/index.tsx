@@ -1,19 +1,18 @@
-"use client"
-import Cookies from "js-cookie"
-export default function index() {
-     const logout =()=>{
-        Cookies.remove('token');
-        Cookies.remove('isAuthenticated');
-        Cookies.remove('userId');
-        setTimeout(() => {
-            location.reload()
-        }, 1000);
-    }
-  return (
-    <>
-       <div onClick={logout} className="card p-4">Logout</div>
-    </>
-  )
-}
+"use client";
+import Cookies from "js-cookie";
 
- 
+export default function Index() {
+  const logout = () => {
+    document.cookie.split(";").forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      Cookies.remove(name, { path: "/" }); // must match original path
+    });
+    location.reload();
+  };
+
+  return (
+    <div onClick={logout} className="card p-4 cursor-pointer">
+      Logout
+    </div>
+  );
+}

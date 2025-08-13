@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <ImageVariation />
         </div>
         <div className="w-full lg:w-2/3 h-full px-4 lg:px-8">
-          <main className="flex items-center justify-center min-h-full ">
+          <main className="flex items-center lg:items-start justify-center min-h-full ">
             {children}
           </main>
         </div>

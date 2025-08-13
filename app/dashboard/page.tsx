@@ -53,13 +53,13 @@ export default async function Page() {
           <p className="text-sm text-gray-500">@{user.username}</p>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2  font_three">
         <Edit/><Link href="/dashboard/my-profile">Edit Profile</Link>
       </div>
      </div>
 
       <section className="lg:mt-10">
-        <h3 className="text-xl font-bold mb-4">My Chronicles</h3>
+        <h3 className="text-xl font-bold mb-4 text-center">My Chronicles</h3>
         <MyChronicles />
       </section>
     </main>

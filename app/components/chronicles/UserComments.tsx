@@ -40,7 +40,7 @@ function UserComments({ Pid, comments }: UserCommentsProps) {
 
   return (
     <>
-      <div className="mt-4 pt-1 ">
+      <div className="mt-1 pt-1 ">
         <form onSubmit={addCommentsFn} className="flex space-x-3 mb-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center flex-shrink-0">
             <User className="w-4 h-4" />

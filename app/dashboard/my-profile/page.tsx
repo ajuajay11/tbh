@@ -137,8 +137,12 @@ export default function Page() {
                 },
             })
             console.log(response);
-            const successMsg = response?.data?.message;
-            setSuccess(successMsg)
+            if(response.status == 200){
+              const successMsg = response?.data?.message;
+               Cookies.set('avatar', response?.data?.user?.profilePicture, { expires: 12 });
+               setSuccess(successMsg)
+            }
+            
             // alert('Profile updated successfully!');
         } catch (err: unknown) {
       let message = 'Unexpected error';
