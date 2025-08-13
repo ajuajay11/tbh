@@ -59,7 +59,7 @@ const otp = Math.floor(1000 + Math.random() * 9000).toString();
     });
  
     return NextResponse.json(
-      { message: "register user successsfully" },
+      { message: "Otp send Successfully, Please verify Your mail" },
       { status: 200 }
     );
   } catch (error) {

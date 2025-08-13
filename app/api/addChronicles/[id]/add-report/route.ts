@@ -16,7 +16,14 @@ interface UserDocument {
   _id: string;
   email: string;
 }
-
+interface IReportEntry {
+  user: {
+    userId: string;
+    name?: string;
+  };
+  reason: string;
+  createdAt?: Date;
+}
 export async function POST( request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectToDatabase();
@@ -43,7 +50,9 @@ export async function POST( request: NextRequest, { params }: { params: Promise<
 
     // Check if already reported
     const userObjectId = getUser?._id.toString();
-    const alreadyReported = findPost.reportedBy.find( (entry) => entry.user.userId.toString() === userObjectId );
+   const alreadyReported = findPost.reportedBy.find(
+  (entry: IReportEntry) => entry.user.userId.toString() === userObjectId
+);
     if (alreadyReported) {
       return NextResponse.json( { message: "You already reported this post." }, { status: 400 } );
     }

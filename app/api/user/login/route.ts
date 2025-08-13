@@ -58,6 +58,7 @@ const token = generateToken(user as TokenUser);
             id:user._id,
             firstname :user.email,
             lastname:user.lastname,
+            avatar:user.profilePicture,
             email:user.email,
             gender:user.gender,
             age:user.age,

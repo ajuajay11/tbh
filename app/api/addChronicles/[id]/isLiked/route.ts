@@ -14,6 +14,16 @@ interface RequestBody {
   isLiked: boolean;
   createdAt?: Date;
 }
+interface IReportEntry {
+  user: {
+    userId: string;
+    name?: string;
+  };
+  like: boolean;
+  reason: string;
+  createdAt?: Date;
+}
+ 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -47,7 +57,7 @@ export async function POST(
       return NextResponse.json({ message: "Post not found" }, { status: 404 });
     }
     const existingLikeIndex = findPost.UserLikes.findIndex(
-      (likeEntry) => likeEntry.user.userId === getUser._id.toString()
+      (likeEntry:IReportEntry) => likeEntry.user.userId === getUser._id.toString()
     );
     if (existingLikeIndex !== -1) {
       // Update existing like status
@@ -64,7 +74,7 @@ export async function POST(
         createdAt: body.createdAt || new Date(),
       });
     }
-    const likeCount = findPost.UserLikes.filter((e) => e.like === true).length;
+    const likeCount = findPost.UserLikes.filter((e: IReportEntry) => e.like === true).length;
     findPost.likeCount = likeCount;
     // ADD THIS LINE - Save the document to persist changes
     await findPost.save({ validateBeforeSave: false });
