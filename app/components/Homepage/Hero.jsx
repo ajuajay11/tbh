@@ -90,7 +90,7 @@ export default function Hero() {
                 </div>
 
                 {/* Right side - Content Section */}
-                <div className="w-full md:w-1/2 lg:w-1/2 flex items-center justify-center px-6 lg:px-12 relative">
+                <div className="w-full md:w-1/2 lg:w-1/2 flex items-center justify-center px-6 lg:px-12 relative mt-20 lg:pt-0">
                     {/* Content goes here */}
                     <div className="max-w-lg w-full">
                         {/* Hero Text */}

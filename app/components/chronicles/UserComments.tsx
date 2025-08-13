@@ -50,7 +50,7 @@ function UserComments({ Pid, comments }: UserCommentsProps) {
           </div>
           <button className="text-blue-400 font-semibold text-sm hover:text-blue-300 transition-colors px-3 py-2"> Comment </button>
         </form>
-         <div className="space-y-2 border-t border-gray-800 pt-4">
+         <div className="space-y-2 border-t border-gray-800 pt-4 hidden lg:block">
           {comments.slice(0, 2).map((comment) => (
             <div key={comment?._id} className="flex space-x-3">
               <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">

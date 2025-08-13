@@ -23,17 +23,17 @@ body {
 .font_four{
   font-size: clamp(14px, 4vw, 24px);
 }
-.font_four{
+.font_five{
   font-size: clamp(14px, 4vw, 24px);
 }
-.font_four{
-  font-size: clamp(14px, 4vw, 20px);
+.font_six{
+  font-size: clamp(10px, 4vw, 20px);
 }
-.font_five{
+.font_eight{
   font-size: 10px;
 }
 .font_seven{
-  font-size: 30px ;
+  font-size: clamp(20px, 4vw, 30px);
 }
 .font_clr1{
   color: #005e94;

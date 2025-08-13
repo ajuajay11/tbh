@@ -94,7 +94,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
 
   return (
     <>
-      <div className="h-screen w-full overflow-hidden flex justify-center">
+      <div className="h-screen w-full overflow-hidden flex justify-center pt-10">
         <div className="flex flex-col md:flex-row h-full w-full max-w-[1600px]">
           <div className="h-screen w-full text-white flex">
             <LeftPanel />
@@ -144,12 +144,12 @@ export default async function Chronicles({ searchParams }: PageProps) {
                         </div>
                       </header>
                       {/* Post Content */}
-                      <div className="flex-1 px-4 flex flex-col justify-center  py-10 lg:py-3" style={{background: 'cornsilk'}}>
+                      <div className="flex-1 px-4 flex flex-col justify-center lg:py-3" style={{background: 'cornsilk'}}>
                         <h2 className="text-center eb-garamond text-[#000] pt-5 fw-bold leading-tight font_seven">
                           {chronicle?.yourStoryTitle}
                         </h2>
-                        <div className="prose prose-invert max-w-none pt-5">
-                          <p className="text-center eb-garamond font_six text-gray-900 leading-relaxed whitespace-pre-wrap lg:px-20">
+                        <div className="prose prose-invert max-w-none pt-2 lg:pt-5">
+                          <p className="text-center eb-garamond font_six text-gray-900 leading-relaxed whitespace-pre-wrap px-0 lg:px-20 pb-5">
                             {truncatedDesc(chronicle?.chroniclesOfYou,410)}
                           </p>
                         </div>

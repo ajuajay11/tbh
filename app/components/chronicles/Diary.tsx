@@ -367,10 +367,10 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
 
   return (
     <> <SuccessMsg successMsg={success} />
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 font-serif relative overflow-hidden mt-10">
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-5 lg:py-12 font-serif relative overflow-hidden lg:mt-10">
         <Fireflies />
         <div className="flex justify-between w-full lg:px-20 mt-10 lg:mt-0 ">
-          <Link href="/" className="flex gap-2">
+          <Link href="/" className="flex gap-2 text-[#333]">
             <Reply /> go back
           </Link>
           <div>
@@ -382,7 +382,7 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
           <div className="flex justify-between items-center">
 
           </div>
-          {editable ? <input type="text" name="yourStoryTitle" className="font_clr2 mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300 eb-garamond text-white bg-transparent" value={formData.yourStoryTitle} onChange={handleChange} /> : <h1 className="mt-1 eb-garamond lg:pt-0 text-center text-4xl font-bold mb-8"> {chronicle.yourStoryTitle} </h1>}
+          {editable ? <input type="text" name="yourStoryTitle" className="font_clr2 mt-1 w-full p-2 border rounded-md focus:ring focus:ring-blue-300 eb-garamond text-white bg-transparent" value={formData.yourStoryTitle} onChange={handleChange} /> : <h1 className="mt-1 eb-garamond lg:pt-0 text-center font_seven font-bold mb-8"> {chronicle.yourStoryTitle} </h1>}
           {editable ? <textarea name="chroniclesOfYou" className="border w-full mt-10 bg-transparent font_two scrollYTBH h-[400px]" value={formData?.chroniclesOfYou} onChange={handleChange}>
             {formData.chroniclesOfYou}
           </textarea> : <div className="font_one eb-garamond text-gray-200 tracking-wide whitespace-pre-wrap min-h-[700px] "> {slides[currentIndex]} </div>}
