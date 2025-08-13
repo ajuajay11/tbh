@@ -3,8 +3,11 @@
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
-export default function CreateChronicleForm() {
+export default function CreateChronicleForm() {  
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     yourStoryTitle: "",
     chroniclesOfYou: "",
@@ -54,6 +57,8 @@ export default function CreateChronicleForm() {
         comments: false,
         emailAllowed: false,
       });
+      router.push("/"); // redirect home on error
+
     } catch (error: unknown) {
       if (typeof error === 'object' && error !== null && 'response' in error) {
         const err = error as { response?: { data?: { message?: string } } };
@@ -67,7 +72,7 @@ export default function CreateChronicleForm() {
   return (
 <form
   onSubmit={handleSubmit}
-  className="max-w-lg mx-auto mt-12 p-8 rounded-2xl bg-gray-900/90 backdrop-blur-xl border border-gray-700 shadow-xl space-y-6"
+  className="max-w-lg mx-auto mt-12 p-8 rounded-2xl  border border-gray-700 shadow-xl space-y-6"
 >
   <h2 className="text-3xl font-extrabold text-white text-center tracking-tight drop-shadow-md mb-4">
     Create Your Chronicle

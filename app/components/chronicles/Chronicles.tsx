@@ -3,7 +3,7 @@
 export default function Chronicles() {
   return (
     <>
-      hei
+      _
     </>
   )
 

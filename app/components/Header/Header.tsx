@@ -41,7 +41,7 @@ export default async function Index() {
             </div>
             {/* AUTH ACTION */}
             <div className="flex items-center gap-2">
-              {isAuth == 'true' ? (
+              {isAuth  ? (
                 <DropDown />
               ) : (
                 <Link href="/login" className="tbh_button">

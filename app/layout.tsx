@@ -47,7 +47,7 @@ export const dynamic = "force-dynamic"; // <- Add this line
         ):(
           <>
             <Header />
-            <main className="w-full flex justify-center pt-20 lg:pt-10">
+            <main className="w-full flex justify-center ">
               <div className="w-full p-0 max-w-[1600px]">
                 <Toaster position="top-center" />
                 {children}
