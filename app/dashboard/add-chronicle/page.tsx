@@ -1,4 +1,4 @@
- import CreateChronicles from "@/app/components/chronicles/CreateChronicles"
+ import CreateChronicles from "@/app/dashboard/components/CreateChronicles"
 export default function page() {
   return (
  <>

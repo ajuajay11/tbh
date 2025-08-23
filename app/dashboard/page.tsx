@@ -1,7 +1,7 @@
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import MyChronicles from "@/app/components/chronicles/MyChronicles";
+import MyChronicles from "@/app/chronicles/components/MyChronicles";
 import { Edit } from 'lucide-react';
 import Link from "next/link";
 

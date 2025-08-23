@@ -5,6 +5,7 @@ export const verifyToken = async (token: string): Promise<JwtPayload | null> => 
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     return decoded as JwtPayload;
   } catch (error) {
+    console.error(error);
     return null;
   }
 };

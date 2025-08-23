@@ -1,10 +1,11 @@
 'use client'
 import axios from "axios";
-import "./auth.css";
-import { useState, FormEvent, useRef, Dispatch, SetStateAction } from "react";
-import SuccessMsg from "../SuccessMsg";
-import ErrorMessage from "../ErrorMessage";
- 
+ import { useState, FormEvent, useRef, Dispatch, SetStateAction } from "react";
+import SuccessMsg from "../../../components/SuccessMsg";
+import ErrorMessage from "../../../components/ErrorMessage";
+ import Styles from "../../auth.module.css";
+import { X } from 'lucide-react';
+
 type OtpBoxProps = { closeBtn: () => void; 
   email: string;
   setSteps: Dispatch<SetStateAction<number>>;
@@ -92,9 +93,9 @@ export default function OtpBox(props: OtpBoxProps) {
   return (
     <>
      <SuccessMsg successMsg={success}/>
-    <div className="otpBox ease-in-expo">
+    <div className={`${Styles.otpBox} ease-in-expo`}>
       <div className="flex items-center justify-end">
-        <button onClick={props?.closeBtn}>handleClose</button>
+        <button className="p-3" onClick={props?.closeBtn}><X/></button>
       </div>
       <div className="flex flex-col justify-center items-center h-full text-dark">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
@@ -107,8 +108,8 @@ export default function OtpBox(props: OtpBoxProps) {
           <span className="text-green-700 capitalize">{success}</span>
           <button className="tbh_button">Submit</button>
         </form>
-         <div className="flex justify-between">
-            <span>timer</span>
+         <div className="flex justify-between gap-20 pt-5">
+            <span>0:00</span>
             <button onClick={resendOtp}>Resend</button>
           </div>
           <ErrorMessage message={error} />

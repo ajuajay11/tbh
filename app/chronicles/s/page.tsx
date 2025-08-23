@@ -1,4 +1,4 @@
-import Diary from "@/app/components/chronicles/Diary";
+import Diary from "@/app/chronicles/components/Diary";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 
 type PageProps = {
