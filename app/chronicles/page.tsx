@@ -2,15 +2,16 @@ import { ChronicleResponse, Chronicle  } from "../types/chronicle";
 import "./chronicle.module.css";
 import Comments from "./components/Comments";
 import Likes from "./components/Likes";
+import { getBaseUrl } from "@/lib/getBaseUrl";
  
 export default async function Chronicles() {
-  const res = await fetch("/api/getAllChronicles", {
+  const res = await fetch(`${getBaseUrl()}//api/getAllChronicles`, {
     cache: "no-store", // ensures fresh data
   });
   const result: ChronicleResponse = await res.json();
   
   const chronicles: Chronicle[] = result.limitedChronicles;
-  console.log(chronicles);
+  console.log(chronicles,'${getBaseUrl()}/');
   return (
     <div className="p-2">
       <h1 className="text-2xl font-bold mb-4 text-center">Chronicles</h1>
