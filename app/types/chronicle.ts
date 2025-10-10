@@ -1,27 +1,44 @@
 // types/chronicle.ts
-export type Comment = {
-  _id: string;
-  comment?: string;
-  createdAt: string;
-  user?: { name?: string };
-};
 
-export type Like = {
+export interface User {
   _id: string;
-  like: boolean;
-  createdAt: string;
-  user?: { name?: string };
-};
+  firstname: string;
+  lastname: string;
+  username: string;
+  name:string,
+  userId:string
+}
 
-export type Chronicle = {
+export interface UserComment {
+  _id: string;
+  comment: string;
+  createdAt: string;
+  user: User;
+}
+
+export interface UserLike {
+  _id: string;
+  user: User;
+}
+
+export interface Chronicle {
   _id: string;
   yourStoryTitle: string;
   chroniclesOfYou: string;
+  incidentFrom: string;
   replyAllowed: boolean;
   comments: boolean;
   emailAllowed: boolean;
-  createdAt: string;
   likeCount: number;
-  UserLikes: Like[];
-  UserComments: Comment[];
-};
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  user?: User;
+  UserComments?: UserComment[];
+  UserLikes?: UserLike[];
+}
+
+export interface ChronicleResponse {
+  limitedChronicles: Chronicle[];
+}

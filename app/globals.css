@@ -22,10 +22,10 @@ body {
 }
 
 .customBox {
-  border: 1px solid #808080; /* default Tailwind border color */
+  border: 1px solid #808080; 
   background-color: #00000083;
   color: #ffffff;
-  backdrop-filter: blur(29px); /* ✅ blur-29 replacement */
+  backdrop-filter: blur(29px); 
 }
 /* header */
 .mock {
