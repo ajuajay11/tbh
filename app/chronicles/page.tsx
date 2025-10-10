@@ -4,7 +4,7 @@ import Comments from "./components/Comments";
 import Likes from "./components/Likes";
  
 export default async function Chronicles() {
-  const res = await fetch("http://localhost:3000/api/getAllChronicles", {
+  const res = await fetch("/api/getAllChronicles", {
     cache: "no-store", // ensures fresh data
   });
   const result: ChronicleResponse = await res.json();

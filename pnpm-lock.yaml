@@ -41,9 +41,6 @@ importers:
       dompurify:
         specifier: ^3.2.6
         version: 3.2.6
-      framer-motion:
-        specifier: ^12.23.12
-        version: 12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
