@@ -10,19 +10,14 @@ interface UserDocument {
 }
 
 interface RequestBody {
-   likeCount:number;
+  likeCount:number;
   isLiked: boolean;
   createdAt?: Date;
 }
-interface IReportEntry {
-  user: {
-    userId: string;
-    name?: string;
-  };
-  like: boolean;
-  reason: string;
-  createdAt?: Date;
-}
+// find id
+//  find post
+
+
  
 export async function POST(
   request: NextRequest,
@@ -33,6 +28,8 @@ export async function POST(
     const body: RequestBody = await request.json();
     const { isLiked } = body;
     const { id } = await params; // <-- fixed this line only
+    console.log(isLiked, id);
+    
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
     if (!token) {
@@ -51,35 +48,37 @@ export async function POST(
     if (!getUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    console.log(getUser, "getUser");
+   const userId = userData.userId.toString();
+ 
     const findPost = await UserVibesModel.findById(id);
     if (!findPost) {
       return NextResponse.json({ message: "Post not found" }, { status: 404 });
     }
-    const existingLikeIndex = findPost.UserLikes.findIndex(
-      (likeEntry:IReportEntry) => likeEntry.user.userId === getUser._id.toString()
-    );
-    if (existingLikeIndex !== -1) {
-      // Update existing like status
-      findPost.UserLikes[existingLikeIndex].like = isLiked;
-      findPost.UserLikes[existingLikeIndex].createdAt = body.createdAt || new Date();      
+// Like/Unlike logic
+    const hasLiked = findPost.UserLikes.includes(userId);
+    console.log(hasLiked,'userId');
+    
+    if (isLiked && !hasLiked) {
+      // User wants to LIKE and hasn't liked yet
+      findPost.UserLikes.push(userId);
+      console.log("✅ Added like");
+    } else if (!isLiked && hasLiked) {
+      // User wants to UNLIKE and has already liked
+      findPost.UserLikes = findPost.UserLikes.filter(
+        (id: string) => id !== userId
+      );
+      console.log("✅ Removed like");
     } else {
-      // Add new like entry
-      findPost.UserLikes.push({
-        user: {
-          userId: getUser._id,
-          name: getUser.email,
-        },
-        like: isLiked,
-        createdAt: body.createdAt || new Date(),
-      });
+      // No change needed
+      console.log("⚠️ No change - already in desired state");
     }
-    const likeCount = findPost.UserLikes.filter((e: IReportEntry) => e.like === true).length;
-    findPost.likeCount = likeCount;
-    // ADD THIS LINE - Save the document to persist changes
-    await findPost.save({ validateBeforeSave: false });
+    findPost.likeCount = findPost.UserLikes.length;
+    await findPost.save();
     return NextResponse.json(
-      { message: "Comment Added Succesfully", findPost,likeCount },
+      { message: "Like updated successfully",
+        likeCount: findPost.likeCount,
+        userLikes: findPost.UserLikes,  
+        hasCurrentUserLiked: findPost.UserLikes.includes(userId)},
       { status: 200 }
     );
   } catch (error) {

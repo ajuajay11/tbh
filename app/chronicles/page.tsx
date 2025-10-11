@@ -15,7 +15,8 @@ export default async function Chronicles() {
   return (
     <div className="p-2">
       <h1 className="text-2xl font-bold mb-4 text-center">Chronicles</h1>
-      <div className="grid gap-2">
+      {chronicles.length>0?
+        <div className="grid gap-2">
         {chronicles.map((item) => (
           <div
             key={item._id}
@@ -47,10 +48,11 @@ export default async function Chronicles() {
               </p>
             </div>
             {<Comments userCommentsData={item.UserComments || [] } />   }
-            {<Likes userLikesData={item.UserLikes || [] } />   }
+            {<Likes Pid={item._id || ""} userLikesData={item.UserLikes || [] } />   }
           </div>
         ))}
       </div>
+      :<p>hei</p>}
     </div>
   );
 }

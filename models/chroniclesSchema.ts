@@ -11,16 +11,12 @@ export interface IUserComment {
 }
 
 export interface IUserLikes {
-  user: {
-    userId: string;
-    name?: string;
-  };
-  like: boolean;
-  createdAt?: Date;
+  UserLikes: string[]; // Array of user IDs
+  likeCount?: number;
 }
 
 export interface IReportEntry {
-   user: {
+  user: {
     userId: string;
     name?: string;
   };
@@ -64,26 +60,18 @@ const DarkTruth: Schema<IUserStory> = new Schema(
       ],
       default: [],
     },
+ 
     UserLikes: {
-      type: [
-        {
-          user: {
-            userId: { type: String },
-            name: { type: String },
-          },
-          like: { type: Boolean, default: false },
-          createdAt: { type: Date, default: Date.now },
-        },
-      ],
-      default: [],
-    },
+  type: [String],
+  default: [],
+},
     likeCount: { type: Number, default: 0 },
     emailAllowed: { type: Boolean, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     createdAt: { type: Date, default: Date.now },
     status: { type: Number, default: 1 },
     reportedBy: {
-       type: [
+      type: [
         {
           user: {
             userId: { type: String },
@@ -99,6 +87,8 @@ const DarkTruth: Schema<IUserStory> = new Schema(
   { timestamps: true }
 );
 
-const UserVibesModel = mongoose.models?.DarkTruth || mongoose.model<IUserStory>("DarkTruth", DarkTruth);
+const UserVibesModel =
+  mongoose.models?.DarkTruth ||
+  mongoose.model<IUserStory>("DarkTruth", DarkTruth);
 
 export default UserVibesModel;

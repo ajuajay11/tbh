@@ -19,6 +19,7 @@ export interface UserComment {
 export interface UserLike {
   _id: string;
   user: User;
+  likeCount:number
 }
 
 export interface Chronicle {
