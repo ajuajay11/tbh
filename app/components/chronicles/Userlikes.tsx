@@ -93,9 +93,9 @@ function UserLikes({ Pid, likes: initialLikes, likeCount: initialCount }: UserLi
     <div className="flex items-center gap-1">
       <button onClick={toggleLike} className="flex items-center gap-2">
       {hasLiked ? (
-        <HeartHandshake className="w-6 h-6 text-red-600" />
+        <HeartHandshake />
       ) : (
-        <Heart className="w-6 h-6 group-hover:text-red-400 transition-colors" />
+        <Heart  />
       )}
     </button>
       {count > 0 ? <span className="text-white">{count}</span> : null}

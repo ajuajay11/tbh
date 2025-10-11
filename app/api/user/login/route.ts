@@ -16,8 +16,11 @@ interface TokenUser {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('poda kunne')
   try {
     await connectToDatabase();
+  console.log('poda kunne')
+
     const body: RequestBody = await request.json();
     const { email, password } = body;
     if (!email || !password) {

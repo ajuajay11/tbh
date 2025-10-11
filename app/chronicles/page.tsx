@@ -1,4 +1,5 @@
 import { getBaseUrl } from "@/lib/getBaseUrl";
+<<<<<<< Updated upstream
 import { cookies } from "next/headers";
 // import FilterChronicles from "@/app/components/chronicles/FilterChronicles";
 import UserCommentsComponent from "@/app/components/chronicles/UserComments";
@@ -37,6 +38,32 @@ type Chronicle = {
       name: string;
     };
   }[];
+=======
+ 
+export default async function Chronicles() {
+  const res = await fetch(`${getBaseUrl()}//api/getAllChronicles`, {
+    cache: "no-store", // ensures fresh data
+  });
+  const result: ChronicleResponse = await res.json();
+  
+  const chronicles: Chronicle[] = result.limitedChronicles;
+  console.log(chronicles,'chronicles');
+  
+   return (
+    <div className="p-2">
+      <h1 className="text-2xl font-bold mb-4 text-center">Chronicles</h1>
+      <div className="grid gap-2">
+        {chronicles.map((item) => (
+          <div
+            key={item._id}
+            className="p-4 rounded-xl shadow-md border bg-white"
+          >
+            {/* Story Title */}
+            <h2 className="text-xl font-semibold">{item.yourStoryTitle}</h2>
+            <p className="mt-2 text-gray-700 whitespace-pre-line">
+              {item.chroniclesOfYou}
+            </p>
+>>>>>>> Stashed changes
 
   UserLikes: {
     _id: string;
@@ -221,6 +248,7 @@ export default async function Chronicles({ searchParams }: PageProps) {
                 }
               </div>
             </div>
+<<<<<<< Updated upstream
             {/* Right Panel */}
             {/* <div className="hidden lg:block w-1/5 p-4 pt-20 transform" style={{ backgroundImage: `url('/girl.png')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.5 }}> */}
             <div className="hidden lg:block w-1/5 p-4 pt-20 transform"  >
@@ -232,6 +260,14 @@ export default async function Chronicles({ searchParams }: PageProps) {
               </div> */}
             </div>
 
+=======
+            <div>
+              {<Comments userCommentsData={item.UserComments || [] } />   }
+            </div>
+            <div>
+              { <Likes pid={item._id || ""} userLikesData={item.UserLikes || []}/>   }
+            </div>
+>>>>>>> Stashed changes
           </div>
 
         </div></div>
