@@ -10,10 +10,7 @@ export interface IUserComment {
   createdAt?: Date;
 }
 
-export interface IUserLikes {
-  UserLikes: string[]; // Array of user IDs
-  likeCount?: number;
-}
+ 
 
 export interface IReportEntry {
   user: {
@@ -30,7 +27,7 @@ export interface IUserStory extends Document {
   replyAllowed: boolean;
   incidentFrom: string;
   UserComments: IUserComment[];
-  UserLikes: IUserLikes[];
+  UserLikes: string[]; //
   comments: boolean;
   reportedBy: IReportEntry[];
   emailAllowed: boolean;
@@ -60,11 +57,11 @@ const DarkTruth: Schema<IUserStory> = new Schema(
       ],
       default: [],
     },
- 
+
     UserLikes: {
-  type: [String],
-  default: [],
-},
+      type: [String],
+      default: [],
+    },
     likeCount: { type: Number, default: 0 },
     emailAllowed: { type: Boolean, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },

@@ -3,19 +3,26 @@ import "./chronicle.module.css";
 import Comments from "./components/Comments";
 import Likes from "./components/Likes";
 import { getBaseUrl } from "@/lib/getBaseUrl";
- 
+ import { cookies } from 'next/headers';
+
 export default async function Chronicles() {
-  const res = await fetch(`${getBaseUrl()}//api/getAllChronicles`, {
-    cache: "no-store", // ensures fresh data
+ const cookieStore = cookies();
+  const token = cookieStore.get('token')?.value;
+
+  const res = await fetch(`http://localhost:3000/api/getAllChronicles`, {
+    cache: 'no-store',
+    headers: {
+      Authorization: token ? `Bearer ${token}` : '',
+    },
   });
   const result: ChronicleResponse = await res.json();
   
   const chronicles: Chronicle[] = result.limitedChronicles;
-  console.log(chronicles,'${getBaseUrl()}/');
+  console.log(result,'result');
   return (
     <div className="p-2">
       <h1 className="text-2xl font-bold mb-4 text-center">Chronicles</h1>
-      {chronicles.length>0?
+      {chronicles && chronicles.length>0?
         <div className="grid gap-2">
         {chronicles.map((item) => (
           <div

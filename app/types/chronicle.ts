@@ -37,7 +37,7 @@ export interface Chronicle {
   __v: number;
   user?: User;
   UserComments?: UserComment[];
-  UserLikes?: UserLike[];
+UserLikes: string[]; //
 }
 
 export interface ChronicleResponse {

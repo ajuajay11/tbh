@@ -52,6 +52,7 @@ export async function GET(request: NextRequest) {
       .populate("user", "username firstname lastname" )
         .sort(sortObj)
         .limit(6);
+console.log(limitedChronicles,'limitedChronicles');
 
       const total = await UserVibesModel.countDocuments(baseQuery);
 
