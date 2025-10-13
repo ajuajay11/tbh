@@ -5,7 +5,7 @@ import { verifyToken } from "@/utils/auth";
 import { FilterQuery } from "mongoose";
 // import BadWordsNext from "bad-words-next";
 // import en from "bad-words-next/lib/en";
-import "@/models/users"; // ✅ Register the Users model
+import "@/models/users"; 
 
 export async function GET(request: NextRequest) {
   // const badwords = new BadWordsNext({ data: en });

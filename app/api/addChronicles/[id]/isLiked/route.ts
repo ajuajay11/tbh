@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
-import ChronicleSchema from "@/models/chroniclesSchema.ts";
+import ChronicleSchema from "@/models/chroniclesSchema";
 interface RequestBody {
   likeCount: number;
   isLiked: boolean;

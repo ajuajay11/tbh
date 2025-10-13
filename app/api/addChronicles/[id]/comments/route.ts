@@ -18,38 +18,56 @@ interface UserDocument {
 }
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }) {
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectToDatabase();
-    const { id } = await params;  // <-- fixed this line only
+    const { id } = await params; // <-- fixed this line only
     const body: RequestBody = await request.json();
-    const {comment}= body;
+    const { comment } = body;
     if (!comment) {
-      return NextResponse.json({ message: "Please enter a comment" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Please enter a comment" },
+        { status: 400 }
+      );
     }
     if (!id) {
-      return NextResponse.json({ message: "Post ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Post ID is required" },
+        { status: 400 }
+      );
     }
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
     if (!token) {
-       return NextResponse.json({ message: "Please Subscribe to get all convo" },{ status: 404 });
+      return NextResponse.json(
+        { message: "Please Subscribe to get all convo" },
+        { status: 404 }
+      );
     }
+    console.log(token);
+
     const userData = await verifyToken(token);
-        if(!userData){
-          return NextResponse.json({message:"please login"},{status:401})
-        }
-        const getUser = await User.findById(userData?.userId) as UserDocument | null;
-        if (!getUser) {
-            return NextResponse.json({ message: "User not found" }, { status: 404 });
-        }
-        console.log(getUser,'getUser');
+    if (!userData) {
+      return NextResponse.json({ message: "please login" }, { status: 401 });
+    }
+    console.log(userData);
+
+    const getUser = (await User.findById(
+      userData.userId
+    )) as UserDocument | null;
+    console.log(getUser, "getUser");
+    if (!getUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
     const findPost = await UserVibesModel.findById(id);
-     if (!findPost) {
+    if (!findPost) {
       return NextResponse.json({ message: "Post not found" }, { status: 404 });
     }
-      findPost.UserComments.push({
-       user: {
+    console.log(findPost);
+
+    findPost.UserComments.push({
+      user: {
         userId: getUser._id,
         name: getUser.email,
       },
@@ -58,14 +76,69 @@ export async function POST(
     });
 
     await findPost.save();
-    return NextResponse.json({ message: "Comment Added Succesfully" ,  user: {
-        userId: getUser._id,
-        name: getUser.email,
-        comment: comment,
-      createdAt: body.createdAt || new Date(),
+    return NextResponse.json(
+      {
+        message: "Comment Added Succesfully",
+        user: {
+          userId: getUser._id,
+          name: getUser.email,
+          comment: comment,
+          createdAt: body.createdAt || new Date(),
+        },
       },
-    }, { status: 200 });
-   } catch (error) {
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: "server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await connectToDatabase();
+ 
+    const { id } = await params; // <-- fixed this line only
+     
+     // Get Cid from search params
+    const { searchParams } = new URL(request.url);
+    const Cid = searchParams.get('Cid');
+    console.log(Cid,'Cid');
+    const authHeader = request.headers.get("authorization");
+      const token = authHeader?.split(" ")[1];
+      if (!token) {
+      return NextResponse.json({ message: "token not found" }, { status: 404 });
+    }
+    const userData = await verifyToken(token);
+    if (!userData) {
+      return NextResponse.json({ message: "please login" }, { status: 401 });
+    }
+    const findPost = await UserVibesModel.findById(id);
+    if (!findPost) {
+      return NextResponse.json({ message: "post not found" }, { status: 401 });
+    }
+      const updatedChronicle = await UserVibesModel.findByIdAndUpdate(
+      id,
+      { $pull: { UserComments: { _id: Cid } } },
+      { new: true }
+    );
+
+    if (!updatedChronicle) {
+      return NextResponse.json(
+        { success: false, message: "Chronicle not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Comment deleted successfully",
+      updatedChronicle,
+    });
+  } catch (error) {
     console.error(error);
     return NextResponse.json({ message: "server error" }, { status: 500 });
   }
