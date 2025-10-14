@@ -20,7 +20,7 @@ export default function Header() {
       {token ? (
         <div>
           {pathname === "/chronicles" ? (
-            <Link className="mock mock-neomorphism" href="/dashboard/add-chronicle">
+            <Link className="mock mock-neomorphism" href="/dashboard">
               <CirclePlus />
             </Link>
           ) : (

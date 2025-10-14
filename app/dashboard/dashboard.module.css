@@ -1,0 +1,45 @@
+.my_profile input,
+.my_profile select,
+.my_profile textarea {
+  width: 100%;
+  padding: 1rem 2.5rem; /* py-4 px-10 */
+  border: 2px solid #e5e7eb; /* Tailwind gray-200 */
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+ .my_profile label{
+    margin-bottom:10px;
+ }
+/* Focus effect */
+.my_profile input:focus,
+.my_profile select:focus,
+.my_profile textarea:focus {
+  border-color: #ac0000; /* blue-500 */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* soft glow */
+}
+
+/* Optional hover effect */
+.my_profile input:hover,
+.my_profile select:hover,
+.my_profile textarea:hover {
+  border-color: #93c5fd; /* lighter blue */
+}
+
+/* Optional disabled look */
+.my_profile input:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+ 
+.glass_card {
+  background: rgba(218, 192, 192, 0);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(0px);filter: blur(12px);
+-webkit-backdrop-filter: blur(0px);
+border: 1px solid rgba(0, 0, 0, 0.28);
+}
+ 

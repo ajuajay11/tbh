@@ -6,7 +6,8 @@ export interface User {
   lastname: string;
   username: string;
   name:string,
-  userId:string
+  userId:string,
+  email:string
 }
 
 export interface UserComment {
