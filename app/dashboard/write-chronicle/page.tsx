@@ -41,7 +41,7 @@ function Page() {
   };
 
   return (
-    <div className={`${Styles.my_profile} ${Styles.glass_card} container mx-auto p-6 `}>
+    <div className={`${Styles.my_profile} ${Styles.glass_card} container   p-6 `}>
       {/* Title */}
       <div className="mb-4">
         <label htmlFor="yourStoryTitle" className="block mb-1  capitalize">
@@ -73,10 +73,10 @@ function Page() {
       </div>
 
       {/* ✅ Checkboxes Section */}
-      <div className="mb-4 space-y-2">
-        <label className="block mb-1">Permissions</label>
+      <div className="mb-4  ">
+        <label className="  mb-1">Permissions</label>
 
-        <label className="flex items-center gap-2">
+        <label className="  items-center gap-2">
           <input
             type="checkbox"
             name="replyAllowed"

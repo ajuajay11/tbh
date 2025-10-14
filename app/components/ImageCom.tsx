@@ -18,27 +18,15 @@ export default function withImageCom<P extends object>(
       }, 2000);
       return () => clearTimeout(timer);
     }, []);
-    const contentClass =
-      pathname === "/dashboard" || pathname=== "/dashboard/write-chronicle"
-        ? `${styles.content} w-full lg:w-[50%] items-start h-full lg:top-40`
-        : `${styles.content}`;
+    const contentClass = pathname === "/dashboard" || pathname === "/dashboard/write-chronicle" ? `${styles.content} w-full lg:w-[50%] items-start h-full lg:top-40` : `${styles.content}`;
     return (
-      <div
-        className={`${styles.wrapper} h-screen flex justify-center lg:justify-end items-center`}
-      >
-        <div
-          className={`${styles.bg} ${
-            !showSecond ? styles.visible : styles.hidden
-          }`}
+      <div className={`${styles.wrapper} h-screen flex justify-center lg:justify-end items-center`} >
+        <div className={`${styles.bg} ${!showSecond ? styles.visible : styles.hidden  }`}
           style={{ backgroundImage: `url(${heroImgTwo.src})` }}
         />
-        <div
-          className={`${styles.bg} ${
-            showSecond ? styles.visible : styles.hidden
-          }`}
+        <div className={`${styles.bg} ${showSecond ? styles.visible : styles.hidden }`}
           style={{ backgroundImage: `url(${heroImg.src})` }}
         />
-
         <div className={`${styles.content, contentClass}`}>
           <WrappedComponent {...props} />
         </div>

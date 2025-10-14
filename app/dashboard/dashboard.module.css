@@ -33,13 +33,23 @@
   cursor: not-allowed;
   opacity: 0.7;
 }
+  
  
 .glass_card {
-  background: rgba(218, 192, 192, 0);
-border-radius: 16px;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(0px);filter: blur(12px);
--webkit-backdrop-filter: blur(0px);
-border: 1px solid rgba(0, 0, 0, 0.28);
+  background-color: rgba(255, 255, 255, 0.51);
+  border-radius: 5px;
+  color: #333;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  max-width: 50%;
+  padding: 1rem 2rem;
 }
- 
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .glass_card {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(108, 108, 108, 0.861);  
+  }
+}
+

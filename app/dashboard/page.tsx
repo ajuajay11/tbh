@@ -1,10 +1,12 @@
  import DashboardHome from "./components/DashboardHome";
  import "./dashboard.module.css"
-export default async function Dashboard() {
+export default function page() {
  
   return (
     <>
-      <DashboardHome  />
+      <div>
+        <DashboardHome  />
+      </div>
     </>
   );
 }

@@ -167,7 +167,7 @@ function Page() {
   return (
     <>
       <SuccessMsg successMsg={success} />
-      <div className="w-full max-w-2xl pt-20 lg:pt-1">
+      <div className="w-full max-w-2xl pt-20 lg:pt-1 overflow-y-scroll scrollbar-none h-full">
         <div className="  overflow-hidden">
           {/* Header Section */}
 
@@ -181,8 +181,8 @@ function Page() {
                     <Image
                       src={previewUrl}
                       alt="Profile preview"
-                      width={120}
-                      height={120}
+                      width={90}
+                      height={90}
                       className="w-30 h-30 rounded-full object-cover border-4 border-white shadow-lg mx-auto"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-200">
