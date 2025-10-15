@@ -86,7 +86,7 @@ useEffect(() => {
                       <CirclePlus />
                     </Link>
                   ) : (
-                    <Link className="mock" href="/dashboard/my-profile">
+                    <Link className="mock" href="/dashboard">
                       <UserRoundPen />
                     </Link>
                   )}

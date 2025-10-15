@@ -1,0 +1,15 @@
+ .reel_container {
+      height: 100vh; /* Or a fixed height */
+      overflow-y: scroll; /* Enable vertical scrolling */
+      scroll-snap-type: y mandatory; /* Snap vertically, mandatory means it *must* snap */
+    }
+        .reel_item {
+      height: 100%; /* Each item takes up the full height of the container */
+      scroll-snap-align: start; /* Snap to the start of each item */
+      display: flex; /* For centering content within the item */
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      background-color: lightgray; /* Example styling */
+      border-bottom: 1px solid darkgray; /* Example styling */
+    }

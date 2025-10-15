@@ -1,9 +1,11 @@
-import {  Chronicle } from "../types/chronicle";
+import { Chronicle } from "../types/chronicle";
 import "./chronicle.module.css";
 import Comments from "./components/Comments";
 import Likes from "./components/Likes";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
+import Styles from "./chronicle.module.css";
+import { truncatedDesc  } from '@/utils/truncatedText'; // adjust path as needed
 
 export default async function Chronicles() {
   const cookieStore = await cookies();
@@ -28,17 +30,18 @@ export default async function Chronicles() {
   return (
     <div className="p-2">
       <h1 className="text-2xl font-bold mb-4 text-center">Chronicles</h1>
+      
       {chronicles && chronicles.length > 0 ? (
-        <div className="grid gap-2">
+        <div className={`${Styles.reel_container}`}>
           {chronicles.map((item) => (
             <div
               key={item._id}
-              className="p-4 rounded-xl shadow-md border bg-white"
+              className={`${Styles.reel_item} p-4 rounded-xl shadow-md border bg-white`}
             >
               {/* Story Title */}
               <h2 className="text-xl font-semibold">{item.yourStoryTitle}</h2>
               <p className="mt-2 text-gray-700 whitespace-pre-line">
-                {item.chroniclesOfYou}
+                {truncatedDesc(item.chroniclesOfYou, 30)}
               </p>
 
               {/* Extra Info */}
@@ -60,7 +63,7 @@ export default async function Chronicles() {
                   {item.UserComments ? item.UserComments.length : 0}
                 </p>
               </div>
-              {<Comments  Pid={item._id || ""} userCommentsData={item.UserComments || []} />}
+              {<Comments Pid={item._id || ""} userCommentsData={item.UserComments || []} />}
               {
                 <Likes
                   Pid={item._id || ""}
