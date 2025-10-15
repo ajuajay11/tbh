@@ -5,7 +5,7 @@ import { User, House, CirclePlus, BookOpenText } from "lucide-react";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-
+import LogOut from "@/app/components/logout/index"
 export default function Header() {
   const pathname = usePathname();
   const [token, setToken] = useState<string | null>(null);
@@ -18,24 +18,19 @@ export default function Header() {
   return (
     <nav>
       {token ? (
-        <div>
-          {pathname === "/chronicles" ? (
-            <div className="mock mock-neomorphism flex gap-3">
-              <Link className="" href="/dashboard">
-                <CirclePlus />
-              </Link>
-              <Link className="" href="/dashboard/write-chronicle">
-                <BookOpenText />
-              </Link>
-            </div>
-
-          ) : (
-            <Link className="mock mock-neomorphism" href="/">
-              <BookOpenText />
-            </Link>
-          )}
+        <div className="navMock">
+          
+             {pathname === "/chronicles"?<div className="flex">
+            <Link className="mock" href="dashboard/write-chronicle"><CirclePlus/></Link>
+            <Link className="mock" href="dashboard/my-profile"><BookOpenText/></Link>
+         
+             <LogOut/>
+           
+             
+           </div>:<div></div>}
         </div>
-      ) : (
+          
+       ) : (
         <div>
           {pathname === "/login" ? (
             <Link className="mock mock-neomorphism" href="/">

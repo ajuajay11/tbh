@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Merienda:wght@300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Merienda:wght@300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -8,73 +8,67 @@
 
 body {
   background: #050505;
-  color: #fff;  
+  color: #fff;
 }
 /* fonts/ */
-.font_one{
+.font_one {
   font-size: clamp(40px, 4vw, 60px);
 }
-.font_two{
+.font_two {
   font-size: clamp(20px, 4vw, 30px);
 }
-.font_three{
+.font_three {
   font-size: clamp(10px, 4vw, 20px);
 }
 
 .customBox {
-  border: 1px solid #808080; 
+  border: 1px solid #808080;
   background-color: #00000083;
   color: #ffffff;
-  backdrop-filter: blur(29px); 
+  backdrop-filter: blur(29px);
 }
 /* header */
-.mock {
-  position: fixed;
+.navMock{
+  position: absolute;
   bottom: 10px;
   left: 50%;
+  transform: translateX(-50%) translateY(-50%) rotateX(15deg) rotateY(10deg);
+  z-index: 10;
+}
+.mock {
+  
   transform: translateX(-50%) translateY(-50%) rotateX(15deg) rotateY(10deg);
   z-index: 10;
   background: #333333;
   padding: 20px;
   border: none;
-   cursor: pointer;
-  
+  cursor: pointer;
+
   /* Neumorphic 3D Effect */
-  box-shadow: 
-    20px 20px 40px #1a1a1a,
-    -20px -20px 40px #4d4d4d,
-    inset 5px 5px 10px #1a1a1a,
-    inset -5px -5px 10px #4d4d4d;
-  
+  box-shadow: 20px 20px 40px #1a1a1a, -20px -20px 40px #4d4d4d,
+    inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
+
   transition: all 0.3s ease;
 }
 
 .mock-neomorphism:hover {
-  box-shadow: 
-    15px 15px 30px #1a1a1a,
-    -15px -15px 30px #4d4d4d,
-    inset 8px 8px 15px #1a1a1a,
-    inset -8px -8px 15px #4d4d4d;
+  box-shadow: 15px 15px 30px #1a1a1a, -15px -15px 30px #4d4d4d,
+    inset 8px 8px 15px #1a1a1a, inset -8px -8px 15px #4d4d4d;
 }
 
-.mock-neomorphism:active {
-  box-shadow: 
-    inset 20px 20px 40px #1a1a1a,
-    inset -20px -20px 40px #4d4d4d;
-}
-.tbh_button{
+.tbh_button {
   background-color: #980000;
   padding: 10px 20px;
   color: #fff;
   text-transform: capitalize;
- }
+}
 
- .scrollbar-none::-webkit-scrollbar {
+.scrollbar-none::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-none {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

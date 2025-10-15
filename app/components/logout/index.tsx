@@ -1,6 +1,6 @@
 "use client";
 import Cookies from "js-cookie";
-
+import { LogOut } from "lucide-react";
 export default function Index() {
   const logout = () => {
     document.cookie.split(";").forEach(cookie => {
@@ -11,8 +11,8 @@ export default function Index() {
   };
 
   return (
-    <div onClick={logout} className="card p-4 cursor-pointer">
-      Logout
+    <div onClick={logout} className="mock">
+      <LogOut/>
     </div>
   );
 }
