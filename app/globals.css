@@ -28,27 +28,45 @@ body {
   backdrop-filter: blur(29px);
 }
 /* header */
-.navMock{
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%) rotateX(15deg) rotateY(10deg);
+.mockstand {
+  position: fixed;
+  right: 0;
+  bottom: 5%;
+  z-index: 999;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  cursor: pointer;
+  background: linear-gradient(135deg, #980000 0%, #98000079 100%);
+  padding: 16px 10px 16px 20px;
+  border-radius: 50px 0 0 50px;
+}
+
+.mockstand:hover {
+  transform: translateY(-5px);
+  box-shadow: -6px 6px 10px rgba(0, 0, 0, 0.6);
+}
+ 
+
+/* Icon color */
+.mockstand svg {
+  color: white;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+ 
+.navMock {
+  position: fixed;
   z-index: 10;
 }
 .mock {
-  
-  transform: translateX(-50%) translateY(-50%) rotateX(15deg) rotateY(10deg);
   z-index: 10;
   background: #333333;
   padding: 20px;
   border: none;
   cursor: pointer;
-
-  /* Neumorphic 3D Effect */
-  box-shadow: 20px 20px 40px #1a1a1a, -20px -20px 40px #4d4d4d,
-    inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
-
-  transition: all 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 10px 10px 20px #1a1a1a, -10px -10px 40px #4d4d4d75, inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
+  transition: all 0.5s ease;
 }
 
 .mock-neomorphism:hover {
@@ -72,3 +90,79 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.openModal {
+  position: fixed;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #0a0a0a;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(163, 163, 163, 0.15);
+  min-width: 400px;
+}
+ 
+/* checkbox */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  background-color: white;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.custom-checkbox:hover .checkmark {
+  border-color: #980000;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #980000;
+  border-color:#980000;
+}
+
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox input:checked ~ .checkmark::after {
+  display: block;
+}
+
+/* label and button globalincidentFrom */
+ label, button{
+    margin-bottom:5px;
+    font-size: clamp(14px, 4vw, 18px) !important;
+ }
+ 

@@ -1,3 +1,4 @@
+ 
 .my_profile input,
 .my_profile select,
 .my_profile textarea {
@@ -7,10 +8,8 @@
   background-color: transparent;
   transition: all 0.2s ease-in-out;
   box-sizing: border-box;
-}
- .my_profile label{
-    margin-bottom:10px;
  }
+ 
 /* Focus effect */
 .my_profile input:focus,
 .my_profile select:focus,
@@ -36,12 +35,11 @@
   
  
 .glass_card {
-  background-color: rgba(255, 255, 255, 0.51);
+  background-color: rgba(46, 46, 46, 0.51);
   border-radius: 5px;
-  color: #333;
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-  max-width: 50%;
+   
+   line-height: 1.5;
+ 
   padding: 1rem 2rem;
 }
 
@@ -49,7 +47,7 @@
   .glass_card {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    background-color: rgba(108, 108, 108, 0.861);  
+    background-color: rgba(46, 46, 46, 0.51);  
   }
 }
 

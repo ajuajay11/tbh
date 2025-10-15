@@ -9,6 +9,7 @@ import ImageCom from "../../components/ImageCom";
 import ToggleEyes from "../components/ToggleEyes";
 import ButtonLoading from "@/app/components/ButtonLoading";
 import Styles from "../auth.module.css"
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 
 // Inner component that uses useSearchParams
@@ -48,7 +49,7 @@ function RegisterForm() {
     e.preventDefault();
     setLoader(true);
     try {
-      const res = await axios.post(`/api/user/sendOtp`, { email: register.email });
+      const res = await axios.post(`${getBaseUrl()}/api/user/sendOtp`, { email: register.email });
       if (res.status === 200) {
         setModalOpen(true);
       }

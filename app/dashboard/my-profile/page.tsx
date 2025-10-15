@@ -6,9 +6,11 @@ import Cookies from "js-cookie";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import SuccessMsg from "@/app/components/SuccessMsg";
 import { ImagePlay } from "lucide-react";
+import { getBaseUrl } from "@/lib/getBaseUrl";
+
 import Styles from "../dashboard.module.css";
 // import { useRouter } from "next/navigation"; // ✅ Correct client-side hook
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 interface User {
   email: string;
   firstname: string;
@@ -26,9 +28,29 @@ function Page() {
   const [user, setUser] = useState<UserResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const handleScroll = () => {
+    if (divRef.current) {
+      const currentScroll = divRef.current.scrollTop; // ✅ current scroll position
+      setScrollY(currentScroll);
+       // ✅ Hide all elements with class "mock" if scroll >= 100
+    const mocks = document.getElementsByClassName("mock");
+console.log(scrollY);
+
+    for (let i = 0; i < mocks.length; i++) {
+      const el = mocks[i] as HTMLElement;
+      if (currentScroll >= 100) {
+        el.style.display = "none";
+      } else {
+        el.style.display = "block";
+      }
+    }
+    }
+  };
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await fetch("/api/user", {
+      const res = await fetch(`${getBaseUrl()}/api/user`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
@@ -167,8 +189,9 @@ function Page() {
   return (
     <>
       <SuccessMsg successMsg={success} />
-      <div className="w-full max-w-2xl pt-20 lg:pt-1 overflow-y-scroll scrollbar-none h-full">
-        <div className="  overflow-hidden">
+      <div className="w-full max-w-2xl pt-20 lg:pt-1 overflow-y-scroll scrollbar-none " style={{height:"100vh"}} ref={divRef}
+        onScroll={handleScroll}>
+        <div  >
           {/* Header Section */}
 
           {/* Form Section */}

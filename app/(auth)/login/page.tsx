@@ -8,7 +8,9 @@ import axios from "axios";
 import ImageCom from "../../components/ImageCom";
 import ToggleEyes from "../components/ToggleEyes";
 import ButtonLoading from "@/app/components/ButtonLoading";
-import Styles from "../auth.module.css"
+import Styles from "../auth.module.css";
+import { getBaseUrl } from "@/lib/getBaseUrl";
+
 function Login() {
   const [login, setLogin] = useState({
     email: "chronicleofstrangers@gmail.com",
@@ -22,7 +24,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(`/api/user/login`, login, {
+      const response = await axios.post(`${getBaseUrl()}/api/user/login`, login, {
         headers: {
           "Content-Type": "application/json",
         }
