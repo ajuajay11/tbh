@@ -50,9 +50,9 @@ export default function Comments({ Pid, userLikesData }: LikesProps) {
   };
   return (
     <>
-      <div className="mt-1 bg-sky-300 p-4 flex items-center gap-2">
+      <div className="mt-1 p-4 flex items-center gap-2">
       <button onClick={toggleLike}>
-        {hasLiked ? <Heart style={{ color: "red" }} /> : <Heart />}
+        {hasLiked ? <Heart style={{ fill: "red" }} /> : <Heart />}
       </button>
       <span>{likeCount}</span>
     </div>

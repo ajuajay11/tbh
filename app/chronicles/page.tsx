@@ -6,6 +6,7 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Styles from "./chronicle.module.css";
 import { truncatedDesc  } from '@/utils/truncatedText'; // adjust path as needed
+import { MessageCircle, Share2 } from "lucide-react";
 
 export default async function Chronicles() {
   const cookieStore = await cookies();
@@ -28,24 +29,21 @@ export default async function Chronicles() {
     ? result.data ?? []
     : result.limitedChronicles ?? [];
   return (
-    <div className="p-2">
-      <h1 className="text-2xl font-bold mb-4 text-center">Chronicles</h1>
-      
-      {chronicles && chronicles.length > 0 ? (
-        <div className={`${Styles.reel_container}`}>
-          {chronicles.map((item) => (
-            <div
-              key={item._id}
-              className={`${Styles.reel_item} p-4 rounded-xl shadow-md border bg-white`}
-            >
-              {/* Story Title */}
-              <h2 className="text-xl font-semibold">{item.yourStoryTitle}</h2>
-              <p className="mt-2 text-gray-700 whitespace-pre-line">
-                {truncatedDesc(item.chroniclesOfYou, 30)}
+   <div className="p-0">
+  {chronicles && chronicles.length > 0 ? (
+    <div className={Styles.reel_container}>
+      {chronicles.map((item) => (
+        <div key={item._id} className={Styles.reel_item}>
+          <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
+            {/* Story Content */}
+            <div className="max-w-[400px] w-full text-center px-4 ">
+              <h2 className="text-2xl font-semibold mb-3">
+                {item.yourStoryTitle}
+              </h2>
+              <p className="whitespace-pre-line text-sm leading-relaxed">
+                {truncatedDesc(item.chroniclesOfYou, 500)}
               </p>
-
-              {/* Extra Info */}
-              <div className="text-sm text-gray-500">
+              <div className="mt-4 text-gray-400 text-xs">
                 <p>
                   <strong>From:</strong> {item.incidentFrom}
                 </p>
@@ -55,27 +53,40 @@ export default async function Chronicles() {
                     ? `${item.user.firstname} ${item.user.lastname} (@${item.user.username})`
                     : "Anonymous"}
                 </p>
-                <p>
-                  <strong>Likes:</strong> {item.likeCount || 0}
-                </p>
-                <p>
-                  <strong>Comments:</strong>{" "}
-                  {item.UserComments ? item.UserComments.length : 0}
-                </p>
               </div>
-              {<Comments Pid={item._id || ""} userCommentsData={item.UserComments || []} />}
-              {
-                <Likes
-                  Pid={item._id || ""}
-                  userLikesData={item.UserLikes}
-                />
-              }
             </div>
-          ))}
+
+            {/* Right Side Action Bar */}
+            <div className="absolute right-4 bottom-24 flex flex-col items-center gap-5 text-white">
+              <Likes Pid={item._id || ""} userLikesData={item.UserLikes} />
+
+              <button className="flex flex-col items-center">
+                <MessageCircle className="w-6 h-6" />
+                <span className="text-xs mt-1">
+                  {item.UserComments?.length || 0}
+                </span>
+              </button>
+
+              <button className="flex flex-col items-center">
+                <Share2 className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Comments Section (optional, hidden until expanded) */}
+            {/* <div className="absolute bottom-0 left-0 w-full">
+              <Comments
+                Pid={item._id || ""}
+                userCommentsData={item.UserComments || []}
+              />
+            </div> */}
+          </div>
         </div>
-      ) : (
-        <p>hei</p>
-      )}
+      ))}
     </div>
+  ) : (
+    <p>hei</p>
+  )}
+</div>
+
   );
 }

@@ -1,15 +1,45 @@
- .reel_container {
-      height: 100vh; /* Or a fixed height */
-      overflow-y: scroll; /* Enable vertical scrolling */
-      scroll-snap-type: y mandatory; /* Snap vertically, mandatory means it *must* snap */
-    }
-        .reel_item {
-      height: 100%; /* Each item takes up the full height of the container */
-      scroll-snap-align: start; /* Snap to the start of each item */
-      display: flex; /* For centering content within the item */
-      justify-content: center;
-      align-items: center;
-      font-size: 2em;
-      background-color: lightgray; /* Example styling */
-      border-bottom: 1px solid darkgray; /* Example styling */
-    }
+.reel_container {
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  background-color: #000; /* dark background like TikTok */
+}
+
+.reel_item {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Center content box (desktop narrower like reels) */
+@media (min-width: 768px) {
+  .reel_item > div {
+    max-width: 420px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+/* Full width on mobile */
+@media (max-width: 767px) {
+  .reel_item > div {
+    width: 100%;
+  }
+}
+
+/* Hide scrollbar */
+.reel_container::-webkit-scrollbar {
+  display: none;
+}
+.reel_container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

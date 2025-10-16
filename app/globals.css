@@ -20,7 +20,13 @@ body {
 .font_three {
   font-size: clamp(10px, 4vw, 20px);
 }
-
+.logo{
+   position: fixed;
+  z-index: 999;
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
 .customBox {
   border: 1px solid #808080;
   background-color: #00000083;
