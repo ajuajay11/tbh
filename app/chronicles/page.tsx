@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import Styles from "./chronicle.module.css";
 import { truncatedDesc  } from '@/utils/truncatedText'; // adjust path as needed
 import { MessageCircle, Share2 } from "lucide-react";
-
+import Link from "next/link";
 export default async function Chronicles() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
@@ -33,7 +33,7 @@ export default async function Chronicles() {
   {chronicles && chronicles.length > 0 ? (
     <div className={Styles.reel_container}>
       {chronicles.map((item) => (
-        <div key={item._id} className={Styles.reel_item}>
+        <Link href={`/chronicles/${item._id}`}  key={item._id} className={Styles.reel_item}>
           <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
             {/* Story Content */}
             <div className="max-w-[400px] w-full text-center px-4 ">
@@ -80,7 +80,7 @@ export default async function Chronicles() {
               />
             </div> */}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   ) : (

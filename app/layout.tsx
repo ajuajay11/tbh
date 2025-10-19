@@ -3,10 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import "../app/globals.css";
-import 'aos/dist/aos.css'; // Import AOS styles globally
-import AosInit from "./components/AosInit";
-import Image from "next/image";
-import logo from "../public/logo.png"
+ import AosInit from "./components/AosInit";
+// import Image from "next/image";
+// import logo from "../public/logo.png"
 import { Toaster } from 'react-hot-toast';
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +30,9 @@ export const dynamic = "force-dynamic"; // <- Add this line
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}>
         <AosInit />
-        <div className="logo">
+        {/* <div className="logo">
           <Image src={logo} width={100} height={100} alt="logo"/>
-        </div>
+        </div> */}
         {data?.mode ?  (
           <main className="flex justify-center items-center min-h-screen text-white">
             <p>Site is currently under maintenance.</p>
