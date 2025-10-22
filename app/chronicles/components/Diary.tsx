@@ -19,7 +19,18 @@ interface DiaryProps {
 
 const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const [splitWords, setSplitWords] = useState<string[]>([]);
-
+  const [edit, setEdit] = useState<boolean[]>(false);
+ const [addChronicle, setAddChronicle] = useState<Chronicle>({
+    yourStoryTitle: chronicle.yourStoryTitle,
+    chroniclesOfYou: chronicle.chroniclesOfYou,
+    replyAllowed: chronicle.replyAllowed,
+    emailAllowed: chronicle.emailAllowed,
+    comments: String,
+    incidentFrom: chronicle,
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (chronicle?.chroniclesOfYou) {
       // ✅ Split story text every 600 characters (adjust for page size)
@@ -27,7 +38,9 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
       setSplitWords(chunks);
     }
   }, [chronicle]);
-
+  const editChronicle = () => {
+    setEdit(true)
+  }
   if (!chronicle) return <div>No chronicle found</div>;
 
   return (
@@ -35,29 +48,35 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
       <h2 className="text-2xl font-semibold mb-6 text-white">
         {chronicle.yourStoryTitle}
       </h2>
+      <button onClick={editChronicle}>Edit Chronicle</button>
+      {edit ?
+      
+      : <div><HTMLFlipBook
+          width={550}
+          height={400}
+          size="stretch"
+          minWidth={315}
+          maxWidth={1000}
+          minHeight={400}
+          maxHeight={400}
+          maxShadowOpacity={0.5}
+          showCover={true}
+          mobileScrollSupport={true}
+          className="shadow-2xl"
+        >
+          {/* <div className="page p-6 bg-[#fffff0] text-[#2d2d2d] font-serif text-lg leading-relaxed">Chronicles</div> */}
+          {splitWords.map((text, i) => (
+            <div
+              key={i}
+              className="page p-6 bg-[#fffff0] text-[#2d2d2d] font-serif text-lg leading-relaxed"
+            >
+              <p>{text}</p>
+            </div>
+          ))}
+          <div className="page p-6 bg-[#fffff0] text-[#2d2d2d] font-serif text-lg leading-relaxed"> </div>
 
-      <HTMLFlipBook
-        width={550}
-        height={733}
-        size="stretch"
-        minWidth={315}
-        maxWidth={1000}
-        minHeight={400}
-        maxHeight={1533}
-        maxShadowOpacity={0.5}
-        showCover={true}
-        mobileScrollSupport={true}
-        className="shadow-2xl"
-      >
-        {splitWords.map((text, i) => (
-          <div
-            key={i}
-            className="page p-6 bg-[#fffff0] text-[#2d2d2d] font-serif text-lg leading-relaxed"
-          >
-            <p>{text}</p>
-          </div>
-        ))}
-      </HTMLFlipBook>
+        </HTMLFlipBook></div>}
+
     </div>
   );
 };
