@@ -1,39 +1,35 @@
-// import { Chronicle } from "@/app/types/chronicle";
+// app/chronicles/[id]/page.tsx
+
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Diary from "../components/Diary";
 
-type PageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-export default async function page({ searchParams }: PageProps) {
-   const params = await searchParams;
-
-    const { id } = params;
-
-    const cookieStore = await cookies();
-      const token = cookieStore.get("token")?.value;
-     
- 
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
   const baseUrl = getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/getAllChronicles?id=${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
 
-  const res = await fetch(`${baseUrl}/api/getAllChronicles?id=${id}`, { cache: "no-store" });
-  if (!res.ok) {
-    return <div>Chronicle not found</div>;
+  const data = await res.json();
+  console.log("Server:", data);
+
+  if (!res.ok || !data || !data.data?.length) {
+    return <div>Post not found {id}</div>;
   }
 
-  const jsonData = await res.json();
-  const chronicleDiary = jsonData.limitedChronicles?.[0] || jsonData.data?.[0];
-  console.log(chronicleDiary);
- 
-  if (!chronicleDiary) {
-    return <div>No chronicle found</div>;
-  }
+  // ✅ Get the first post (specific chronicle)
+  const chronicleDiary = data.data[0];
 
   return (
     <>
-    <Diary chronicle={chronicleDiary}/>
-    
+      <Diary chronicle={chronicleDiary} />
     </>
   );
 }

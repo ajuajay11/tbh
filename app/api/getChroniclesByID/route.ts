@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     const allChronicles = await UserVibesModel.find({
-      user: userData.userId, // ✅ Correct field
+      user: userData.userId, 
     });
     return NextResponse.json(
       {

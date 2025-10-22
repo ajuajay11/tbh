@@ -5,12 +5,12 @@ import { verifyToken } from "@/utils/auth";
 import { FilterQuery } from "mongoose";
 // import BadWordsNext from "bad-words-next";
 // import en from "bad-words-next/lib/en";
-import "@/models/users"; 
+import "@/models/users";
 
 export async function GET(request: NextRequest) {
   // const badwords = new BadWordsNext({ data: en });
   // console.log(badwords);
-   const { searchParams } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const country = searchParams.get("country");
   const id = searchParams.get("id");
   const search = searchParams.get("search");
@@ -49,10 +49,10 @@ export async function GET(request: NextRequest) {
 
     if (!token) {
       const limitedChronicles = await UserVibesModel.find(baseQuery)
-      .populate("user", "username firstname lastname" )
+        .populate("user", "username firstname lastname")
         .sort(sortObj)
         .limit(6);
-console.log(limitedChronicles,'limitedChronicles');
+      console.log(limitedChronicles, "limitedChronicles");
 
       const total = await UserVibesModel.countDocuments(baseQuery);
 
@@ -62,8 +62,8 @@ console.log(limitedChronicles,'limitedChronicles');
           limitedChronicles,
           pagination: {
             total,
-            page: 1, 
-            limit: 6,  
+            page: 1,
+            limit: 6,
             totalPages: Math.ceil(total / 6), // Total pages if they had full access
           },
         },
@@ -82,7 +82,6 @@ console.log(limitedChronicles,'limitedChronicles');
       reportedBy: { $ne: userData.id }, // ✅ exclude reported stories
     };
 
-    // Count total documents matching query for pagination meta
     const total = await UserVibesModel.countDocuments(query);
 
     const filtered = await UserVibesModel.find(query)
@@ -113,5 +112,3 @@ console.log(limitedChronicles,'limitedChronicles');
     );
   }
 }
-
- 

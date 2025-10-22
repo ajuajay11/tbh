@@ -1,6 +1,6 @@
 import { Chronicle } from "../types/chronicle";
 import "./chronicle.module.css";
-import Comments from "./components/Comments";
+// import Comments from "./components/Comments";
 import Likes from "./components/Likes";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
@@ -33,8 +33,9 @@ export default async function Chronicles() {
   {chronicles && chronicles.length > 0 ? (
     <div className={Styles.reel_container}>
       {chronicles.map((item) => (
+        
         <Link href={`/chronicles/${item._id}`}  key={item._id} className={Styles.reel_item}>
-          <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
+           <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
             {/* Story Content */}
             <div className="max-w-[400px] w-full text-center px-4 ">
               <h2 className="text-2xl font-semibold mb-3">
