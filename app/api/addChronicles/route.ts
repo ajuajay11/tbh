@@ -4,6 +4,7 @@ import UserVibesModel from "@/models/chroniclesSchema";
 import connectToDatabase from "@/lib/db";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
+import { Filter } from 'bad-words'
 
 interface RequestBody {
   yourStoryTitle: string;
@@ -17,6 +18,8 @@ interface RequestBody {
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
+const filter = new Filter();
+console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
 
     const body: RequestBody = await request.json();
     const {
@@ -27,7 +30,7 @@ export async function POST(request: NextRequest) {
       comments,
       incidentFrom,
     } = body;
-
+    
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ message: "No token found" }, { status: 401 });
@@ -44,9 +47,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const newdarktruth = new UserVibesModel({
-      yourStoryTitle,
-      chroniclesOfYou,
+   const newdarktruth = new UserVibesModel({
+      yourStoryTitle: filter.clean(yourStoryTitle),
+      chroniclesOfYou: filter.clean(chroniclesOfYou),
       replyAllowed,
       emailAllowed,
       comments,
@@ -61,8 +64,8 @@ export async function POST(request: NextRequest) {
         message: "Congragulation you done it",
         story: {
           _id: newdarktruth._id,
-          yourStoryTitle,
-          chroniclesOfYou,
+          yourStoryTitle: newdarktruth.yourStoryTitle,
+          chroniclesOfYou: newdarktruth.chroniclesOfYou,
           replyAllowed,
           emailAllowed,
           comments,

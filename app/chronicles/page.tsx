@@ -6,8 +6,9 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Styles from "./chronicle.module.css";
 import { truncatedDesc  } from '@/utils/truncatedText'; // adjust path as needed
-import { MessageCircle, Share2 } from "lucide-react";
+import { Share2 } from "lucide-react";
 import Link from "next/link";
+import Comments from "./components/Comments";
 export default async function Chronicles() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
@@ -34,10 +35,10 @@ export default async function Chronicles() {
     <div className={Styles.reel_container}>
       {chronicles.map((item) => (
         
-        <Link href={`/chronicles/${item._id}`}  key={item._id} className={Styles.reel_item}>
+        <article key={item._id} className={Styles.reel_item}>
            <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
             {/* Story Content */}
-            <div className="max-w-[400px] w-full text-center px-4 ">
+            <Link href={`/chronicles/${item._id}`}  className="max-w-[400px] w-full text-center px-4 ">
               <h2 className="text-2xl font-semibold mb-3">
                 {item.yourStoryTitle}
               </h2>
@@ -55,18 +56,17 @@ export default async function Chronicles() {
                     : "Anonymous"}
                 </p>
               </div>
-            </div>
+            </Link>
 
             {/* Right Side Action Bar */}
-            <div className="absolute right-4 bottom-24 flex flex-col items-center gap-5 text-white">
-              <Likes Pid={item._id || ""} userLikesData={item.UserLikes} />
-
-              <button className="flex flex-col items-center">
-                <MessageCircle className="w-6 h-6" />
-                <span className="text-xs mt-1">
-                  {item.UserComments?.length || 0}
-                </span>
-              </button>
+            <div className="absolute right-4 bottom-24 flex flex-col items-center gap-2 text-white bg-[#999]">
+              <Likes Pid={item._id || ""} userLikesData={item?.UserLikes} />
+              <div>
+               <Comments
+                Pid={item._id || ""}
+                userCommentsData={item.UserComments || []}
+              />
+             </div>
 
               <button className="flex flex-col items-center">
                 <Share2 className="w-6 h-6" />
@@ -81,7 +81,7 @@ export default async function Chronicles() {
               />
             </div> */}
           </div>
-        </Link>
+        </article>
       ))}
     </div>
   ) : (

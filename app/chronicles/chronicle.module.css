@@ -43,3 +43,7 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.comments{
+ position: absolute;
+}

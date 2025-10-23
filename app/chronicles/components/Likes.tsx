@@ -8,28 +8,31 @@ interface LikesProps {
   userLikesData: string[]; // ✅ matches Chronicle.UserLikes
   Pid: string;
 }
-export default function Comments({ Pid, userLikesData }: LikesProps) {
+export default function Likes({ Pid, userLikesData }: LikesProps) {
   const UserId = Cookies.get("userId");
   const token = Cookies.get("token");
   const [hasLiked, setHasLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
-    if (!UserId) return;
-    const filterLike = userLikesData.some((e) => e == UserId);
-    setLikeCount(userLikesData.length); // ✅ count total likes
-    if (filterLike) {
-      setHasLiked(true);
-       console.log(likeCount,'likeCount');
-       
-    }
-  }, [UserId, userLikesData, likeCount]);
+    if (!UserId || !userLikesData) return;
+
+    console.log(userLikesData, "filterLike");
+
+    const filterLike = userLikesData.includes(UserId); // ✅ simpler for array of strings
+    console.log(filterLike);
+
+    setLikeCount(userLikesData.length); // total likes
+    setHasLiked(filterLike);
+  }, [UserId, userLikesData]);
 
   const toggleLike = async () => {
     const newLikedState = !hasLiked;
     setHasLiked(newLikedState);
     try {
-      const res = await axios.post( `${getBaseUrl()}/api/addChronicles/${Pid}/isLiked`, {
+      const res = await axios.post(
+        `${getBaseUrl()}/api/addChronicles/${Pid}/isLiked`,
+        {
           isLiked: newLikedState,
         },
         {
@@ -40,9 +43,9 @@ export default function Comments({ Pid, userLikesData }: LikesProps) {
         }
       );
 
-      setLikeCount(res?.data.likeCount ?? (newLikedState
-        ? likeCount + 1
-        : likeCount - 1));
+      setLikeCount(
+        res?.data.likeCount ?? (newLikedState ? likeCount + 1 : likeCount - 1)
+      );
     } catch (err) {
       console.error("API error, reverting like", err);
       setHasLiked(!newLikedState);
@@ -50,12 +53,12 @@ export default function Comments({ Pid, userLikesData }: LikesProps) {
   };
   return (
     <>
-      <div className="mt-1 p-4 flex items-center gap-2">
-      <button onClick={toggleLike}>
-        {hasLiked ? <Heart style={{ fill: "red" }} /> : <Heart />}
-      </button>
-      <span>{likeCount}</span>
-    </div>
+      <div className="mt-1 p-4 flex flex-col items-center ">
+        <button onClick={toggleLike}>
+          {hasLiked ? <Heart fill="red" /> : <Heart stroke="gray" />}
+        </button>
+        <span>{likeCount === 0 ? "likes": likeCount}</span>
+      </div>
     </>
   );
 }
