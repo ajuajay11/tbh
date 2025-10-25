@@ -4,8 +4,10 @@ import Cookies from "js-cookie";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {  UserLike  } from "@/app/types/chronicle";
+
 interface LikesProps {
-  userLikesData: string[]; // ✅ matches Chronicle.UserLikes
+  userLikesData: UserLike[]; // Changed from string[] to UserLike[]
   Pid: string;
 }
 export default function Likes({ Pid, userLikesData }: LikesProps) {
@@ -14,17 +16,15 @@ export default function Likes({ Pid, userLikesData }: LikesProps) {
   const [hasLiked, setHasLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  useEffect(() => {
-    if (!UserId || !userLikesData) return;
+useEffect(() => {
+  if (!UserId || !userLikesData) return;
 
-    console.log(userLikesData, "filterLike");
+  // Use .some to check for matching user in array of objects
+  const filterLike = userLikesData.some(like => like._id === UserId);
 
-    const filterLike = userLikesData.includes(UserId); // ✅ simpler for array of strings
-    console.log(filterLike);
-
-    setLikeCount(userLikesData.length); // total likes
-    setHasLiked(filterLike);
-  }, [UserId, userLikesData]);
+  setLikeCount(userLikesData.length);
+  setHasLiked(filterLike);
+}, [UserId, userLikesData]);
 
   const toggleLike = async () => {
     const newLikedState = !hasLiked;
@@ -53,9 +53,9 @@ export default function Likes({ Pid, userLikesData }: LikesProps) {
   };
   return (
     <>
-      <div className="mt-1 p-4 flex flex-col items-center ">
+      <div className="mt-1 flex flex-col items-center text-[#333]">
         <button onClick={toggleLike}>
-          {hasLiked ? <Heart fill="red" /> : <Heart stroke="gray" />}
+          {hasLiked ? <Heart fill="red" /> : <Heart  />}
         </button>
         <span>{likeCount === 0 ? "likes": likeCount}</span>
       </div>

@@ -20,6 +20,9 @@ body {
 .font_three {
   font-size: clamp(10px, 4vw, 20px);
 }
+.font_four {
+  font-size: clamp(25px, 4vw, 35px);
+}
 .logo{
    position: fixed;
   z-index: 999;
@@ -36,14 +39,14 @@ body {
 /* header */
 .mockstand {
   position: fixed;
-  right: 0;
-  bottom: 5%;
+  left: 0;
+  bottom: 5.5%;
   z-index: 999;
   transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   cursor: pointer;
   background: linear-gradient(135deg, #980000 0%, #98000079 100%);
-  padding: 16px 10px 16px 20px;
-  border-radius: 50px 0 0 50px;
+  padding: 16px 10px 16px 10px;
+  border-radius: 0 50px 50px 0px;
 }
 
 .mockstand:hover {
@@ -74,7 +77,16 @@ body {
   box-shadow: 10px 10px 20px #1a1a1a, -10px -10px 40px #4d4d4d75, inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
   transition: all 0.5s ease;
 }
-
+@media screen and (max-width: 480px) {
+  .mock {
+    padding: 10px;
+    display: flex;
+    width: 100%;
+    border-radius: 0px;
+    box-shadow: 10px 10px 20px #1a1a1a, -10px -10px 40px #4d4d4d75, inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
+     justify-content:center;
+  }
+}
 .mock-neomorphism:hover {
   box-shadow: 15px 15px 30px #1a1a1a, -15px -15px 30px #4d4d4d,
     inset 8px 8px 15px #1a1a1a, inset -8px -8px 15px #4d4d4d;
@@ -171,4 +183,26 @@ body {
     margin-bottom:5px;
     font-size: clamp(14px, 4vw, 18px) !important;
  }
- 
+ .book-wrapper {
+  position: relative;
+  background-color: #d7cbb3; /* optional: soft background behind book */
+  border-radius: 8px;
+}
+
+.binding {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 12px; /* thickness of the spine */
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.15)
+  );
+  z-index: 5;
+  border-radius: 2px;
+  pointer-events: none;
+}

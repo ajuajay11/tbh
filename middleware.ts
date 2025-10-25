@@ -12,7 +12,7 @@ export function middleware(request:NextRequest) {
     return NextResponse.next();
   }
   if (!token) {
-    if (["/dashboard", "/chronicles"].includes(request.nextUrl.pathname)) {
+    if (["/dashboard", "/chronicles", "/dashboard/my-profile"].includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }

@@ -55,14 +55,8 @@ export default function Header() {
 
       {/* Always keep nav mounted for animation */}
       <nav
-        className={`fixed bottom-[0%] left-1/2 z-50 transition-all duration-700 
-        ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform
-        ${mock
-            ? "translate-x-[-50%] translate-y-0 scale-100 opacity-100"
-            : "translate-x-[50%] translate-y-[30%] scale-75 opacity-0"
-          }`}
-      >
-        <div className="flex ">
+        className={`fixed w-full lg:w-auto bottom-0 lg:bottom-[2%] lg:left-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform ${mock ? " lg:translate-x-[-50%] translate-y-0 scale-100 opacity-100" : "lg:translate-x-[50%] translate-y-[30%] scale-75 opacity-0" }`} >
+        <div className="flex  w-full lg:gap-3">
           {token ? (
             <>
               {pathname === "/chronicles" ? (

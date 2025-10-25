@@ -79,7 +79,8 @@ function DashboardHome() {
         {chronicles && chronicles.length > 0 ? (
           <div className="grid grid-cols-3 gap-1" >
             {chronicles.map((item) => (
-              <div
+              <Link
+                  href={`/chronicles/${item._id}`}
                 key={item._id}
                 className="aspect-square relative group cursor-pointer overflow-hidden"
               >
@@ -89,21 +90,8 @@ function DashboardHome() {
                   </p>
                 </div>
 
-                <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">❤️</span>
-                    <span className="font-semibold">
-                      {item.likeCount || 0}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">💬</span>
-                    <span className="font-semibold">
-                      {item.UserComments?.length || 0}
-                    </span>
-                  </div>
-                </div>
-              </div>
+                 
+              </Link>
             ))}
           </div>
         ) : (

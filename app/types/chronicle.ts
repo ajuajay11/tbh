@@ -1,13 +1,13 @@
-// types/chronicle.ts
+// types/chronicle.ts --
 
 export interface User {
   _id: string;
   firstname: string;
   lastname: string;
   username: string;
-  name:string,
-  userId:string,
-  email:string
+  name: string;
+  userId: string;
+  email: string;
 }
 
 export interface UserComment {
@@ -39,7 +39,7 @@ export interface Chronicle {
   __v: number;
   user?: User;
   UserComments?: UserComment[];
-UserLikes: string[]; //
+  UserLikes?: UserLike[];   // <-- Change string[] (userIds) to UserLike[], if API gives you objects
 }
 
 export interface ChronicleResponse {
