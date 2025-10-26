@@ -123,7 +123,7 @@ useEffect(() => {
   
   // Cleanup
   return () => window.removeEventListener("resize", updateDimensions);
-}, []); // Empty dependency array - only run once on mount
+}, [dimensions]); // Empty dependency array - only run once on mount
   useEffect(() => {
   if (chronicle?.chroniclesOfYou) {
     // Match every 600 characters including newlines
