@@ -114,7 +114,14 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-400 p-8">No chronicles available</p>
+        <section className="h-screen flex items-center justify-center flex-col">
+          <p className="text-center text-gray-400 p-8">No chronicles available</p>
+          <div className="text-center">
+          <Link href="/dashboard/write-chronicle" className="tbh_button">
+          start with you</Link>
+ 
+          </div>
+        </section>
       )}
     </>
   );

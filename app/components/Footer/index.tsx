@@ -9,9 +9,9 @@ export default function Index() {
       <span className="text-white/70 text-sm">Share your story</span>
     </div>
     <div className="flex gap-6">
-      <a href="#" className="text-white/70 hover:text-pink-300 transition">About</a>
-      <a href="#" className="text-white/70 hover:text-pink-300 transition">Contact</a>
-      <a href="#" className="text-white/70 hover:text-pink-300 transition">Privacy</a>
+      <a href="#" className="text-white/70 hover:text-pink-300 transition">  </a>
+      <a href="#" className="text-white/70 hover:text-pink-300 transition"> </a>
+      <a href="#" className="text-white/70 hover:text-pink-300 transition"> </a>
     </div>
     <div className="text-white/50 text-xs">
       &copy; {new Date().getFullYear()} Chronicles. All rights reserved.

@@ -63,7 +63,7 @@ function Page() {
       console.log(response);
       if (response.status == 200) {
         const successMsg = response?.data?.message;
-
+window.location.href = '/dashboard';
         setSuccess(successMsg);
       }
 
@@ -85,7 +85,7 @@ function Page() {
     <>
  
       <SuccessMsg successMsg={success} />
-     <div className={`overflow-y-scroll scrollbar-none ${Styles.glass_card}`} style={{height: "100vh;"}} >
+     <div className={`overflow-y-scroll scrollbar-none ${Styles.glass_card}`} style={{height: "95vh"}} >
        <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto`} >
         {/* Title */}
         <div className="my-5">
