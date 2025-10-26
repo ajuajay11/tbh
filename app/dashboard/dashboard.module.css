@@ -3,7 +3,7 @@
 .my_profile select,
 .my_profile textarea {
   width: 100%;
-  padding: 1rem 2.5rem; /* py-4 px-10 */
+  padding: 8px 14px; /* py-4 px-10 */
   border: 2px solid #6c6c6c; /* Tailwind gray-200 */
   background-color: transparent;
   transition: all 0.2s ease-in-out;

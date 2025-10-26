@@ -84,7 +84,7 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
                     {item.yourStoryTitle}
                   </h2>
                   <p className="whitespace-pre-line font_three leading-relaxed">
-                    {truncatedDesc(item.chroniclesOfYou, 500)}
+                    {truncatedDesc(item.chroniclesOfYou, 300)}
                   </p>
                   <div className="mt-4 text-gray-400 text-xs">
                     <p>

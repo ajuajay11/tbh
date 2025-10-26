@@ -29,25 +29,25 @@ function Page() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [scrollY, setScrollY] = useState(0);
-  const handleScroll = () => {
-    if (divRef.current) {
-      const currentScroll = divRef.current.scrollTop; // ✅ current scroll position
-      setScrollY(currentScroll);
-       // ✅ Hide all elements with class "mock" if scroll >= 100
-    const mocks = document.getElementsByClassName("mock");
-console.log(scrollY);
+  // const [scrollY, setScrollY] = useState(0);
+//   const handleScroll = () => {
+//     if (divRef.current) {
+//       const currentScroll = divRef.current.scrollTop; // ✅ current scroll position
+//       setScrollY(currentScroll);
+//        // ✅ Hide all elements with class "mock" if scroll >= 100
+//     const mocks = document.getElementsByClassName("mock");
+// console.log(scrollY);
 
-    for (let i = 0; i < mocks.length; i++) {
-      const el = mocks[i] as HTMLElement;
-      if (currentScroll >= 100) {
-        el.style.display = "none";
-      } else {
-        el.style.display = "block";
-      }
-    }
-    }
-  };
+//     for (let i = 0; i < mocks.length; i++) {
+//       const el = mocks[i] as HTMLElement;
+//       if (currentScroll >= 100) {
+//         el.style.display = "none";
+//       } else {
+//         el.style.display = "block";
+//       }
+//     }
+//     }
+//   };
   useEffect(() => {
     const fetchUser = async () => {
       const res = await fetch(`${getBaseUrl()}/api/user`, {
@@ -190,7 +190,7 @@ console.log(scrollY);
     <>
       <SuccessMsg successMsg={success} />
       <div className="w-full max-w-2xl pt-20 lg:pt-1 overflow-y-scroll scrollbar-none " style={{height:"100vh"}} ref={divRef}
-        onScroll={handleScroll}>
+         >
         <div  >
           {/* Header Section */}
 
@@ -261,21 +261,7 @@ console.log(scrollY);
                     placeholder="your@email.com"
                     required
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <svg
-                      className="w-5 h-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                      />
-                    </svg>
-                  </div>
+                   
                 </div>
               </div>
 
@@ -351,21 +337,7 @@ console.log(scrollY);
                     onChange={handleChange}
                     placeholder="Choose a unique username"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <svg
-                      className="w-5 h-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
-                  </div>
+                   
                 </div>
               </div>
             </div>

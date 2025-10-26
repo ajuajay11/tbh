@@ -4,8 +4,8 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import Diary from "../components/Diary";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const baseUrl = getBaseUrl();

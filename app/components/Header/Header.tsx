@@ -53,10 +53,9 @@ export default function Header() {
         <ListCollapse />
       </div>
 
-      {/* Always keep nav mounted for animation */}
-      <nav
-        className={`fixed w-full lg:w-auto bottom-0 lg:bottom-[2%] lg:left-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform ${mock ? " lg:translate-x-[-50%] translate-y-0 scale-100 opacity-100" : "lg:translate-x-[50%] translate-y-[30%] scale-75 opacity-0" }`} >
-        <div className="flex  w-full lg:gap-3">
+       <nav
+        className={`fixed w-full md:w-auto bottom-0 md:bottom-[2%] md:left-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform ${mock ? " md:translate-x-[-50%] translate-y-0 scale-100 opacity-100" : "md:translate-x-[50%] translate-y-[30%] scale-75 opacity-0" }`} >
+        <div className="flex  w-full md:gap-3">
           {token ? (
             <>
               {pathname === "/chronicles" ? (

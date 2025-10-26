@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useState, FormEvent } from "react";
 import Cookies from "js-cookie";
-import { MessageCircle } from "lucide-react";
+import { Trash2, X, MessageCircle } from "lucide-react"
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { UserComment } from "../../types/chronicle";
 
@@ -72,62 +72,82 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-[998]"
+            className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-[998]"
             onClick={toggleComments}
           />
 
           {/* Bottom Modal */}
           <div
-            className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-[999] transform transition-transform duration-300 ease-out ${
-              isCommentOpen ? "translate-y-0" : "translate-y-full"
-            }`}
-            style={{ maxHeight: "70vh" }}
+            className={`fixed bottom-0 left-0 right-0 bg-neutral-900 rounded-t-3xl shadow-2xl z-[999] transform transition-transform duration-300 ease-out ${isCommentOpen ? "translate-y-0" : "translate-y-full"
+              }`}
+            style={{ maxHeight: "80vh" }}
           >
-            <div className="flex justify-center pt-3 pb-2">
-              <div className="w-12 h-1 bg-gray-300 rounded-full" />
+            {/* Top handle + close */}
+            <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b border-neutral-700">
+              <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto"></div>
+              <button
+                onClick={toggleComments}
+                className="absolute right-4 top-4 text-neutral-400 hover:text-white transition"
+              >
+                <X size={22} />
+              </button>
             </div>
 
-            <div className="px-4 pb-3 border-b border-gray-200">
-              <h3 className="text-center font-semibold text-lg">Comments</h3>
+            {/* Header */}
+            <div className="px-4 pb-3 border-b border-neutral-700">
+              <h3 className="text-center font-semibold text-lg text-white">
+                Comments
+              </h3>
             </div>
 
+            {/* Comments list */}
             <div
-              className="overflow-y-auto px-4 py-3"
-              style={{ maxHeight: "calc(70vh - 180px)" }}
+              className="overflow-y-auto px-4 py-4"
+              style={{ maxHeight: "calc(80vh - 180px)" }}
             >
               {allComments.length > 0 ? (
                 allComments.map((comment, id) => (
-                  <div key={comment._id || id} className="mb-4">
-                    <p className="text-gray-800">{comment.comment}</p>
+                  <div
+                    key={comment._id || id}
+                    className="group relative mb-4 p-3 rounded-xl bg-neutral-800 hover:bg-neutral-750 transition"
+                  >
+                    <p className="text-gray-200 text-sm leading-relaxed">
+                      {comment.comment}
+                    </p>
+
+                    {/* Delete icon on hover */}
                     <button
-                      className="text-sm text-red-500"
                       onClick={() => deleteComment(comment._id)}
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-neutral-500 hover:text-red-600"
+                      title="Delete comment"
                     >
-                      Delete
+                      <Trash2 size={18} strokeWidth={2} />
                     </button>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-400 text-center py-8">
+                <p className="text-neutral-500 text-center py-10">
                   No comments yet. Be the first!
                 </p>
               )}
             </div>
 
+            {/* Comment input */}
             <form
               onSubmit={addComment}
-              className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white"
+              className="flex items-center gap-2 p-4 border-t border-neutral-700 bg-neutral-900"
             >
               <input
                 type="text"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Add a comment..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-400" required
+                className="flex-1 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-full text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-red-600"
+                required
               />
               <button
                 type="submit"
-                className="px-6 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600"
+                className="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
               >
                 Post
               </button>

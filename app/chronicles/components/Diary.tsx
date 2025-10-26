@@ -12,6 +12,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { createPortal } from "react-dom";
 
+interface FlipBookMethods {
+  pageFlip: () => { flipNext: () => void; flipPrev: () => void };
+}
+
 // ✅ Fixed: Added User interface
 interface User {
   _id: string;
@@ -43,6 +47,22 @@ interface ChronicleFormData {
 interface DiaryProps {
   chronicle: Chronicle;
 }
+// interface MinimalFlipBookProps {
+//   children: React.ReactNode;
+//   ref?: React.Ref<FlipBookMethods>;
+//   width: number;
+//   height: number;
+//   minWidth?: number;
+//   maxWidth?: number;
+//   minHeight?: number;
+//   maxHeight?: number;
+//   size?: "fixed" | "stretch";
+//   showCover?: boolean;
+//   drawShadow?: boolean;
+//   flippingTime?: number;
+//   maxShadowOpacity?: number;
+//   className?: string;
+// }
 
 const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const [splitWords, setSplitWords] = useState<string[]>([]);
@@ -60,52 +80,56 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
     incidentFrom: chronicle.incidentFrom,
   });
   const [error, setError] = useState<string | null>(null);
-   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 400, height: 600 });
   const [openModal, setOpenModal] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const bookRef = useRef();
+const bookRef = useRef<FlipBookMethods | null>(null);
 
   const handleCoverDoubleClick = () => {
-    // Programmatically flip to the next page
     if (bookRef.current) {
-      bookRef.current.pageFlip().flipNext();
-    }
+bookRef.current?.pageFlip().flipNext();    }
   };
   // Check if current user is the owner (client-side only)
   useEffect(() => {
+
     const userId = Cookies.get("userId");
     setIsOwner(userId === chronicle.user._id);
   }, [chronicle.user._id]);
 
-  useEffect(() => {
-    const updateDimensions = () => {
-      const vh = window.innerHeight;
+// Replace the useEffect starting around line 92 with this:
 
-      if (window.innerWidth < 768) {
-        setDimensions({ width: vh * 0.65, height: vh * 0.9 });
-        setIsPortrait(true);
-        console.log(isPortrait);
-        console.log(dimensions);
-      } else if (window.innerWidth < 1280) {
-        setDimensions({ width: vh * 0.7, height: vh * 0.9 });
-        setIsPortrait(true);
-      } else {
-        setDimensions({ width: vh * 0.9, height: vh * 0.9 });
-        setIsPortrait(false);
-      }
-    };
+useEffect(() => {
+  const updateDimensions = () => {
+    const vh = window.innerHeight;
 
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
-
-  useEffect(() => {
-    if (chronicle?.chroniclesOfYou) {
-      const chunks = chronicle.chroniclesOfYou.match(/.{1,600}/gs) || [];
-      setSplitWords(chunks);
+    if (window.innerWidth < 768) {
+      setDimensions({ width: vh * 0.65, height: vh * 0.9 });
+      setIsPortrait(true);
+    } else if (window.innerWidth < 1280) {
+      setDimensions({ width: vh * 0.7, height: vh * 0.9 });
+      setIsPortrait(true);
+    } else {
+      setDimensions({ width: vh * 0.9, height: vh * 0.9 });
+      setIsPortrait(false);
     }
+  };
+
+  // Call once on mount
+  updateDimensions();
+  
+  // Add resize listener
+  window.addEventListener("resize", updateDimensions);
+  
+  // Cleanup
+  return () => window.removeEventListener("resize", updateDimensions);
+}, []); // Empty dependency array - only run once on mount
+  useEffect(() => {
+  if (chronicle?.chroniclesOfYou) {
+    // Match every 600 characters including newlines
+    const chunks = chronicle.chroniclesOfYou.match(/[\s\S]{1,600}/g) || [];
+    setSplitWords(chunks);
+  }
   }, [chronicle]);
 
   const handleChange = (
@@ -123,7 +147,7 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const doEditable = () => {
     setEditable((e) => !e);
   };
- 
+
   const submitChronicle = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -144,7 +168,7 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
       if (response.status === 200) {
         const successMsg = response?.data?.message;
         setSuccess(successMsg);
-      
+
 
       }
     } catch (err: unknown) {
@@ -160,13 +184,13 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
       setLoading(false);
     }
   };
-    const DeleteAccFn = async () => {
+  const DeleteAccFn = async () => {
     try {
       const res = await axios.delete(`${getBaseUrl()}/api/addChronicles/${chronicle._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
- console.log(res);
- 
+      console.log(res);
+
       if (res.status === 200) {
         const successMsg = res?.data?.message;
         setSuccess(successMsg); window.location.href = '/dashboard';
@@ -180,7 +204,7 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
         message = err.message;
       }
       setError(message);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -337,63 +361,77 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
         </section>
       ) : (
         <div className="flex flex-col justify-center items-center min-h-screen bg-[#000004] px-5">
-          <HTMLFlipBook
-            width={410}
-            height={690}
-            minWidth={320}
-            maxWidth={900}
-            minHeight={460}
-            maxHeight={1200}
-            size="fixed"
-            ref={bookRef}
-            showCover={false}
-            drawShadow={true}
-            flippingTime={1000}
-            maxShadowOpacity={0.18}
-            className="flipbook mx-auto rounded-xl shadow-2xl"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()} // Prevent single-click flip
-              onDoubleClick={handleCoverDoubleClick}
-              style={{ cursor: "pointer" }}
-              className="page-cover relative w-full h-full flex flex-col justify-center items-center text-white font-serif text-center overflow-hidden rounded-xl"
-            >
-              <Image
-                src={heroImg}
-                alt="Cover Background"
-                fill
-                priority
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-[#980000bb] mix-blend-multiply" />
-              <div className="relative z-10 flex flex-col items-center justify-center h-full p-10">
-                <h1 className="text-4xl font-bold mb-4 leading-tight italic drop-shadow-lg">
-                  {chronicle.yourStoryTitle}
-                </h1>
-                <p className="italic text-lg drop-shadow-md">
-                  {chronicle.incidentFrom}
-                </p>
-                <p className="pt-10 text-sm opacity-90">
-                  By: {chronicle.user.firstname} {chronicle.user.lastname}
-                </p>
-              </div>
-            </div>
+ 
+<HTMLFlipBook
+  ref={bookRef}
+  width={410}
+  height={690}
+  minWidth={320}
+  maxWidth={900}
+  minHeight={460}
+  maxHeight={1200}
+  size="fixed"
+  showCover={false}
+  drawShadow={true}
+  flippingTime={1000}
+  maxShadowOpacity={0.18}
+  className="flipbook mx-auto rounded-xl shadow-2xl"
+  // Add missing required props:
+  style={{}}
+  startPage={0}
+  usePortrait={isPortrait}
+  startZIndex={0}
+  autoSize={true}
+  clickEventForward={true}
+  useMouseEvents={true}
+  swipeDistance={30}
+  showPageCorners={true}
+  disableFlipByClick={false}
+  mobileScrollSupport={true}
+>
+  {/* Cover */}
+  <div
+    onClick={(e) => e.stopPropagation()}
+    onDoubleClick={handleCoverDoubleClick}
+    style={{ cursor: "pointer" }}
+    className="page-cover relative w-full h-full flex flex-col justify-center items-center text-white font-serif text-center overflow-hidden rounded-xl"
+  >
+    <Image
+      src={heroImg}
+      alt="Cover Background"
+      fill
+      priority
+      className="object-cover object-center"
+    />
+    <div className="absolute inset-0 bg-[#980000bb] mix-blend-multiply" />
+    <div className="relative z-10 flex flex-col items-center justify-center h-full p-10">
+      <h1 className="text-4xl font-bold mb-4 leading-tight italic drop-shadow-lg">
+        {chronicle.yourStoryTitle}
+      </h1>
+      <p className="italic text-lg drop-shadow-md">
+        {chronicle.incidentFrom}
+      </p>
+      <p className="pt-10 text-sm opacity-90">
+        By: {chronicle.user.firstname} {chronicle.user.lastname}
+      </p>
+    </div>
+  </div>
 
-            {/* Story Pages */}
-            {splitWords.map((text, i) => (
-              <div
-                key={i}
-                className="page bg-[#fffbea] text-[#232323] font-serif leading-relaxed p-8 text-justify rounded-xl"
-                style={{
-                  backgroundImage: "url(/paper-texture.png)", // Add a subtle texture image
-                  boxShadow:
-                    "inset 16px 0 32px -22px #b1a991, 2px 0 8px 2px rgba(41,41,41,0.075)",
-                }}
-              >
-                <p>{text}</p>
-              </div>
-            ))}
-          </HTMLFlipBook>
+  {/* Story Pages */}
+  {splitWords.map((text, i) => (
+    <div
+      key={i}
+      className="page bg-[#fffbea] text-[#232323] font-serif leading-relaxed p-8 text-justify rounded-xl"
+      style={{
+        backgroundImage: "url(/paper-texture.png)",
+        boxShadow:
+          "inset 16px 0 32px -22px #b1a991, 2px 0 8px 2px rgba(41,41,41,0.075)",
+      }}
+    >
+      <p>{text}</p>
+    </div>
+  ))}
+</HTMLFlipBook>
         </div>
       )}
       {openModal &&

@@ -83,8 +83,10 @@ function Page() {
   };
   return (
     <>
+ 
       <SuccessMsg successMsg={success} />
-      <form onSubmit={submitChronicle} className={`${Styles.my_profile} ${Styles.glass_card} w-full h-full lg:h-auto`} >
+     <div className={`overflow-y-scroll scrollbar-none ${Styles.glass_card}`} style={{height: "100vh;"}} >
+       <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto`} >
         {/* Title */}
         <div className="my-5">
           <label htmlFor="yourStoryTitle" className="block mb-1  capitalize">
@@ -114,7 +116,7 @@ function Page() {
             value={addChronicle.chroniclesOfYou}
             onChange={handleChange} // pass the event directly
             placeholder="Enter your story title"
-            className="w-full border border-gray-700 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 placeholder-gray-500 resize-none"
+            className="w-full border border-gray-700 outline-none transition-all duration-200 placeholder-gray-500 resize-none px-3 py-5"
             rows={7}
           />
         </div>
@@ -128,7 +130,7 @@ function Page() {
             required
             id="incidentFrom"
             value={addChronicle.incidentFrom}
-            onChange={handleChange} 
+            onChange={handleChange}
           >
             <option value="" className="bg-black">Choose Any</option>
             {countries.map((e) => (
@@ -141,7 +143,7 @@ function Page() {
         </div>
         {/* ✅ Checkboxes Section */}
 
-        <div className="my-4 flex flex-col lg:flex-row gap-5 text-xl font_three">
+        <div className="my-4 flex flex-col lg:flex-row lg:gap-5 text-xl font_three">
           <label className="custom-checkbox">
             <input
               type="checkbox"
@@ -181,7 +183,7 @@ function Page() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full tbh_button rounded-lg"
+          className="w-full tbh_button rounded-lg mb-10"
         >
           {loading ? (
             <span className="flex items-center justify-center">
@@ -189,11 +191,12 @@ function Page() {
               Creating Chronicles...
             </span>
           ) : (
-            <span className="flex items-center justify-center">Submit</span>
+            <span className="flex items-center justify-center b-10">Submit</span>
           )}
         </button>
         <ErrorMessage message={error} />
       </form>
+     </div>
     </>
   );
 }

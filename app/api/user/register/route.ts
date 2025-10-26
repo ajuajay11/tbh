@@ -13,6 +13,7 @@ interface RequestBody {
   gender: string;
   profilePicture?: string;
   age?: number;
+  username:string;
 }
 
 export async function POST(request: NextRequest) {
@@ -26,8 +27,10 @@ export async function POST(request: NextRequest) {
       firstname,
       lastname,
       gender,
+      username,
       profilePicture,
-      age} = body;
+      age
+    } = body;
 
     // for the existing user
     const existingUser = await User.findOne({ email });
@@ -39,26 +42,41 @@ export async function POST(request: NextRequest) {
     }
     const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
 
+    let finalUsername = username?.trim();
+    if (!finalUsername) {
+      // base name (lowercase + remove spaces)
+      const base = `${firstname}${lastname}`.replace(/\s+/g, "").toLowerCase();
+      let randomNum = Math.floor(1000 + Math.random() * 9000); // random 4-digit number
+      finalUsername = `${base}${randomNum}`;
+
+      // ensure uniqueness
+      let exists = await User.findOne({ username: finalUsername });
+      while (exists) {
+        randomNum = Math.floor(1000 + Math.random() * 9000);
+        finalUsername = `${base}${randomNum}`;
+        exists = await User.findOne({ username: finalUsername });
+      }
+    }
     // Create a new user
     const newUser = new User({
       email,
-      password:hashedPassword,
+      password: hashedPassword,
       firstname,
       lastname,
       gender,
+      username: finalUsername,
       profilePicture,
       age,
     });
-
     await newUser.save();
     return NextResponse.json(
       { message: "register user successsfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Registration error:", error);
     return NextResponse.json(
-      { Message: "Internal server Error" },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }
