@@ -7,7 +7,7 @@ import axios from "axios";
 import {  UserLike  } from "@/app/types/chronicle";
 
 interface LikesProps {
-  userLikesData: UserLike[]; // Changed from string[] to UserLike[]
+  userLikesData: UserLike[] | string[];  // Array of Pid strings
   Pid: string;
 }
 export default function Likes({ Pid, userLikesData }: LikesProps) {
@@ -19,12 +19,12 @@ export default function Likes({ Pid, userLikesData }: LikesProps) {
 useEffect(() => {
   if (!UserId || !userLikesData) return;
 
-  // Use .some to check for matching user in array of objects
-  const filterLike = userLikesData.some(like => like._id === UserId);
+  const filterLike = userLikesData.some((like) => like === UserId);
 
   setLikeCount(userLikesData.length);
   setHasLiked(filterLike);
 }, [UserId, userLikesData]);
+
 
   const toggleLike = async () => {
     const newLikedState = !hasLiked;

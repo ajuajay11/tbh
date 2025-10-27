@@ -16,19 +16,17 @@ interface FlipBookMethods {
   pageFlip: () => { flipNext: () => void; flipPrev: () => void };
 }
 
-// ✅ Fixed: Added User interface
 interface User {
   _id: string;
   firstname: string;
   lastname: string;
 }
 
-// ✅ Fixed: Changed user type from string to User
 interface Chronicle {
   yourStoryTitle: string;
   chroniclesOfYou: string;
   incidentFrom: string;
-  user: User; // Changed from string to User object
+  user: User;
   _id: string;
   emailAllowed: boolean;
   comments: boolean;
@@ -47,30 +45,13 @@ interface ChronicleFormData {
 interface DiaryProps {
   chronicle: Chronicle;
 }
-// interface MinimalFlipBookProps {
-//   children: React.ReactNode;
-//   ref?: React.Ref<FlipBookMethods>;
-//   width: number;
-//   height: number;
-//   minWidth?: number;
-//   maxWidth?: number;
-//   minHeight?: number;
-//   maxHeight?: number;
-//   size?: "fixed" | "stretch";
-//   showCover?: boolean;
-//   drawShadow?: boolean;
-//   flippingTime?: number;
-//   maxShadowOpacity?: number;
-//   className?: string;
-// }
 
 const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const [splitWords, setSplitWords] = useState<string[]>([]);
   const [isPortrait, setIsPortrait] = useState(true);
   const [isEditable, setEditable] = useState(false);
   const token = Cookies.get("token");
-
-  const [isOwner, setIsOwner] = useState(false); // Track if user is owner
+  const [isOwner, setIsOwner] = useState(false);
   const [addChronicle, setAddChronicle] = useState<ChronicleFormData>({
     yourStoryTitle: chronicle.yourStoryTitle,
     chroniclesOfYou: chronicle.chroniclesOfYou,
@@ -84,53 +65,52 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   const [dimensions, setDimensions] = useState({ width: 400, height: 600 });
   const [openModal, setOpenModal] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-const bookRef = useRef<FlipBookMethods | null>(null);
+  const bookRef = useRef<FlipBookMethods | null>(null);
 
-  const handleCoverDoubleClick = () => {
-    if (bookRef.current) {
-bookRef.current?.pageFlip().flipNext();    }
-  };
-  // Check if current user is the owner (client-side only)
   useEffect(() => {
+    const updateDimensions = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight - 10;
 
+      if (window.innerWidth < 768) {
+        // Mobile: Full width and full height
+        setDimensions({ width: vw, height: vh });
+        setIsPortrait(true);
+      } else {
+        // Desktop: 600px width centered, with proportional height
+        setDimensions({ width: 600, height: vh * 0.85 });
+        setIsPortrait(false);
+      }
+    };
+
+    // Call once on mount
+    updateDimensions();
+
+    // Add resize listener
+    window.addEventListener("resize", updateDimensions);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+  // Owner logic
+  useEffect(() => {
     const userId = Cookies.get("userId");
     setIsOwner(userId === chronicle.user._id);
   }, [chronicle.user._id]);
 
-// Replace the useEffect starting around line 92 with this:
+  // Split text logic
+  useEffect(() => {
+    if (chronicle?.chroniclesOfYou) {
+      const chunks = chronicle.chroniclesOfYou.match(/[\s\S]{1,600}/g) || [];
+      setSplitWords(chunks);
+    }
+  }, [chronicle]);
 
-useEffect(() => {
-  const updateDimensions = () => {
-    const vh = window.innerHeight;
-
-    if (window.innerWidth < 768) {
-      setDimensions({ width: vh * 0.65, height: vh * 0.9 });
-      setIsPortrait(true);
-    } else if (window.innerWidth < 1280) {
-      setDimensions({ width: vh * 0.7, height: vh * 0.9 });
-      setIsPortrait(true);
-    } else {
-      setDimensions({ width: vh * 0.9, height: vh * 0.9 });
-      setIsPortrait(false);
+  const handleCoverDoubleClick = () => {
+    if (bookRef.current) {
+      bookRef.current?.pageFlip().flipNext();
     }
   };
-
-  // Call once on mount
-  updateDimensions();
-  
-  // Add resize listener
-  window.addEventListener("resize", updateDimensions);
-  
-  // Cleanup
-  return () => window.removeEventListener("resize", updateDimensions);
-}, [dimensions]); // Empty dependency array - only run once on mount
-  useEffect(() => {
-  if (chronicle?.chroniclesOfYou) {
-    // Match every 600 characters including newlines
-    const chunks = chronicle.chroniclesOfYou.match(/[\s\S]{1,600}/g) || [];
-    setSplitWords(chunks);
-  }
-  }, [chronicle]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -151,29 +131,20 @@ useEffect(() => {
   const submitChronicle = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
-    const token = Cookies.get("token");
-
     try {
       const response = await axios.put(
         `${getBaseUrl()}/api/addChronicles/${chronicle._id}`,
         addChronicle,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response);
       if (response.status === 200) {
         const successMsg = response?.data?.message;
         setSuccess(successMsg);
-
-
       }
     } catch (err: unknown) {
       let message = "Unexpected error";
-
       if (axios.isAxiosError(err)) {
         message = err.response?.data?.message || err.message;
       } else if (err instanceof Error) {
@@ -184,20 +155,22 @@ useEffect(() => {
       setLoading(false);
     }
   };
+
   const DeleteAccFn = async () => {
     try {
-      const res = await axios.delete(`${getBaseUrl()}/api/addChronicles/${chronicle._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(res);
-
+      const res = await axios.delete(
+        `${getBaseUrl()}/api/addChronicles/${chronicle._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.status === 200) {
         const successMsg = res?.data?.message;
-        setSuccess(successMsg); window.location.href = '/dashboard';
+        setSuccess(successMsg);
+        window.location.href = "/dashboard";
       }
     } catch (err) {
       let message = "Unexpected error";
-
       if (axios.isAxiosError(err)) {
         message = err.response?.data?.message || err.message;
       } else if (err instanceof Error) {
@@ -208,29 +181,23 @@ useEffect(() => {
       setLoading(false);
     }
   };
+
   if (!chronicle) return <div>No chronicle found</div>;
 
   return (
     <>
       <SuccessMsg successMsg={success} />
-      {/* ✅ Improved UI: Better positioned edit button */}
       {isOwner && (
-        <div className="flex justify-end p-4">
-          <button
-            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
-            onClick={doEditable}
-          >
+        <div className="flex justify-center gap-3">
+          <button className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105" onClick={doEditable} >
             {isEditable ? "Cancel" : "Edit"}
+          </button>
+          <button className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105" onClick={() => setOpenModal((prev) => !prev)} >
+            Delete
           </button>
         </div>
       )}
-      <div>
-        {isOwner && (
-          <div className="mock" onClick={() => setOpenModal((prev) => !prev)}>
-            Delete
-          </div>
-        )}
-      </div>
+
       {isEditable ? (
         <section className="min-h-screen flex items-center justify-center p-4">
           <div className="w-full max-w-2xl">
@@ -239,7 +206,6 @@ useEffect(() => {
               onSubmit={submitChronicle}
               className={`${Styles.my_profile} ${Styles.glass_card} w-full p-6`}
             >
-              {/* Title */}
               <div className="my-5">
                 <label
                   htmlFor="yourStoryTitle"
@@ -257,8 +223,6 @@ useEffect(() => {
                   required
                 />
               </div>
-
-              {/* Chronicles */}
               <div className="mb-5">
                 <label
                   htmlFor="chroniclesOfYou"
@@ -276,8 +240,6 @@ useEffect(() => {
                   rows={10}
                 />
               </div>
-
-              {/* Incident From */}
               <div className="mb-5">
                 <label
                   htmlFor="incidentFrom"
@@ -301,8 +263,6 @@ useEffect(() => {
                   ))}
                 </select>
               </div>
-
-              {/* Checkboxes Section */}
               <div className="my-6 space-y-3">
                 <label className="custom-checkbox flex items-center gap-3 cursor-pointer">
                   <input
@@ -314,7 +274,6 @@ useEffect(() => {
                   />
                   <span className="text-lg">Allow Replies</span>
                 </label>
-
                 <label className="custom-checkbox flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -325,7 +284,6 @@ useEffect(() => {
                   />
                   <span className="text-lg">Allow Emails</span>
                 </label>
-
                 <label className="custom-checkbox flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -337,8 +295,6 @@ useEffect(() => {
                   <span className="text-lg">Allow Comments</span>
                 </label>
               </div>
-
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
@@ -360,84 +316,104 @@ useEffect(() => {
           </div>
         </section>
       ) : (
-        <div className="flex flex-col justify-center items-center min-h-screen bg-[#000004] px-5">
- 
-<HTMLFlipBook
-  ref={bookRef}
-  width={410}
-  height={690}
-  minWidth={320}
-  maxWidth={900}
-  minHeight={460}
-  maxHeight={1200}
-  size="fixed"
-  showCover={false}
-  drawShadow={true}
-  flippingTime={1000}
-  maxShadowOpacity={0.18}
-  className="flipbook mx-auto rounded-xl shadow-2xl"
-  // Add missing required props:
-  style={{}}
-  startPage={0}
-  usePortrait={isPortrait}
-  startZIndex={0}
-  autoSize={true}
-  clickEventForward={true}
-  useMouseEvents={true}
-  swipeDistance={30}
-  showPageCorners={true}
-  disableFlipByClick={false}
-  mobileScrollSupport={true}
->
-  {/* Cover */}
-  <div
-    onClick={(e) => e.stopPropagation()}
-    onDoubleClick={handleCoverDoubleClick}
-    style={{ cursor: "pointer" }}
-    className="page-cover relative w-full h-full flex flex-col justify-center items-center text-white font-serif text-center overflow-hidden rounded-xl"
-  >
-    <Image
-      src={heroImg}
-      alt="Cover Background"
-      fill
-      priority
-      className="object-cover object-center"
-    />
-    <div className="absolute inset-0 bg-[#980000bb] mix-blend-multiply" />
-    <div className="relative z-10 flex flex-col items-center justify-center h-full p-10">
-      <h1 className="text-4xl font-bold mb-4 leading-tight italic drop-shadow-lg">
-        {chronicle.yourStoryTitle}
-      </h1>
-      <p className="italic text-lg drop-shadow-md">
-        {chronicle.incidentFrom}
-      </p>
-      <p className="pt-10 text-sm opacity-90">
-        By: {chronicle.user.firstname} {chronicle.user.lastname}
-      </p>
-    </div>
-  </div>
-
-  {/* Story Pages */}
-  {splitWords.map((text, i) => (
-    <div
-      key={i}
-      className="page bg-[#fffbea] text-[#232323] font-serif leading-relaxed p-8 text-justify rounded-xl"
-      style={{
-        backgroundImage: "url(/paper-texture.png)",
-        boxShadow:
-          "inset 16px 0 32px -22px #b1a991, 2px 0 8px 2px rgba(41,41,41,0.075)",
-      }}
-    >
-      <p>{text}</p>
-    </div>
-  ))}
-</HTMLFlipBook>
+        // Responsive FlipBook (centered for desktop, full width mobile)
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "100vh",
+            background: "#000004",
+          }}
+        >
+          <div
+            style={{
+              width: dimensions.width,
+              maxWidth: "1100px",
+              margin: "0 auto",
+              transition: "width 0.2s",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "100vh",
+              background: "#000004",
+            }}
+          >
+            <HTMLFlipBook
+              ref={bookRef}
+              width={dimensions.width}
+              height={dimensions.height}
+              minWidth={320}
+              maxWidth={1100}
+              minHeight={460}
+              maxHeight={1200}
+              size="fixed"
+              showCover={false}
+              drawShadow={true}
+              flippingTime={1000}
+              maxShadowOpacity={0.18}
+              className="flipbook mx-auto rounded-xl shadow-2xl"
+              style={{ width: "100%" }}
+              startPage={0}
+              usePortrait={isPortrait}
+              startZIndex={0}
+              autoSize={true}
+              clickEventForward={true}
+              useMouseEvents={true}
+              swipeDistance={30}
+              showPageCorners={true}
+              disableFlipByClick={false}
+              mobileScrollSupport={true}
+            >
+              {/* Cover */}
+              <div
+                onClick={(e) => e.stopPropagation()}
+                onDoubleClick={handleCoverDoubleClick}
+                style={{ cursor: "pointer" }}
+                className="page-cover relative w-full h-full flex flex-col justify-center items-center text-white font-serif text-center overflow-hidden rounded-xl"
+              >
+                <Image
+                  src={heroImg}
+                  alt="Cover Background"
+                  fill
+                  priority
+                  className="object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-[#980000bb] mix-blend-multiply" />
+                <div className="relative z-10 flex flex-col items-center justify-center h-full p-10">
+                  <h1 className="text-4xl font-bold mb-4 leading-tight italic drop-shadow-lg">
+                    {chronicle.yourStoryTitle}
+                  </h1>
+                  <p className="italic text-lg drop-shadow-md">
+                    {chronicle.incidentFrom}
+                  </p>
+                  <p className="pt-10 text-sm opacity-90">
+                    By: {chronicle.user.firstname} {chronicle.user.lastname}
+                  </p>
+                </div>
+              </div>
+              {/* Story Pages */}
+              {splitWords.map((text, i) => (
+                <div
+                  key={i}
+                  className="page bg-[#fffbea] text-[#232323] font-serif leading-relaxed p-8 text-justify rounded-xl"
+                  style={{
+                    boxShadow:
+                      "inset 16px 0 32px -22px #b1a991, 2px 0 8px 2px rgba(41,41,41,0.075)",
+                  }}
+                >
+                  <p>{text}</p>
+                </div>
+              ))}
+            </HTMLFlipBook>
+          </div>
         </div>
       )}
       {openModal &&
         createPortal(
           <div className="openModal">
-            <h3 className=" font_two mb-1">Confirm Logout</h3>
+            <h3 className="font_two mb-1">Confirm Logout</h3>
             <p className="modal_message">Are you sure you want to log out?</p>
             <div className="pt-10 flex justify-end gap-4">
               <button onClick={DeleteAccFn} className="tbh_button logout_btn">

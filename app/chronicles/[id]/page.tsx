@@ -1,35 +1,83 @@
-// app/chronicles/[id]/page.tsx
-
+"use client";
 import { getBaseUrl } from "@/lib/getBaseUrl";
-import { cookies } from "next/headers";
+import { useState, useEffect } from "react";
 import Diary from "../components/Diary";
+import NormalNode from "../components/NormalMode";
+import Cookies from "js-cookie";
+import { Chronicle } from "@/app/types/chronicle";
+ 
+export default function DiaryTabs({ params }: { params: Promise<{ id: string }> }) {
+  const [tabIndex, setTabIndex] = useState(0);
+  const [chronicleDiary, setChronicleDiary] = useState<Chronicle | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/getAllChronicles?id=${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    cache: "no-store",
-  });
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { id } = await params;
+        const token = Cookies.get("token");
+        const baseUrl = getBaseUrl();
+        
+        const res = await fetch(`${baseUrl}/api/getAllChronicles?id=${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
+        });
 
-  const data = await res.json();
-  console.log("Server:", data);
+        const data = await res.json();
+        console.log("Client:", data);
 
-  if (!res.ok || !data || !data.data?.length) {
-    return <div>Post not found {id}</div>;
-  }
+        if (!res.ok || !data || !data.data?.length) {
+          setError(true);
+        } else {
+          setChronicleDiary(data.data[0]);
+        }
+      } catch (err) {
+        console.error(err);
+        
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  // ✅ Get the first post (specific chronicle)
-  const chronicleDiary = data.data[0];
+    fetchData();
+  }, [params]);
+console.log(tabIndex);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Post not found</div>;
 
   return (
-    <>
-      <Diary chronicle={chronicleDiary} />
-    </>
+    <div className="max-w-2xl mx-auto mt-8">
+      <div className="flex gap-4 mb-4 justify-center">
+        <button
+          className={`px-4 py-2 rounded-xl font-medium ${
+            tabIndex !== 0 ? "bg-black/60 text-white" : "bg-white/80 text-black"
+          }`}
+          onClick={() => setTabIndex(0)}
+        >
+          Normal Node
+        </button>
+        <button
+          className={`px-4 py-2 rounded-xl font-medium ${
+            tabIndex !== 1 ? "bg-black/80 text-white" : "bg-white/80 text-black"
+          }`}
+          onClick={() => setTabIndex(1)}
+        >
+          Diary
+        </button>
+      </div>
+      <div>
+        {tabIndex === 0 ? (
+          <NormalNode chronicle={chronicleDiary} />
+        ) : (
+          <Diary chronicle={chronicleDiary} />
+        )}
+      </div>
+    </div>
   );
 }

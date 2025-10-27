@@ -83,7 +83,7 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
             style={{ maxHeight: "80vh" }}
           >
             {/* Top handle + close */}
-            <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b border-neutral-700">
+            <div className="flex justify-between items-center px-4 pt-4 pb-2 ">
               <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto"></div>
               <button
                 onClick={toggleComments}

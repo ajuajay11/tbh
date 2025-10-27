@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Chronicle, User, UserLike, UserComment } from "@/app/types/chronicle";
 import Likes from "@/app/chronicles/components/Likes";
 import Styles from "@/app/chronicles/chronicle.module.css";
@@ -14,7 +14,7 @@ import img1 from "@/public/tbh.png";
 interface ChronicleWithUser extends Chronicle {
   user: User;
   createdAt: string;
-  UserLikes?: UserLike[];       // Array type!
+  UserLikes?: UserLike[]; // Array type!
   UserComments?: UserComment[];
 }
 interface ScrollReelsProps {
@@ -99,15 +99,24 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
                   </div>
                 </Link>
 
-                 <div className="absolute right-3 bottom-16 flex flex-col items-center gap-3 text-white">
-                <Likes Pid={item._id || ""} userLikesData={item.UserLikes || []} />
+                <div className="absolute right-3 bottom-16 flex flex-col items-center gap-3 text-white">
                   <div>
-                    <Comments Pid={item._id || ""} userCommentsData={item.UserComments || []} />
-
+                    <Likes
+                      Pid={item._id || ""}
+                      userLikesData={item.UserLikes || []}
+                    />
                   </div>
-                  <button className="flex flex-col items-center">
-                    <Share2 className="w-6 h-6 text-[#333]" />
-                  </button>
+                  <div>
+                    <Comments
+                      Pid={item._id || ""}
+                      userCommentsData={item.UserComments || []}
+                    />
+                  </div>
+                  <div>
+                    <button className="flex flex-col items-center">
+                      <Share2 className="w-6 h-6 text-[#333]" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -115,11 +124,13 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
         </div>
       ) : (
         <section className="h-screen flex items-center justify-center flex-col">
-          <p className="text-center text-gray-400 p-8">No chronicles available</p>
+          <p className="text-center text-gray-400 p-8">
+            No chronicles available
+          </p>
           <div className="text-center">
-          <Link href="/dashboard/write-chronicle" className="tbh_button">
-          start with you</Link>
- 
+            <Link href="/dashboard/write-chronicle" className="tbh_button">
+              start with you
+            </Link>
           </div>
         </section>
       )}

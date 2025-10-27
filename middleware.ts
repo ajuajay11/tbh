@@ -1,19 +1,30 @@
-import { NextResponse,NextRequest } from "next/server";
-// import Cookies from 'js-cookie';
+import { NextResponse, NextRequest } from "next/server";
 
-export function middleware(request:NextRequest) {
- const token = request.cookies.get('token')?.value; // Access the token from cookies
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('token')?.value;
+  const pathname = request.nextUrl.pathname;
+
+  // Redirect authenticated users from landing and auth pages to main content
   if (token) {
-    if (["/login", "/register","/"].includes(request.nextUrl.pathname) ) {
+    if (["/login", "/register", "/"].includes(pathname)) {
       return NextResponse.redirect(new URL("/chronicles", request.url));
     }
-  }
-  if (token) {
+    // Let authenticated users access other routes
     return NextResponse.next();
   }
-  if (!token) {
-    if (["/dashboard", "/chronicles", "/dashboard/my-profile"].includes(request.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+
+  // Protect dashboard and chronicles routes for non-authenticated users
+  const protectedRoutes = [
+    "/dashboard",
+    "/chronicles",
+    "/dashboard/my-profile"
+  ];
+
+  // Match dynamic /chronicles/:id route
+  if (!token && (protectedRoutes.includes(pathname) || pathname.startsWith("/chronicles/"))) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
+
+  // Allow all other requests
+  return NextResponse.next();
 }
