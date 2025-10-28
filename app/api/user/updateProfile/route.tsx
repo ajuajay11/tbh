@@ -1,7 +1,8 @@
-import connectToDatabase from '@/lib/db';
-import { NextRequest, NextResponse } from 'next/server';
+import connectToDatabase from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/utils/auth";
 import User from "@/models/users";
+import { updateProfileSchema } from "@/lib/validationSchemas";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,16 +10,31 @@ export async function POST(request: NextRequest) {
 
     // Parse FormData instead of JSON
     const formData = await request.formData();
-    
-    // Extract form fields
-    const email = formData.get('email') as string;
-    const firstname = formData.get('firstname') as string;
-    const lastname = formData.get('lastname') as string;
-    const gender = formData.get('gender') as string;
-    const age = formData.get('age') ? Number(formData.get('age')) : undefined;
-    const username = formData.get('username') as string;
-    const profilePictureFile = formData.get('profilePicture') as File;
 
+    // Extract form fields
+    const email = formData.get("email") as string;
+    const firstname = formData.get("firstname") as string;
+    const lastname = formData.get("lastname") as string;
+    const gender = formData.get("gender") as string;
+    const age = formData.get("age") ? Number(formData.get("age")) : undefined;
+    const username = formData.get("username") as string;
+    const profilePictureFile = formData.get("profilePicture") as File;
+    // Prepare data object for validation
+    const dataToValidate: Record<string, string | number> = {};
+    if (email) dataToValidate.email = email;
+    if (firstname) dataToValidate.firstname = firstname;
+    if (lastname) dataToValidate.lastname = lastname;
+    if (gender) dataToValidate.gender = gender;
+    if (age) dataToValidate.age = age;
+    if (username) dataToValidate.username = username;
+    // Validate input data
+    const validationResult = updateProfileSchema.safeParse(dataToValidate);
+    if (!validationResult.success) {
+      const firstErrorMessage =
+        validationResult.error.issues[0]?.message || "Invalid input";
+
+      return NextResponse.json({ message: firstErrorMessage }, { status: 400 });
+    }
     // Verify authentication
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -44,45 +60,59 @@ export async function POST(request: NextRequest) {
         // Convert file to base64
         const arrayBuffer = await profilePictureFile.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
-        const base64Image = buffer.toString('base64');
+        const base64Image = buffer.toString("base64");
 
         // Prepare Imgbb API request
         const imgbbApiKey = process.env.IMGBB_API_KEY; // Add this to your .env file
         if (!imgbbApiKey) {
-          return NextResponse.json({ message: "Image upload service not configured" }, { status: 500 });
+          return NextResponse.json(
+            { message: "Image upload service not configured" },
+            { status: 500 }
+          );
         }
 
         const imgbbFormData = new FormData();
-        imgbbFormData.append('key', imgbbApiKey);
-        imgbbFormData.append('image', base64Image);
-        imgbbFormData.append('name', `profile_${userData.userId}_${Date.now()}`);
+        imgbbFormData.append("key", imgbbApiKey);
+        imgbbFormData.append("image", base64Image);
+        imgbbFormData.append(
+          "name",
+          `profile_${userData.userId}_${Date.now()}`
+        );
         // Optional: Add expiration (in seconds, 60-15552000)
         // imgbbFormData.append('expiration', '604800'); // 7 days
 
         // Upload to Imgbb
-        const imgbbResponse = await fetch('https://api.imgbb.com/1/upload', {
-          method: 'POST',
-          body: imgbbFormData
+        const imgbbResponse = await fetch("https://api.imgbb.com/1/upload", {
+          method: "POST",
+          body: imgbbFormData,
         });
 
         if (!imgbbResponse.ok) {
           const errorText = await imgbbResponse.text();
-          console.error('Imgbb upload failed:', errorText);
-          return NextResponse.json({ message: "Failed to upload image" }, { status: 500 });
+          console.error("Imgbb upload failed:", errorText);
+          return NextResponse.json(
+            { message: "Failed to upload image" },
+            { status: 500 }
+          );
         }
 
         const imgbbResult = await imgbbResponse.json();
-        
+
         if (imgbbResult.success) {
           profilePictureUrl = imgbbResult.data.url; // Use the direct image URL
         } else {
-          console.error('Imgbb upload error:', imgbbResult);
-          return NextResponse.json({ message: "Image upload failed" }, { status: 500 });
+          console.error("Imgbb upload error:", imgbbResult);
+          return NextResponse.json(
+            { message: "Image upload failed" },
+            { status: 500 }
+          );
         }
-
       } catch (imageError) {
-        console.error('Image processing error:', imageError);
-        return NextResponse.json({ message: "Error processing image" }, { status: 500 });
+        console.error("Image processing error:", imageError);
+        return NextResponse.json(
+          { message: "Error processing image" },
+          { status: 500 }
+        );
       }
     }
 
@@ -99,14 +129,13 @@ export async function POST(request: NextRequest) {
 
     // Return updated user (exclude sensitive data)
     const { ...userResponse } = getUser.toObject();
-    
-    return NextResponse.json({ 
-      message: "User updated successfully", 
-      user: userResponse 
-    });
 
+    return NextResponse.json({
+      message: "User updated successfully",
+      user: userResponse,
+    });
   } catch (error) {
-    console.error('Server error:', error);
+    console.error("Server error:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

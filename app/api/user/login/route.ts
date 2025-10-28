@@ -4,12 +4,8 @@ import connectToDatabase from "@/lib/db";
 import User from "@/models/users";
 import * as jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { z } from "zod";
+ import { loginSchema } from "@/lib/validationSchemas";
 
-const loginSchema = z.object({
-  email: z.string().email().max(100),
-  password: z.string().min(4).max(100),
-});
 
 // Define the shape of the expected request body
 interface RequestBody {

@@ -3,7 +3,8 @@ import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
-
+import sanitize from "sanitize-html";
+import { commentSchema } from "@/lib/validationSchemas";
 interface RequestBody {
   user: {
     userId?: string;
@@ -25,12 +26,24 @@ export async function POST(
     const { id } = await params; // <-- fixed this line only
     const body: RequestBody = await request.json();
     const { comment } = body;
-    if (!comment) {
+    const safeComment = sanitize(comment, {
+      allowedTags: [], // remove all HTML tags
+      allowedAttributes: {},
+    });
+    if (!safeComment.trim()) {
       return NextResponse.json(
-        { message: "Please enter a comment" },
+        { message: "Please enter a valid comment" },
         { status: 400 }
       );
     }
+    const parsed = commentSchema.safeParse({ comment: safeComment });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { message: parsed.error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
     if (!id) {
       return NextResponse.json(
         { message: "Post ID is required" },
@@ -71,18 +84,18 @@ export async function POST(
         userId: getUser._id,
         name: getUser.email,
       },
-      comment,
+      comment: safeComment, // save sanitized comment
       createdAt: body.createdAt || new Date(),
     });
 
     await findPost.save();
     return NextResponse.json(
       {
-        message: "Comment Added Succesfully",
+        message: "Comment Added Successfully",
         user: {
           userId: getUser._id,
           name: getUser.email,
-          comment: comment,
+          comment: safeComment, // <- use sanitized comment here
           createdAt: body.createdAt || new Date(),
         },
       },
@@ -100,16 +113,15 @@ export async function DELETE(
 ) {
   try {
     await connectToDatabase();
- 
+
     const { id } = await params; // <-- fixed this line only
-     
-     // Get Cid from search params
-    const { searchParams } = new URL(request.url);
-    const Cid = searchParams.get('Cid');
-    console.log(Cid,'Cid');
+
+     const { searchParams } = new URL(request.url);
+    const Cid = searchParams.get("Cid");
+    console.log(Cid, "Cid");
     const authHeader = request.headers.get("authorization");
-      const token = authHeader?.split(" ")[1];
-      if (!token) {
+    const token = authHeader?.split(" ")[1];
+    if (!token) {
       return NextResponse.json({ message: "token not found" }, { status: 404 });
     }
     const userData = await verifyToken(token);
@@ -120,7 +132,7 @@ export async function DELETE(
     if (!findPost) {
       return NextResponse.json({ message: "post not found" }, { status: 401 });
     }
-      const updatedChronicle = await UserVibesModel.findByIdAndUpdate(
+    const updatedChronicle = await UserVibesModel.findByIdAndUpdate(
       id,
       { $pull: { UserComments: { _id: Cid } } },
       { new: true }
