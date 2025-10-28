@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "../components/useContext";
-
+import {truncatedDesc} from "@/utils/truncatedText"
 function DashboardHome() {
   const { chronicles, userData } = useUser();
   const [isMounted, setIsMounted] = useState(false);
@@ -45,7 +45,7 @@ function DashboardHome() {
 
           <div className="flex-1">
             <div className="flex items-center gap-6 lg:gap-40 justify-between">
-              <h1 className="text-xl font-light">
+              <h1 className="font_three ">
                 {userData?.username || "to Be Honest"}
               </h1>
               <Link href="/dashboard/my-profile" className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold hover:bg-blue-600"
@@ -58,10 +58,6 @@ function DashboardHome() {
               <div className="text-center">
                 <span className="font-semibold">{chronicles?.length || 0}</span>
                 <span className="text-gray-600 ml-1">posts</span>
-              </div>
-              <div className="text-center">
-                <span className="font-semibold">272</span>
-                <span className="text-gray-600 ml-1">following</span>
               </div>
             </div>
 
@@ -86,11 +82,9 @@ function DashboardHome() {
               >
                 <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black-900 flex items-center justify-center p-4">
                   <p className="capitalize text-center">
-                    {item.yourStoryTitle}
+                    {truncatedDesc(item.yourStoryTitle, 20)}
                   </p>
                 </div>
-
-                 
               </Link>
             ))}
           </div>

@@ -4,7 +4,8 @@ import UserVibesModel from "@/models/chroniclesSchema";
 import connectToDatabase from "@/lib/db";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
-import { Filter } from 'bad-words'
+import { Filter } from "bad-words";
+import sanitizeHtml from "sanitize-html";
 
 interface RequestBody {
   yourStoryTitle: string;
@@ -12,14 +13,14 @@ interface RequestBody {
   replyAllowed: boolean;
   emailAllowed: boolean;
   comments: boolean;
-  incidentFrom:string
+  incidentFrom: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
-const filter = new Filter();
-console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
+    const filter = new Filter();
+    console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
 
     const body: RequestBody = await request.json();
     const {
@@ -30,7 +31,27 @@ console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
       comments,
       incidentFrom,
     } = body;
-    
+    const safeTitle = sanitizeHtml(yourStoryTitle, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+    const safeChronicles = sanitizeHtml(chroniclesOfYou, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+   if (!safeTitle.trim()) {
+  return NextResponse.json(
+    { message: "Title cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
+}
+
+  if (!safeChronicles.trim()) {
+  return NextResponse.json(
+    { message: "Story content cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
+}
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ message: "No token found" }, { status: 401 });
@@ -47,9 +68,9 @@ console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-   const newdarktruth = new UserVibesModel({
-      yourStoryTitle: filter.clean(yourStoryTitle),
-      chroniclesOfYou: filter.clean(chroniclesOfYou),
+    const newdarktruth = new UserVibesModel({
+      yourStoryTitle: filter.clean(safeTitle),
+      chroniclesOfYou: filter.clean(safeChronicles),
       replyAllowed,
       emailAllowed,
       comments,

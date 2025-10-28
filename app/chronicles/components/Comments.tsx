@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { Trash2, X, MessageCircle } from "lucide-react"
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import { UserComment } from "../../types/chronicle";
+import { usePathname } from "next/navigation"; // ✅ Import this
 
 interface CommentsProps {
   userCommentsData: UserComment[];
@@ -13,10 +14,13 @@ interface CommentsProps {
 }
 
 export default function Comments({ Pid, userCommentsData }: CommentsProps) {
+  const pathname = usePathname(); // ✅ Get the current route
+
   const token = Cookies.get("token");
   const [comment, setComment] = useState("");
   const [isCommentOpen, setCommentOpen] = useState(false);
   const [allComments, setAllComments] = useState<UserComment[]>(userCommentsData);
+  const [loading, setLoading] = useState(false);
 
   const toggleComments = () => {
     setCommentOpen((prev) => !prev);
@@ -25,7 +29,7 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
   const addComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!comment.trim()) return;
-
+    setLoading(true)
     try {
       const res = await axios.post(
         `${getBaseUrl()}/api/addChronicles/${Pid}/comments`,
@@ -41,10 +45,14 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
       if (res.status === 200) {
         setAllComments((prev) => [...prev, res.data.user]);
         setComment("");
+        setCommentOpen(false)
+        setLoading(false)
       }
     } catch (error) {
+      setLoading(false)
       console.error(error);
     }
+
   };
 
   const deleteComment = async (Cid: string) => {
@@ -60,15 +68,17 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
       console.error(error);
     }
   };
+  const layoutClass =
+    pathname === "/chronicles"
+      ? "flex-col"
+      : "flex";
 
   return (
     <>
-     
-      <button onClick={toggleComments} className="p-3 text-[#a1a1a1] rounded-full shadow-lg items-center flex flex-col gap-0">
+      <button onClick={toggleComments} className={`p-3 text-[#a1a1a1] rounded-full shadow-lg items-center ${layoutClass} gap-1`}>
         <MessageCircle className="w-6 h-6" />
         <span className="text-[#a1a1a1] m-0">{allComments?.length || null}</span>
       </button>
-
       {isCommentOpen && (
         <>
           {/* Backdrop */}
@@ -117,13 +127,13 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
                     </p>
 
                     {/* Delete icon on hover */}
-                    <button
+                    {comment._id ? <button
                       onClick={() => deleteComment(comment._id)}
                       className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-neutral-500 hover:text-red-600"
                       title="Delete comment"
                     >
                       <Trash2 size={18} strokeWidth={2} />
-                    </button>
+                    </button> : null}
                   </div>
                 ))
               ) : (
@@ -136,22 +146,27 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
             {/* Comment input */}
             <form
               onSubmit={addComment}
-              className="flex items-center gap-2 p-4 border-t border-neutral-700 bg-neutral-900 pb-20"
+              className="flex items-center  gap-2 p-4 border-t border-neutral-700 bg-neutral-900 pb-20"
             >
               <input
                 type="text"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Add a comment..."
-                className="flex-1 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-full text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-red-600"
+                className="flex-1 px-4 py-2 bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-red-600"
                 required
               />
               <button
                 type="submit"
-                className="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                disabled={loading}
+                className={`tbh_button m-0 ${loading
+                  ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                  : "hover:bg-red-600"
+                  }`}
               >
-                Post
+                {loading ? "..." : "Post"}
               </button>
+
             </form>
           </div>
         </>

@@ -69,6 +69,8 @@ window.location.href = '/dashboard';
 
       // alert('Profile updated successfully!');
     } catch (err: unknown) {
+      console.log(err);
+      
       let message = "Unexpected error";
 
       if (axios.isAxiosError(err)) {
@@ -85,8 +87,8 @@ window.location.href = '/dashboard';
     <>
  
       <SuccessMsg successMsg={success} />
-     <div className={`overflow-y-scroll scrollbar-none ${Styles.glass_card}`} style={{height: "95vh"}} >
-       <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto`} >
+     <div className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`} style={{height: "100 vh"}} >
+       <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto pb-20`} >
         {/* Title */}
         <div className="my-5">
           <label htmlFor="yourStoryTitle" className="block mb-1  capitalize">
@@ -178,12 +180,13 @@ window.location.href = '/dashboard';
             Allow Comments
           </label>
         </div>
+        <ErrorMessage message={error} />
 
         {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full tbh_button rounded-lg mb-10"
+          className="w-full tbh_button rounded-lg mb-30"
         >
           {loading ? (
             <span className="flex items-center justify-center">
@@ -194,7 +197,6 @@ window.location.href = '/dashboard';
             <span className="flex items-center justify-center b-10">Submit</span>
           )}
         </button>
-        <ErrorMessage message={error} />
       </form>
      </div>
     </>

@@ -3,7 +3,7 @@ import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
-import sanitize from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 import { commentSchema } from "@/lib/validationSchemas";
 interface RequestBody {
   user: {
@@ -26,13 +26,14 @@ export async function POST(
     const { id } = await params; // <-- fixed this line only
     const body: RequestBody = await request.json();
     const { comment } = body;
-    const safeComment = sanitize(comment, {
+    const safeComment = sanitizeHtml(comment, {
       allowedTags: [], // remove all HTML tags
       allowedAttributes: {},
     });
+ 
     if (!safeComment.trim()) {
       return NextResponse.json(
-        { message: "Please enter a valid comment" },
+        { message: "comment cannot be empty or contain only HTML tags" },
         { status: 400 }
       );
     }

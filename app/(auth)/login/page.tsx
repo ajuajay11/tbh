@@ -14,7 +14,7 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 function Login() {
   const [login, setLogin] = useState({
     email: "chronicleofstrangers@gmail.com",
-    password: ""
+    password: "Ajay@1504905"
   })
   const [eyes, setEyes] = useState(false); // false = password hidden, true = visible
   const [error, setError] = useState<string | null>(null);

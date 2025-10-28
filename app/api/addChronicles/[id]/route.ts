@@ -3,7 +3,7 @@ import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
-import sanitize from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 
 interface RequestBody {
   yourStoryTitle: string;
@@ -29,20 +29,27 @@ export async function PUT(
       replyAllowed,
       comments,
     } = body;
-    const safeTitle = sanitize(yourStoryTitle, {
+    const safeTitle = sanitizeHtml(yourStoryTitle, {
       allowedTags: [],
       allowedAttributes: {},
     });
-    const safeChronicles = sanitize(chroniclesOfYou, {
+    const safeChronicles = sanitizeHtml(chroniclesOfYou, {
       allowedTags: [],
       allowedAttributes: {},
     });
-if (!safeTitle.trim()) {
-  return NextResponse.json({ message: "Title cannot be empty" }, { status: 400 });
+   if (!safeTitle.trim()) {
+  return NextResponse.json(
+    { message: "Title cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
 }
 
+
 if (!safeChronicles.trim()) {
-  return NextResponse.json({ message: "Story content cannot be empty" }, { status: 400 });
+  return NextResponse.json(
+    { message: "Story content cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
 }
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
