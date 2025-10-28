@@ -11,39 +11,22 @@ import { countries } from "@/lib/Countries";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { createPortal } from "react-dom";
-
+import { Chronicle } from "@/app/types/chronicle"; // Import Chronicle
 interface FlipBookMethods {
   pageFlip: () => { flipNext: () => void; flipPrev: () => void };
-}
-
-interface User {
-  _id: string;
-  firstname: string;
-  lastname: string;
-}
-
-interface Chronicle {
-  yourStoryTitle: string;
-  chroniclesOfYou: string;
-  incidentFrom: string;
-  user: User;
-  _id: string;
-  emailAllowed: boolean;
-  comments: boolean;
-  replyAllowed: boolean;
 }
 
 interface ChronicleFormData {
   yourStoryTitle: string;
   chroniclesOfYou: string;
   incidentFrom: string;
-  replyAllowed: boolean;
   emailAllowed: boolean;
   comments: boolean;
+  replyAllowed: boolean;
 }
 
 interface DiaryProps {
-  chronicle: Chronicle;
+  chronicle: Chronicle; // This now uses the imported Chronicle type
 }
 
 const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
@@ -95,8 +78,8 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
   // Owner logic
   useEffect(() => {
     const userId = Cookies.get("userId");
-    setIsOwner(userId === chronicle.user._id);
-  }, [chronicle.user._id]);
+    setIsOwner(userId === chronicle.user?._id);
+  }, [chronicle.user?._id]);
 
   // Split text logic
   useEffect(() => {
@@ -189,10 +172,16 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
       <SuccessMsg successMsg={success} />
       {isOwner && (
         <div className="flex justify-center gap-3">
-          <button className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105" onClick={doEditable} >
+          <button
+            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
+            onClick={doEditable}
+          >
             {isEditable ? "Cancel" : "Edit"}
           </button>
-          <button className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105" onClick={() => setOpenModal((prev) => !prev)} >
+          <button
+            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
+            onClick={() => setOpenModal((prev) => !prev)}
+          >
             Delete
           </button>
         </div>
@@ -389,7 +378,8 @@ const Diary: React.FC<DiaryProps> = ({ chronicle }) => {
                     {chronicle.incidentFrom}
                   </p>
                   <p className="pt-10 text-sm opacity-90">
-                    By: {chronicle.user.firstname} {chronicle.user.lastname}
+                    By: {chronicle.user?.firstname || "Unknown"}{" "}
+                    {chronicle.user?.lastname || ""}
                   </p>
                 </div>
               </div>

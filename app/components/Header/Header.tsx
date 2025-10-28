@@ -26,16 +26,12 @@ export default function Header() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1024) {
-        // lg breakpoint (Tailwind's default)
-        setMock(true);
+         setMock(true);
       }
     };
 
-    // Run once on mount
-    handleResize();
-
-    // Listen to window resize
-    window.addEventListener("resize", handleResize);
+     handleResize();
+     window.addEventListener("resize", handleResize);
 
     // Cleanup on unmount
     return () => window.removeEventListener("resize", handleResize);
@@ -57,8 +53,7 @@ export default function Header() {
         <Link href="/why-tbh">Why TBH?</Link>
       </div> :null
      }
-       <nav
-        className={`fixed w-full md:w-auto bottom-0 md:bottom-[2%] md:left-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform ${mock ? " md:translate-x-[-50%] translate-y-0 scale-100 opacity-100" : "md:translate-x-[50%] translate-y-[30%] scale-75 opacity-0" }`} >
+       <nav className={`fixed w-full md:w-auto bottom-0 md:bottom-[2%] md:left-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform ${mock ? " md:translate-x-[-50%] translate-y-0 scale-100 opacity-100" : "md:translate-x-[50%] translate-y-[30%] scale-75 opacity-0" }`} >
         <div className="flex  w-full md:gap-3">
           {token ? (
             <>

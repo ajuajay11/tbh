@@ -37,7 +37,6 @@ export default function DiaryTabs({ params }: { params: Promise<{ id: string }> 
         }
       } catch (err) {
         console.error(err);
-        
         setError(true);
       } finally {
         setLoading(false);
@@ -46,17 +45,18 @@ export default function DiaryTabs({ params }: { params: Promise<{ id: string }> 
 
     fetchData();
   }, [params]);
-console.log(tabIndex);
+
+  console.log(tabIndex);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Post not found</div>;
+  if (error || !chronicleDiary) return <div>Post not found</div>;
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
       <div className="flex gap-4 mb-4 justify-center">
         <button
           className={`px-4 py-2 rounded-xl font-medium ${
-            tabIndex !== 0 ? "bg-black/60 text-white" : "bg-white/80 text-black"
+            tabIndex === 0 ? "bg-black/60 text-white" : "bg-white/80 text-black"
           }`}
           onClick={() => setTabIndex(0)}
         >
@@ -64,7 +64,7 @@ console.log(tabIndex);
         </button>
         <button
           className={`px-4 py-2 rounded-xl font-medium ${
-            tabIndex !== 1 ? "bg-black/80 text-white" : "bg-white/80 text-black"
+            tabIndex === 1 ? "bg-black/60 text-white" : "bg-white/80 text-black"
           }`}
           onClick={() => setTabIndex(1)}
         >
