@@ -4,6 +4,12 @@ import connectToDatabase from "@/lib/db";
 import User from "@/models/users";
 import * as jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  email: z.string().email().max(100),
+  password: z.string().min(4).max(100),
+});
 
 // Define the shape of the expected request body
 interface RequestBody {
@@ -19,19 +25,21 @@ export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
     const body: RequestBody = await request.json();
-    const { email, password } = body;
-    if (!email || !password) {
-      return NextResponse.json(
-        { message: "please enter your email" },
-        { status: 404 }
-      );
+    const parsed = loginSchema.safeParse(body);
+    if (!parsed.success) {
+      const firstErrorMessage =
+        parsed.error.issues[0]?.message || "Invalid input";
+
+      return NextResponse.json({ message: firstErrorMessage }, { status: 400 });
     }
+    const { email, password } = parsed.data;
+
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-if (!isPasswordValid) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return NextResponse.json(
         { message: "Invalid password" },
         { status: 401 }
@@ -51,21 +59,22 @@ if (!isPasswordValid) {
       );
     };
 
-const token = generateToken(user as TokenUser);
+    const token = generateToken(user as TokenUser);
     return NextResponse.json(
-      { message: "login user successfully",
-        user:{
-            id:user._id,
-            firstname :user.email,
-            lastname:user.lastname,
-            avatar:user.profilePicture,
-            email:user.email,
-            gender:user.gender,
-            age:user.age,
-            role:user.role,
-            token
+      {
+        message: "login user successfully",
+        user: {
+          id: user._id,
+          firstname: user.email,
+          lastname: user.lastname,
+          avatar: user.profilePicture,
+          email: user.email,
+          gender: user.gender,
+          age: user.age,
+          role: user.role,
+          token,
         },
-       },
+      },
       { status: 200 }
     );
   } catch (error) {

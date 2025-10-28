@@ -53,11 +53,16 @@ useEffect(() => {
   };
   return (
     <>
-      <div className="mt-1 flex flex-col items-center text-[#333]">
-        <button onClick={toggleLike}>
-          {hasLiked ? <Heart fill="red" /> : <Heart  />}
+      <div
+  className={`p-3 rounded-full shadow-lg flex flex-col items-center gap-0 ${
+    hasLiked ? "text-red-500" : "text-[#a1a1a1]"
+  }`}
+>
+        <button onClick={toggleLike} className="m-0">
+          {hasLiked ? <Heart fill="red" /> : <Heart />}
+           <span className="text-[#a1a1a1] m-0 ">{likeCount === 0 ? null: likeCount}</span>
         </button>
-        <span>{likeCount === 0 ? "likes": likeCount}</span>
+       
       </div>
     </>
   );

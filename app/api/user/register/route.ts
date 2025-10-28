@@ -3,6 +3,18 @@ import type { NextRequest } from "next/server";
 import User from "@/models/users";
 import connectToDatabase from "@/lib/db";
 import bcrypt from "bcryptjs"; // or "bcrypt"
+import { z } from "zod";
+
+const registerSchema = z.object({
+  email: z.string().email().max(100).transform(e => e.trim().toLowerCase()),
+  password: z.string().min(6).max(100).transform(p => p.trim()),
+  firstname: z.string().min(1).max(50).transform(f => f.trim()),
+  lastname: z.string().min(1).max(50).transform(f => f.trim()),
+  gender: z.enum(["male", "female", "other"]),
+  username: z.string().max(30).optional().transform(u => u?.trim()),
+  profilePicture: z.string().url().optional(),
+  age: z.number().int().min(1).max(120).optional(),
+});
 
 // Define the shape of the expected request body
 interface RequestBody {

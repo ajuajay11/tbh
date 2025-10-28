@@ -10,7 +10,7 @@ import Image from "next/image";
 import ReportAProblem from "@/app/chronicles/components/ReportAProblem";
 import { getTimeAgo } from "@/utils/timeAgo";
 import img1 from "@/public/tbh.png";
-
+import ShareComp from "../chronicles/components/ShareComp";
 interface ChronicleWithUser extends Chronicle {
   user: User;
   createdAt: string;
@@ -99,7 +99,7 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
                   </div>
                 </Link>
 
-                <div className="absolute right-3 bottom-16 flex flex-col items-center gap-3 text-white">
+                <div className="absolute right-3 bottom-16 flex flex-col items-center gap-1 text-white">
                   <div>
                     <Likes
                       Pid={item._id || ""}
@@ -113,9 +113,8 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
                     />
                   </div>
                   <div>
-                    <button className="flex flex-col items-center">
-                      <Share2 className="w-6 h-6 text-[#333]" />
-                    </button>
+                    <ShareComp Pid={item._id || ""} Title={item.yourStoryTitle || ""}/>
+                     
                   </div>
                 </div>
               </div>
