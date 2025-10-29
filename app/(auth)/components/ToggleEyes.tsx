@@ -10,7 +10,7 @@ type ToggleEyesProps = {
 
 function ToggleEyes({ eyes, setEyes }: ToggleEyesProps) {
   return (
-    <span data-aos="fade-in" style={{top:'10px', right:'10px'}}
+    <span style={{top:'10px', right:'10px'}}
       onClick={() => setEyes(!eyes)} 
       className="cursor-pointer select-none absolute"
     >

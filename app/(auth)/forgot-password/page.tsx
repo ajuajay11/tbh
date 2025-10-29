@@ -1,88 +1,130 @@
-"use client"
+'use client';
 
-import { useState, FormEvent } from "react";
-import Cookies from 'js-cookie';
-import Link from "next/link";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { useState, ChangeEvent, FormEvent, Suspense } from "react";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import SuccessMsg from "@/app/components/SuccessMsg";
-import axios from "axios";
+import OtpBox from "@/app/(auth)/components/authentication/OtpBox";
+import ImageCom from "../../components/ImageCom";
+import ToggleEyes from "../components/ToggleEyes";
+import ButtonLoading from "@/app/components/ButtonLoading";
+import Styles from "../auth.module.css"
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
-export default function ForgotPassword() {
-  const [login, setLogin] = useState({
-    email: "",
-    password: ""
-  })
 
+// Inner component that uses useSearchParams
+function FormatPasswordForm() {
+   const router = useRouter();
+  const [eyes, setEyes] = useState(false); 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const [password, setPassword] = useState({
+    password: "",
+    email:"",
+    type:"forgot-password"
+  });
+  const [steps, setSteps] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setPassword(prev => ({
+      ...prev,
+      [name]: name === 'age' ? Number(value) : value
+    }));
+  };
+
+  const closeButton = () => {
+    setModalOpen(false);
+ 
+  }
+  const sendMail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    setLoader(true);
     try {
-      const response = await axios.post('/api/user/login', login, {
-        headers: {
-          "Content-Type": "application/json",
-        }
-      });
-       if (response?.status == 200 || '200') {
-        Cookies.set('token', response.data.user.token, { expires: 12 });
-        Cookies.set('isAuthenticated', 'true', { expires: 12 });
-        Cookies.set('userId', response.data.user.id, { expires: 12 });
-        Cookies.set('avatar', response.data.user.avatar, { expires: 12 });
-        const successMsg = response?.data?.message;
-        setSuccess(successMsg)
-        setTimeout(() => {
-          location.reload();
-        }, 2000);
+      const res = await axios.post(`${getBaseUrl()}/api/user/sendOtp`, { email: password.email, type:password.type });
+      if (res.status === 200) {
+        setModalOpen(true);
       }
-      // location.reload();
-      console.log(response, 'response');
     } catch (err: unknown) {
       let message = 'Unexpected error';
-    setLoading(false);
-
       if (axios.isAxiosError(err)) {
         message = err.response?.data?.message || err.message;
       } else if (err instanceof Error) {
         message = err.message;
       }
       setError(message);
+    } finally {
+      setLoader(false);
     }
-  }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    // password.remove(password.email);
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/user/forget-password', password);
+      if (response.status === 200) {
+        router.push('/login');
+      }
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message?: string }>;
+      setError(err.response?.data?.message || err.message || 'Unexpected error');
+    }
+  };
 
   return (
     <>
-      <SuccessMsg successMsg={success} />
-      <section className="w-full max-w-sm p-8 shadow-2xl backdrop-blur-lg border border-white/20 rounded-xl">
-        <h2 className="text-2xl font-bold text-white mb-6 drop-shadow text-start">Sign In</h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="text-white">
-            <input value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })} type="text" placeholder="Email" className="w-full px-4 py-3 rounded-null bg-white/10  placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-white" autoComplete="email" required />
-          </div>
-          <div className="text-white">
-            <input value={login.password} onChange={(e) => setLogin({ ...login, password: e.target.value })} type="password" placeholder="Password" className="w-full px-4 py-3 rounded-null bg-white/10 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300" autoComplete="current-password" required />
-          </div>
-          {loading ? (
-            <div className="flex justify-center items-center" aria-busy="true" aria-label="Loading">
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" role="img" >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" ></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2.93 6.364A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3.93-1.574z" ></path>
-              </svg>
-            </div>
-          ) : (
-            <button type="submit" className="tbh_button w-full"> Login </button>
-          )}
+      {modalOpen && (
 
-        </form>
-        <ErrorMessage message={error} />
-         <div className="mt-6 text-center space-y-2 text-sm">
-          <p className="text-gray-300"> Don&apos;t have an account? <Link href="/register" className="text-blue-400 hover:underline"> Register </Link> </p>
-          <p> <Link href="/forgot-password" className="text-blue-400 hover:underline"> Forgot your password? </Link> </p>
-          <p className="text-gray-400 text-xs"> By signing in, you agree to our  <Link href="/terms" className="underline hover:text-white"> Terms & Conditions  </Link> . </p>
-        </div>
-      </section>
+        <OtpBox closeBtn={closeButton} email={password.email} setSteps={setSteps} />
 
+      )}
+      <div className="lg:me-60 p-4">
+        {steps === 1 ? (
+          <section className={`${Styles.glassCard} backdrop-blur-md`}>
+            <form onSubmit={sendMail} className="space-y-3 lg:space-y-6">
+              <h2 className="text-2xl font-bold text-white text-center">Step 1: Verify Your Email</h2>
+              <p className="text-sm text-gray-300 text-center"> Please enter your email address. We&apos;ll send you a verification code. </p>
+              <div>
+                <label htmlFor="email" className="block text-white font-medium mb-1">Email address</label>
+                <input type="email" id="email" name="email" value={password.email} onChange={handleChange} required className="w-full p-3 customBox" placeholder="you@example.com" />
+              </div>
+              <ErrorMessage message={error} />
+              {loader ? <ButtonLoading /> : <button type="submit" className="tbh_button"> Send Verification Code </button>}
+            </form>
+          </section>
+        ) : (
+          <section className={`${Styles.glassCard} `}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="relative">
+                <label htmlFor="password" className="block text-white font-medium mb-1">New Password:</label>
+                <input type="password" id="password" name="password" value={password.password} onChange={handleChange} required
+                  className="w-full p-3 customBox"
+                  placeholder="Create a password"
+                />
+                <ToggleEyes eyes={eyes} setEyes={setEyes} />
+              </div>
+              <button type="submit" className="tbh_button">
+                submit
+              </button>
+              <ErrorMessage message={error} />
+            </form>
+          </section>
+
+        )}
+      </div>
     </>
-  )
+  );
 }
+// Main Register component with Suspense
+function ForgotPassword() {
+  return (
+    <Suspense fallback={<div className="text-white text-center p-4">Loading...</div>}>
+      <FormatPasswordForm />
+    </Suspense>
+  );
+}
+
+// Export with HOC
+export default ImageCom(ForgotPassword);

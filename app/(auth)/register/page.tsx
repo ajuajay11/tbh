@@ -26,7 +26,8 @@ function RegisterForm() {
     age: 0,
     email: "",
     gender: "",
-    password: ""
+    password: "",
+    type:"register"
   });
   const [steps, setSteps] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,14 +43,13 @@ function RegisterForm() {
 
   const closeButton = () => {
     setModalOpen(false);
-    console.log('dd');
-
+    
   }
   const sendMail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
     try {
-      const res = await axios.post(`${getBaseUrl()}/api/user/sendOtp`, { email: register.email });
+      const res = await axios.post(`${getBaseUrl()}/api/user/sendOtp`, { email: register.email,type:register.type });
       if (res.status === 200) {
         setModalOpen(true);
       }
