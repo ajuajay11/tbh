@@ -11,8 +11,13 @@
   background-repeat: no-repeat;
   opacity: 0;
   transition: opacity 1s ease-in-out; /* fade */
+  
  }
-
+@media screen and (max-width: 767px) {
+  .bg {
+     left: -50px;
+  }
+ }
 .visible {
   opacity: 0.6;
   z-index: 1;

@@ -49,8 +49,8 @@ export default function Header() {
         <ListCollapse />
       </div>
      {pathname === "/"?
-       <div className="fixed right-5" style={{zIndex:"99"}}>
-        <Link href="/why-tbh">Why TBH?</Link>
+       <div className="fixed right-5 top-3" style={{zIndex:"99"}}>
+        <Link className="font_five font-extrabold text-[#13333]" href="/why-tbh">Why TBH?</Link>
       </div> :null
      }
        <nav className={`fixed w-full md:w-auto bottom-0 md:bottom-[2%] md:left-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] transform ${mock ? " md:translate-x-[-50%] translate-y-0 scale-100 opacity-100" : "md:translate-x-[50%] translate-y-[30%] scale-75 opacity-0" }`} >
