@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Chronicle } from "@/app/types/chronicle";
- import { createPortal } from "react-dom";
+import { createPortal } from "react-dom";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import SuccessMsg from "@/app/components/SuccessMsg";
@@ -26,7 +26,7 @@ interface ChronicleCardProps {
 }
 
 export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
-   const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
     setIsOwner(userId === chronicle.user?._id);
   }, [chronicle.user?._id]);
 
-   const handleChange = (
+  const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
@@ -118,33 +118,33 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
   return (
     <>
       <SuccessMsg successMsg={success} />
-     
+
       {isEditable ? (
         <section className="min-h-screen flex items-center justify-center p-4">
-          
+
           <div className="w-full max-w-2xl">
             <SuccessMsg successMsg={success} />
-            
+
             <form
               onSubmit={submitChronicle}
               className={`${Styles.my_profile} ${Styles.glass_card} w-full lg:p-6`}
             >
-               {isOwner && (
-        <div className="flex justify-center gap-3">
-          <button
-            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
-            onClick={doEditable}
-          >
-            {isEditable ? "Cancel" : "Edit"}
-          </button>
-          <button
-            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
-            onClick={() => setOpenModal((prev) => !prev)}
-          >
-            Delete
-          </button>
-        </div>
-      )}
+              {isOwner && (
+                <div className="flex justify-center gap-3">
+                  <button
+                    className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
+                    onClick={doEditable}
+                  >
+                    {isEditable ? "Cancel" : "Edit"}
+                  </button>
+                  <button
+                    className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
+                    onClick={() => setOpenModal((prev) => !prev)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
               <div className="my-5">
                 <label
                   htmlFor="yourStoryTitle"
@@ -202,36 +202,40 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
                   ))}
                 </select>
               </div>
-              <div className="my-6 space-y-3">
-                <label className="custom-checkbox flex items-center gap-3 cursor-pointer">
+
+              <div className="my-4 flex flex-col lg:flex-row lg:gap-5 text-xl font_three">
+                {/* <label className="custom-checkbox">
                   <input
                     type="checkbox"
                     name="replyAllowed"
                     checked={addChronicle.replyAllowed}
                     onChange={handleChange}
-                    className="w-5 h-5"
                   />
-                  <span className="text-lg">Allow Replies</span>
-                </label>
-                <label className="custom-checkbox flex items-center gap-3 cursor-pointer">
+                  <span className="checkmark"></span>
+                  <span>Allow Replies</span>
+                </label> */}
+
+                <label className="custom-checkbox">
                   <input
                     type="checkbox"
                     name="emailAllowed"
                     checked={addChronicle.emailAllowed}
                     onChange={handleChange}
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
-                  <span className="text-lg">Allow Emails</span>
+                  <span className="checkmark"></span>
+                  Allow Emails
                 </label>
-                <label className="custom-checkbox flex items-center gap-3 cursor-pointer">
+
+                <label className="custom-checkbox">
                   <input
                     type="checkbox"
                     name="comments"
                     checked={addChronicle.comments}
                     onChange={handleChange}
-                    className="w-5 h-5"
                   />
-                  <span className="text-lg">Allow Comments</span>
+                  <span className="checkmark"></span>
+                  Allow Comments
                 </label>
               </div>
               <button
@@ -257,26 +261,26 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
       ) : (
         <div className="bg-[#111] text-white rounded-2xl shadow-lg p-6 max-w-3xl mx-auto border border-[#222] transition-all hover:border-[#444]">
           {/* Header */}
-           {isOwner && (
-        <div className="flex justify-center gap-3">
-          <button
-            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
-            onClick={doEditable}
-          >
-            {isEditable ? "Cancel" : "Edit"}
-          </button>
-          <button
-            className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
-            onClick={() => setOpenModal((prev) => !prev)}
-          >
-            Delete
-          </button>
-        </div>
-      )}
+          {isOwner && (
+            <div className="flex justify-center gap-3">
+              <button
+                className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
+                onClick={doEditable}
+              >
+                {isEditable ? "Cancel" : "Edit"}
+              </button>
+              <button
+                className="tbh_button px-6 py-2 rounded-lg transition-all hover:scale-105"
+                onClick={() => setOpenModal((prev) => !prev)}
+              >
+                Delete
+              </button>
+            </div>
+          )}
           <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-3">
-            
+
             <div>
-              
+
               <h2 className="font_twp font-semibold text-[#fafafa]">
                 {chronicle.yourStoryTitle}
               </h2>
@@ -307,29 +311,20 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
 
           {/* Actions */}
 
-         <div className="flex gap-2 items-center">
-           <Likes
-            Pid={chronicle._id || ""}
-            userLikesData={chronicle.UserLikes || []}
-          />
-          <Comments
-            Pid={chronicle._id || ""}
-            userCommentsData={chronicle.UserComments || []}
-          />
+          <div className="flex gap-2 items-center">
+            <Likes
+              Pid={chronicle._id || ""}
+              userLikesData={chronicle.UserLikes || []}
+            />
+           {chronicle?.comments ?
+             <Comments
+              Pid={chronicle._id || ""}
+              userCommentsData={chronicle.UserComments || []}
+            />:null
+           }
 
-          <ShareComp Pid={chronicle._id || ""} Title={chronicle.yourStoryTitle || ""} />
-         </div>
-
-          {/* <button
-            onClick={() => setShowComments(!showComments)}
-            className="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition"
-          >
-            <MessageCircle className="h-5 w-5" />
-            <span>{chronicle.UserComments?.length || 0}</span>
-          </button> */}
-
-
-          
+            <ShareComp Pid={chronicle._id || ""} Title={chronicle.yourStoryTitle || ""} />
+          </div>
 
         </div >)
       }
