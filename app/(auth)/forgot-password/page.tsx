@@ -17,6 +17,7 @@ function FormatPasswordForm() {
    const router = useRouter();
   const [eyes, setEyes] = useState(false); 
   const [error, setError] = useState<string | null>(null);
+  
   const [password, setPassword] = useState({
     password: "",
     email:"",
@@ -63,7 +64,7 @@ function FormatPasswordForm() {
     // password.remove(password.email);
     e.preventDefault();
     try {
-      const response = await axios.post('/api/user/forget-password', password);
+      const response = await axios.put('/api/user/forget-password', password);
       if (response.status === 200) {
         router.push('/login');
       }
@@ -87,7 +88,7 @@ function FormatPasswordForm() {
               <h2 className="text-2xl font-bold text-white text-center">Step 1: Verify Your Email</h2>
               <p className="text-sm text-gray-300 text-center"> Please enter your email address. We&apos;ll send you a verification code. </p>
               <div>
-                <label htmlFor="email" className="block text-white font-medium mb-1">Email address</label>
+                <label htmlFor="email" className="block text-white font-medium ">Email address</label>
                 <input type="email" id="email" name="email" value={password.email} onChange={handleChange} required className="w-full p-3 customBox" placeholder="you@example.com" />
               </div>
               <ErrorMessage message={error} />
@@ -98,8 +99,8 @@ function FormatPasswordForm() {
           <section className={`${Styles.glassCard} `}>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="relative">
-                <label htmlFor="password" className="block text-white font-medium mb-1">New Password:</label>
-                <input type="password" id="password" name="password" value={password.password} onChange={handleChange} required
+                <label htmlFor="password" className="block text-white font-medium ">New Password:</label>
+                <input  type={eyes ? "text" : "password"} id="password" name="password" value={password.password} onChange={handleChange} required
                   className="w-full p-3 customBox"
                   placeholder="Create a password"
                 />

@@ -46,7 +46,7 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
                         <span className="text-white font-semibold text-sm">
-                          {item.user.firstname} {item.user.lastname}
+                          {item?.user?.firstname} {item?.user?.lastname}
                         </span>
                         {/* Verified badge */}
                         <svg
@@ -58,7 +58,7 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
                         </svg>
                       </div>
                       <span className="text-gray-300 text-xs">
-                        @{item.user.username}
+                        @{item?.user?.username}
                       </span>
                     </div>
                   </div>

@@ -8,7 +8,7 @@ import nodemailer from "nodemailer";
 // Define the shape of the expected request body
 interface RequestBody {
   email: string;
-  type: "register" | "forgot-password" | null; // restrict to valid types
+  type: "register" | "forgot-password"; // restrict to valid types
 }
 
 

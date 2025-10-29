@@ -115,7 +115,7 @@ function RegisterForm() {
               <h2 className="text-2xl font-bold text-white text-center">Step 1: Verify Your Email</h2>
               <p className="text-sm text-gray-300 text-center"> Please enter your email address. We&apos;ll send you a verification code. </p>
               <div>
-                <label htmlFor="email" className="block text-white font-medium mb-1">Email address</label>
+                <label htmlFor="email" className="block text-white font-medium ">Email address</label>
                 <input type="email" id="email" name="email" value={register.email} onChange={handleChange} required className="w-full p-3 customBox" placeholder="you@example.com" />
               </div>
               <ErrorMessage message={error} />
@@ -126,27 +126,27 @@ function RegisterForm() {
           <section className={`${Styles.glassCard} `}>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="firstname" className="block text-white font-medium mb-1">Firstname:</label>
+                <label htmlFor="firstname" className="block text-white font-medium  ">Firstname:</label>
                 <input type="text" id="firstname" name="firstname" value={register.firstname} onChange={handleChange} required className="w-full p-3 customBox" placeholder="Enter your first name" />
               </div>
               <div>
-                <label htmlFor="lastname" className="block text-white font-medium mb-1">Lastname:</label>
+                <label htmlFor="lastname" className="block text-white font-medium  ">Lastname:</label>
                 <input type="text" id="lastname" name="lastname" value={register.lastname} onChange={handleChange} required className="w-full p-3 customBox" placeholder="Enter your last name" />
               </div>
               <div>
-                <label htmlFor="email" className="block text-white font-medium mb-1">Email:</label>
+                <label htmlFor="email" className="block text-white font-medium  ">Email:</label>
                 <input type="email" id="email" name="email" value={register.email} disabled required className="w-full p-3 rounded-lg customBox" />
               </div>
               <div className="relative">
-                <label htmlFor="password" className="block text-white font-medium mb-1">Password:</label>
-                <input type="password" id="password" name="password" value={register.password} onChange={handleChange} required
+                <label htmlFor="password" className="block text-white font-medium  ">Password:</label>
+                <input  type={eyes ? "text" : "password"} id="password" name="password" value={register.password} onChange={handleChange} required
                   className="w-full p-3 customBox"
                   placeholder="Create a password"
                 />
                 <ToggleEyes eyes={eyes} setEyes={setEyes} />
               </div>
               <div>
-                <label htmlFor="gender" className="block text-white font-medium mb-1">Gender:</label>
+                <label htmlFor="gender" className="block text-white font-medium  ">Gender:</label>
                 <select id="gender" name="gender" value={register.gender} onChange={handleChange} className="w-full p-3 rounded-lg bg-white/70 text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
@@ -155,7 +155,7 @@ function RegisterForm() {
                 </select>
               </div>
               <div>
-                <label htmlFor="age" className="block text-white font-medium mb-1">Age:</label>
+                <label htmlFor="age" className="block text-white font-medium  ">Age:</label>
                 <input type="number" id="age" name="age"
                   value={register.age} onChange={handleChange} required
                   className="w-full p-3 customBox"
