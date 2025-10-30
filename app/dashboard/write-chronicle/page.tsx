@@ -64,14 +64,14 @@ function Page() {
       console.log(response);
       if (response.status == 200) {
         const successMsg = response?.data?.message;
-window.location.href = '/dashboard';
+        window.location.href = "/dashboard";
         setSuccess(successMsg);
       }
 
       // alert('Profile updated successfully!');
     } catch (err: unknown) {
       console.log(err);
-      
+
       let message = "Unexpected error";
 
       if (axios.isAxiosError(err)) {
@@ -86,124 +86,146 @@ window.location.href = '/dashboard';
   };
   return (
     <>
- 
       <SuccessMsg successMsg={success} />
-     <div className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`} style={{height: "100 vh"}} >
-       <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto pb-20`} >
-        {/* Title */}
-        <div className="my-5">
-          <label htmlFor="yourStoryTitle" className="block mb-1  capitalize">
-            {" "}
-            Title{" "}
-          </label>
-          <input
-            type="text"
-            name="yourStoryTitle"
-            value={addChronicle.yourStoryTitle}
-            onChange={handleChange}
-            placeholder="Enter your story title"
-            className="w-full rounded-lg p-3 outline-none"
-            required
-          />
-        </div>
-
-        {/* Category */}
-        <div className="mb-4">
-          <label htmlFor="yourStoryTitle" className="block mb-1 capitalize">
-            {" "}
-            chronicles Of You{" "}
-          </label>
-          <textarea
-            required
-            name="chroniclesOfYou"
-            value={addChronicle.chroniclesOfYou}
-            onChange={handleChange} // pass the event directly
-            placeholder="Enter your story title"
-            className="w-full border border-gray-700 outline-none transition-all duration-200 placeholder-gray-500 resize-none px-3 py-5"
-            rows={7}
-          />
-        </div>
-        <div>
-          <label htmlFor="yourStoryTitle" className="block mb-1 capitalize">
-            {" "}
-            Incident From{" "}
-          </label>
-          <select
-            name="incidentFrom"
-            required
-            id="incidentFrom"
-            value={addChronicle.incidentFrom}
-            onChange={handleChange}
-          >
-            <option value="" className="bg-black">Choose Any</option>
-            {countries.map((e) => (
-              <option className="bg-black" key={e.id} value={e.name}>
-                {" "}
-                {e.name}{" "}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/* ✅ Checkboxes Section */}
-
-        <div className="my-4 flex flex-col lg:flex-row lg:gap-5 text-xl font_three">
-          {/* <label className="custom-checkbox">
-            <input
-              type="checkbox"
-              name="replyAllowed"
-              checked={addChronicle.replyAllowed}
-              onChange={handleChange}
-            />
-            <span className="checkmark"></span>
-            <span>Allow Replies</span>
-          </label> */}
-
-          <label className="custom-checkbox">
-            <input
-              type="checkbox"
-              name="emailAllowed"
-              checked={addChronicle.emailAllowed}
-              onChange={handleChange}
-              className="w-4 h-4"
-            />
-            <span className="checkmark"></span>
-            Allow Emails
-          </label>
-
-          <label className="custom-checkbox">
-            <input
-              type="checkbox"
-              name="comments"
-              checked={addChronicle.comments}
-              onChange={handleChange}
-            />
-            <span className="checkmark"></span>
-            Allow Comments
-          </label>
-        </div>
-       <label htmlFor="terms" className="text-white mb-4 flex items-center gap-2">
-         <input type="checkbox" name="terms" className="custom-checkbox flex items-center gap-3 cursor-pointer" id="terms" />
-        <Link href="/terms-and-condition" className="underline hover:text-white"> Terms & Conditions  </Link>
-       </label>
-        <ErrorMessage message={error} />
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full tbh_button rounded-lg mb-30"
+      <div
+        className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`}
+        style={{ height: "100 vh" }}
+      >
+        <form
+          onSubmit={submitChronicle}
+          className={`${Styles.my_profile}  w-full h-full lg:h-auto pb-20`}
         >
-          {loading ? (
-            <span className="flex items-center justify-center">
-              <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></span>
-              Creating Chronicles...
-            </span>
-          ) : (
-            <span className="flex items-center justify-center b-10">Submit</span>
-          )}
-        </button>
-      </form>
-     </div>
+          {/* Title */}
+          <div className="my-5">
+            <label htmlFor="yourStoryTitle" className="block mb-1  capitalize">
+              {" "}
+              Title{" "}
+            </label>
+            <input
+              type="text"
+              name="yourStoryTitle"
+              value={addChronicle.yourStoryTitle}
+              onChange={handleChange}
+              placeholder="Enter your story title"
+              className="w-full rounded-lg p-3 outline-none"
+              required
+            />
+          </div>
+
+          {/* Category */}
+          <div className="mb-4">
+            <label htmlFor="yourStoryTitle" className="block mb-1 capitalize">
+              {" "}
+              chronicles Of You{" "}
+            </label>
+            <textarea
+              required
+              name="chroniclesOfYou"
+              value={addChronicle.chroniclesOfYou}
+              onChange={handleChange} // pass the event directly
+              placeholder="Enter your story title"
+              className="w-full border border-gray-700 outline-none transition-all duration-200 placeholder-gray-500 resize-none px-3 py-5"
+              rows={7}
+            />
+          </div>
+          <div>
+            <label htmlFor="yourStoryTitle" className="block mb-1 capitalize">
+              {" "}
+              Incident From{" "}
+            </label>
+            <select
+              name="incidentFrom"
+              required
+              id="incidentFrom"
+              value={addChronicle.incidentFrom}
+              onChange={handleChange}
+            >
+              <option value="" className="bg-black">
+                Choose Any
+              </option>
+              {countries.map((e) => (
+                <option className="bg-black" key={e.id} value={e.name}>
+                  {" "}
+                  {e.name}{" "}
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* ✅ Checkboxes Section */}
+
+          <div className="my-4 flex flex-col lg:flex-row lg:gap-5 text-xl font_three">
+            <label className="custom-checkbox">
+              <input
+                type="checkbox"
+                name="replyAllowed"
+                checked={addChronicle.replyAllowed}
+                onChange={handleChange}
+              />
+              <span className="checkmark"></span>
+              <span>Allow Replies</span>
+            </label>
+
+            <label className="custom-checkbox">
+              <input
+                type="checkbox"
+                name="emailAllowed"
+                checked={addChronicle.emailAllowed}
+                onChange={handleChange}
+                className="w-4 h-4"
+              />
+              <span className="checkmark"></span>
+              Allow Emails
+            </label>
+
+            <label className="custom-checkbox">
+              <input
+                type="checkbox"
+                name="comments"
+                checked={addChronicle.comments}
+                onChange={handleChange}
+              />
+              <span className="checkmark"></span>
+              Allow Comments
+            </label>
+          </div>
+
+          <label className="custom-checkbox">
+            <input
+              type="checkbox"
+              name="terms"
+              className="cursor-pointer"
+              id="terms" required
+            />
+            <span className="checkmark"></span>
+               I agree to the{" "}
+              <Link
+                href="/terms-and-condition"
+                className="underline text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+           </label>
+          <ErrorMessage message={error} />
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full tbh_button rounded-lg mb-30"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></span>
+                Creating Chronicles...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center b-10">
+                Submit
+              </span>
+            )}
+          </button>
+        </form>
+      </div>
     </>
   );
 }

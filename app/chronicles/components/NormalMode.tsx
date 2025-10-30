@@ -259,7 +259,8 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
           </div>
         </section>
       ) : (
-        <div className="bg-[#111] text-white rounded-2xl shadow-lg p-6 max-w-3xl mx-auto border border-[#222] transition-all hover:border-[#444]">
+        <div className="py-5 lg:h-screen ">
+         <div className="bg-[#111] text-white rounded-2xl shadow-lg p-6 max-w-3xl mx-auto border border-[#222] transition-all hover:border-[#444]">
           {/* Header */}
           {isOwner && (
             <div className="flex justify-center gap-3">
@@ -326,7 +327,9 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
             <ShareComp Pid={chronicle._id || ""} Title={chronicle.yourStoryTitle || ""} />
           </div>
 
-        </div >)
+        </div >
+        </div>
+      )
       }
       {
         openModal &&
