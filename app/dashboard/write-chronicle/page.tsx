@@ -3,12 +3,13 @@
 import ImageCom from "@/app/components/ImageCom";
 import { useState, ChangeEvent, FormEvent } from "react";
 import Styles from "../dashboard.module.css";
-import { countries } from "@/lib/Countries";
+import { countries } from "@/lib/countries";
 import Cookies from "js-cookie";
 import axios from "axios";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 import SuccessMsg from "@/app/components/SuccessMsg";
+import Link from "next/dist/client/link";
 // ✅ Define type for state
 interface ChronicleData {
   yourStoryTitle: string;
@@ -180,6 +181,10 @@ window.location.href = '/dashboard';
             Allow Comments
           </label>
         </div>
+       <label htmlFor="terms" className="text-white mb-4 flex items-center gap-2">
+         <input type="checkbox" name="terms" className="custom-checkbox flex items-center gap-3 cursor-pointer" id="terms" />
+        <Link href="/terms-and-condition" className="underline hover:text-white"> Terms & Conditions  </Link>
+       </label>
         <ErrorMessage message={error} />
 
         {/* Submit */}

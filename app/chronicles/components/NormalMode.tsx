@@ -8,7 +8,7 @@ import SuccessMsg from "@/app/components/SuccessMsg";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Styles from "../../dashboard/dashboard.module.css";
-import { countries } from "@/lib/Countries";
+import { countries } from "@/lib/countries";
 import Likes from "./Likes";
 import ShareComp from "./ShareComp";
 import Comments from "./Comments";

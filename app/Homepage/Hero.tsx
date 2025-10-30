@@ -1,14 +1,14 @@
 'use client';
-import { useState } from "react";
+import { useState, FormEvent  } from "react";
 import { useRouter } from 'next/navigation';
 import ImageCom from "../components/ImageCom";
 import style from "./Homepage.module.css";
 
 function Hero() {
     const router = useRouter();
-    const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<string>("");
 
-    const emailRegistration = (e) => {
+  const emailRegistration = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (email) {
             router.push(`/register?e=${encodeURIComponent(email)}`)
@@ -26,7 +26,7 @@ function Hero() {
                 </div>
                 <form onSubmit={emailRegistration} className="flex gap-2">
                     <input className="lg:w-[50%] p-3 customBox" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" required />
-                    <button type="submit" className="no-wrap tbh_button"> Get Started </button>
+                    <button type="submit" className="text-nowrap tbh_button m-0"> Get Started </button>
                 </form>
             </section>
 
