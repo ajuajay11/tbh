@@ -147,7 +147,7 @@ window.location.href = '/dashboard';
         {/* ✅ Checkboxes Section */}
 
         <div className="my-4 flex flex-col lg:flex-row lg:gap-5 text-xl font_three">
-          <label className="custom-checkbox">
+          {/* <label className="custom-checkbox">
             <input
               type="checkbox"
               name="replyAllowed"
@@ -156,7 +156,7 @@ window.location.href = '/dashboard';
             />
             <span className="checkmark"></span>
             <span>Allow Replies</span>
-          </label>
+          </label> */}
 
           <label className="custom-checkbox">
             <input
