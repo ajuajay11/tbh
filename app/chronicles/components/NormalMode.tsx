@@ -119,7 +119,8 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
     <>
       <SuccessMsg successMsg={success} />
 
-      {isEditable ? (
+     <div className="h-screen">
+       {isEditable ? (
         <section className="min-h-screen flex items-center justify-center p-4">
 
           <div className="w-full max-w-2xl">
@@ -260,7 +261,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
         </section>
       ) : (
         <div className="py-5 lg:h-screen ">
-         <div className="bg-[#111] text-white rounded-2xl shadow-lg p-6 max-w-3xl mx-auto border border-[#222] transition-all hover:border-[#444]">
+         <div className="bg-[#111] text-white h-full rounded-2xl shadow-lg p-6 max-w-3xl mx-auto border border-[#222] transition-all hover:border-[#444]">
           {/* Header */}
           {isOwner && (
             <div className="flex justify-center gap-3">
@@ -331,6 +332,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
         </div>
       )
       }
+     </div>
       {
         openModal &&
         createPortal(

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Chronicle, User, UserLike, UserComment } from "@/app/types/chronicle";
 import Styles from "@/app/chronicles/chronicle.module.css";
 import Image from "next/image";
@@ -15,15 +15,16 @@ import { truncatedDesc } from "@/utils/truncatedText";
 interface ChronicleWithUser extends Chronicle {
   user: User;
   createdAt: string;
-  UserLikes?: UserLike[]; // Array type!
+  UserLikes?: UserLike[];
   UserComments?: UserComment[];
 }
+
 interface ScrollReelsProps {
-  initialChronicles : ChronicleWithUser[];
+  initialChronicles: ChronicleWithUser[];
 }
 
-export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
- const [chronicles, setChronicles] = useState(initialChronicles);
+export default function ScrollReels({ initialChronicles }: ScrollReelsProps) {
+  const [chronicles, setChronicles] = useState(initialChronicles);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [page, setPage] = useState(1);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
@@ -31,6 +32,40 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
   const [hasMore, setHasMore] = useState(true);
   const loadingRef = useRef(false);
 
+  // FIX 2: Wrap loadNextPage in useCallback with proper dependencies
+  const loadNextPage = useCallback(async () => {
+    if (loadingRef.current || !hasMore) return;
+    
+    loadingRef.current = true;
+    setLoading(true);
+    
+    try {
+      const token = localStorage.getItem("token");
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`/api/getAllChronicles?page=${page + 1}&limit=20`, {
+        headers,
+      });
+      
+      if (!res.ok) throw new Error("Failed to fetch next page");
+      
+      const result = await res.json();
+      const newChronicles: ChronicleWithUser[] = result.data ?? [];
+      
+      if (newChronicles.length > 0) {
+        setChronicles((prev) => [...prev, ...newChronicles]);
+        setPage((prev) => prev + 1);
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      loadingRef.current = false;
+    }
+  }, [page, hasMore]); // Include dependencies
+
+  // FIX 1: Copy itemRefs.current to a variable inside the effect
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -47,65 +82,42 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
       }
     );
 
-    itemRefs.current.forEach((el) => {
+    // Copy ref to local variable
+    const currentRefs = itemRefs.current;
+
+    currentRefs.forEach((el) => {
       if (el) observer.observe(el);
     });
 
     return () => {
-      itemRefs.current.forEach((el) => {
+      // Use the copied variable in cleanup
+      currentRefs.forEach((el) => {
         if (el) observer.unobserve(el);
       });
     };
-  }, [chronicles.length]); // Re-observe when chronicles change
+  }, [chronicles.length]);
 
+  // FIX 2: Include all dependencies
   useEffect(() => {
     if (visibleIndex >= chronicles.length - 2 && !loading && !loadingRef.current && hasMore) {
       loadNextPage();
     }
-  }, [visibleIndex, chronicles.length]);
+  }, [visibleIndex, chronicles.length, loading, hasMore, loadNextPage]);
 
-  const loadNextPage = async () => {
-    if (loadingRef.current) return;
-    
-    loadingRef.current = true;
-    setLoading(true);
-    
-    try {
-      const token = localStorage.getItem("token");
-      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch(`/api/getAllChronicles?page=${page + 1}&limit=20`, {
-        headers,
-      });
-      if (!res.ok) throw new Error("Failed to fetch next page");
-
-      const result = await res.json();
-      const newChronicles: ChronicleWithUser[] = result.data ?? [];
-
-      if (newChronicles.length > 0) {
-        setChronicles((prev) => [...prev, ...newChronicles]);
-        setPage((prev) => prev + 1);
-      } else {
-        setHasMore(false);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-      loadingRef.current = false;
-    }
-  };
   return (
     <>
-      {initialChronicles  && initialChronicles .length > 0 ? (
+      {initialChronicles && initialChronicles.length > 0 ? (
         <div className={Styles.reel_container}>
           {chronicles.map((item, index) => (
-           <article
-          key={item._id}
-          ref={(el) => { itemRefs.current[index] = el; }}
-          data-index={index}
-          className={Styles.reel_item}
-        >
-              <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
+            <article
+              key={item._id}
+              ref={(el) => {
+                itemRefs.current[index] = el;
+              }}
+              data-index={index}
+              className={Styles.reel_item}
+            >
+              <div className="relative w-full h-[96vh] md:h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
                 <div className="absolute w-full bg-gradient-to-b from-black/80 to-transparent left-0 top-0 flex items-center justify-between px-4 py-3 z-50">
                   <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#980000]">
@@ -116,14 +128,11 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
                         className="object-cover bg-[#000]"
                       />
                     </div>
-
-                    {/* Name and username */}
                     <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
+                      <Link href={`/dashboard?user=${item?.user?.username}`} className="flex items-center gap-2">
                         <span className="text-white font-semibold text-sm">
                           {item?.user?.firstname} {item?.user?.lastname}
                         </span>
-                        {/* Verified badge */}
                         <svg
                           className="w-4 h-4 text-blue-500"
                           fill="currentColor"
@@ -131,25 +140,22 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
                         >
                           <path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                         </svg>
-                      </div>
+                      </Link>
                       <span className="text-gray-300 text-xs">
                         @{item?.user?.username}
                       </span>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-4">
                     <span className="text-gray-300 text-xs hidden sm:block">
                       {getTimeAgo(item.createdAt)}
                     </span>
-
                     <div className="text-white hover:text-gray-300 transition-colors p-2">
                       <ReportAProblem Pid={item._id} />
                     </div>
                   </div>
                 </div>
 
-                {/* Story Content */}
                 <Link
                   href={`/chronicles/${item._id}`}
                   className="max-w-[400px] w-full text-center px-4"
@@ -175,18 +181,24 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
 
                 <div className="absolute right-3 bottom-16 flex flex-col items-center gap-1 text-white">
                   <div>
-                    <Likes Pid={item._id || ""} userLikesData={item.UserLikes || []} />
-                  </div>
-                  <div>
-                    {item.comments && <Comments
+                    <Likes
                       Pid={item._id || ""}
-                      userCommentsData={item.UserComments || []}
-                    />} 
-                    
+                      userLikesData={item.UserLikes || []}
+                    />
                   </div>
                   <div>
-                    <ShareComp Pid={item._id || ""} Title={item.yourStoryTitle || ""} />
-
+                    {item.comments && (
+                      <Comments
+                        Pid={item._id || ""}
+                        userCommentsData={item.UserComments || []}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <ShareComp
+                      Pid={item._id || ""}
+                      Title={item.yourStoryTitle || ""}
+                    />
                   </div>
                 </div>
               </div>
@@ -194,7 +206,6 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
           ))}
           {loading && <p>Loading more...</p>}
         </div>
-        
       ) : (
         <section className="h-screen flex items-center justify-center flex-col">
           <p className="text-center text-gray-400 p-8">
@@ -207,7 +218,6 @@ export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
           </div>
         </section>
       )}
-
     </>
   );
 }

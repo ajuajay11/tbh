@@ -8,8 +8,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
-  
-  const res = await fetch(`${getBaseUrl()}/api/getChroniclesByID`, {
+  const urlParams = new URLSearchParams(window.location.search);
+  console.log(urlParams);
+ return null;
+  const res = await fetch(`${getBaseUrl()}/api/getChroniclesByID?username=${user}`, {
     cache: "no-store",
     headers,
   });
@@ -25,9 +27,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const userResult = await userRes.json();
   const result = await res.json();
   
-  const chronicles: Chronicle[] = result.allChronicles ?? [];
+  const chronicles: Chronicle[] = result.data ?? [];
   const userData: User = userResult.getUser ?? {};
-  console.log(userData,'userData');
+  console.log(result,'userData');
   
   return (
     <UserProvider chronicles={chronicles} userData={userData}>

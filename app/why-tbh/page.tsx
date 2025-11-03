@@ -1,8 +1,15 @@
-"use client";
+ 
+
+import Link from "next/link";
+import { UndoDot } from 'lucide-react';
 
 export default function WhyTbh() {
   return (
-    <section className="max-w-3xl mx-auto px-6 py-12 text-center text-gray-200">
+    <>
+    <Link className="p-10 flex items-center" href="/">
+      <UndoDot />&nbsp;back
+    </Link>
+    <section className="max-w-3xl mx-auto px-6 pb-12 text-center text-gray-200">
       <h1 className="text-3xl font-bold mb-6 text-white">Why TBH?</h1>
 
       <p className="text-lg leading-relaxed mb-4">
@@ -51,5 +58,6 @@ export default function WhyTbh() {
         powerful thing you ever do.
       </p>
     </section>
+    </>
   );
 }

@@ -34,6 +34,7 @@ function Login() {
         Cookies.set('isAuthenticated', 'true', { expires: 12 });
         Cookies.set('userId', response.data.user.id, { expires: 12 });
         Cookies.set('avatar', response.data.user.avatar, { expires: 12 });
+        Cookies.set('username', response.data.user.username, { expires: 12 });
         const successMsg = response?.data?.message;
         setSuccess(successMsg)
         setTimeout(() => {

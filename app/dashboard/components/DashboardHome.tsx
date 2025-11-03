@@ -1,33 +1,42 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ImageCom from "../../components/ImageCom";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "../components/useContext";
-import {truncatedDesc} from "@/utils/truncatedText"
+import { truncatedDesc } from "@/utils/truncatedText";
+
 function DashboardHome() {
   const { chronicles, userData } = useUser();
   const [isMounted, setIsMounted] = useState(false);
   const [profileSrc, setProfileSrc] = useState("/butterfly1.png");
-
-  useEffect(() => {
+  const searchParams = useSearchParams();
+ useEffect(() => {
     setIsMounted(true);
     const profile = Cookies.get("avatar");
+ 
     if (profile) {
       try {
+        // Ensure the avatar is a valid URL or file path
         new URL(profile);
         setProfileSrc(profile);
       } catch {
-        setProfileSrc("/butterfly1.png");
+        // If not a full URL, treat as a local file (e.g., /uploads/profile.png)
+        if (profile.startsWith("/")) {
+          setProfileSrc(profile);
+        } else {
+          setProfileSrc("/butterfly1.png");
+        }
       }
     }
-  }, []);
+  }, [searchParams]);
 
-  if (!isMounted) {
-    // Avoid SSR/CSR mismatch by rendering nothing until hydrated
-    return null;
-  }
+  if (!isMounted) return null;
+
+  const user = searchParams.get("user");
+  const userName = Cookies.get("username");
 
   return (
     <section className="max-w-4xl mx-auto">
@@ -48,10 +57,14 @@ function DashboardHome() {
               <h1 className="font_three ">
                 {userData?.username || "to Be Honest"}
               </h1>
-              <Link href="/dashboard/my-profile" className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold hover:bg-blue-600"
-              >
-                edit
-              </Link>
+              {user === userName && (
+                <Link
+                  href="/dashboard/my-profile"
+                  className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold hover:bg-blue-600"
+                >
+                  edit
+                </Link>
+              )}
             </div>
 
             <div className="flex gap-8 mb-2">
@@ -80,7 +93,7 @@ function DashboardHome() {
                 key={item._id}
                 className="aspect-square relative group cursor-pointer overflow-hidden"
               >
-                <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black-900 flex items-center justify-center p-4">
+                <div className="w-full h-full bg-zinc-950 flex items-center justify-center p-4">
                   <p className="capitalize text-center">
                     {truncatedDesc(item.yourStoryTitle, 20)}
                   </p>

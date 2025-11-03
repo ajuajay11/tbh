@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
           firstname: user.email,
           lastname: user.lastname,
           avatar: user.profilePicture,
+          username: user.username,
           email: user.email,
           gender: user.gender,
           age: user.age,

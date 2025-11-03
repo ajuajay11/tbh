@@ -14,7 +14,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000;
+    background-color: #fffff0; /* dark background like TikTok */
+
   color: #fff;
 }
 
@@ -32,6 +33,9 @@
 @media (max-width: 767px) {
   .reel_item > div {
     width: 100%;
+  }
+  .reel_item {
+    align-items: start;
   }
 }
 
