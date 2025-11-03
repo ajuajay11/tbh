@@ -1,0 +1,19 @@
+.otpBox{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    width: 100%;
+    z-index: 9;
+    height: 100vh;
+    transition: 1s;
+}
+
+.glassCard{
+    width: 100%; /* w-full */
+  padding: 2rem; /* p-8 */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+   
+  border: 1px solid rgba(255, 255, 255, 0.2); /* border + border-white/20 */
+  border-radius: 0.75rem; 
+}

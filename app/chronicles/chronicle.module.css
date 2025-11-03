@@ -1,0 +1,53 @@
+.reel_container {
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  background-color: #000; /* dark background like TikTok */
+}
+
+.reel_item {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    background-color: #fffff0; /* dark background like TikTok */
+
+  color: #fff;
+}
+
+/* Center content box (desktop narrower like reels) */
+@media (min-width: 768px) {
+  .reel_item > div {
+    max-width: 420px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+/* Full width on mobile */
+@media (max-width: 767px) {
+  .reel_item > div {
+    width: 100%;
+  }
+  .reel_item {
+    align-items: start;
+  }
+}
+
+/* Hide scrollbar */
+.reel_container::-webkit-scrollbar {
+  display: none;
+}
+.reel_container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.comments{
+ position: absolute;
+}

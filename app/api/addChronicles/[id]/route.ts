@@ -3,7 +3,8 @@ import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
- 
+import sanitizeHtml from "sanitize-html";
+
 interface RequestBody {
   yourStoryTitle: string;
   chroniclesOfYou: string;
@@ -11,14 +12,45 @@ interface RequestBody {
   emailAllowed: boolean;
   comments: boolean;
 }
+// Inside your PUT handler, after parsing body:
 
-export async function PUT( request: NextRequest, { params }: { params: Promise<{ id: string }> } ) {
-
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectToDatabase();
     const { id } = await params;
     const body: RequestBody = await request.json();
-    const { yourStoryTitle, chroniclesOfYou, emailAllowed, replyAllowed, comments} = body;
+    const {
+      yourStoryTitle,
+      chroniclesOfYou,
+      emailAllowed,
+      replyAllowed,
+      comments,
+    } = body;
+    const safeTitle = sanitizeHtml(yourStoryTitle, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+    const safeChronicles = sanitizeHtml(chroniclesOfYou, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+   if (!safeTitle.trim()) {
+  return NextResponse.json(
+    { message: "Title cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
+}
+
+
+if (!safeChronicles.trim()) {
+  return NextResponse.json(
+    { message: "Story content cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
+}
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ message: "No token found" }, { status: 401 });
@@ -26,17 +58,14 @@ export async function PUT( request: NextRequest, { params }: { params: Promise<{
     const token = authHeader.slice(7); // Remove 'Bearer ' prefix
     console.log(token, "token");
     const userData = await verifyToken(token);
-    if(!userData){
-      return NextResponse.json({message:"please login"},{status:401})
+    if (!userData) {
+      return NextResponse.json({ message: "please login" }, { status: 401 });
     }
     const getUser = await User.findById(userData?.userId);
     const getID = getUser?._id?.toString();
-     const existingStory = await UserVibesModel.findById(id);
+    const existingStory = await UserVibesModel.findById(id);
     if (!existingStory) {
-      return NextResponse.json(
-        { message: "Story not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Story not found" }, { status: 404 });
     }
     if (existingStory.user?.toString() !== getID) {
       return NextResponse.json(
@@ -46,7 +75,13 @@ export async function PUT( request: NextRequest, { params }: { params: Promise<{
     }
     const updatedStory = await UserVibesModel.findByIdAndUpdate(
       id,
-      {yourStoryTitle, chroniclesOfYou, emailAllowed, replyAllowed, comments},
+      {
+        yourStoryTitle: safeTitle,
+        chroniclesOfYou: safeChronicles,
+        emailAllowed,
+        replyAllowed,
+        comments,
+      },
       { new: true }
     );
 
@@ -54,9 +89,8 @@ export async function PUT( request: NextRequest, { params }: { params: Promise<{
       { message: "Story updated successfully", updatedStory },
       { status: 200 }
     );
-    
   } catch (error) {
-     console.error(error);
+    console.error(error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

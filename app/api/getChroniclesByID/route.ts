@@ -1,42 +1,87 @@
+ 
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
-import { verifyToken } from "@/utils/auth"; // Adjust path as needed
+import UserModel from "@/models/users"; // Import User model
+import { verifyToken } from "@/utils/auth";
 
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase();
+    // 1. Extract parameters
+    const searchParams = request.nextUrl.searchParams;
+    const username = searchParams.get("username");
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
-    console.log(token,'token');
+
+    // 2. Validate token first (authentication)
     if (!token) {
       return NextResponse.json(
-        {message: "Please login"}, 
-        { status: 400 } 
-    );
-    }
-    const userData = await verifyToken(token);
-    if (!userData) {
-      return NextResponse.json(
-        { message: "Invalid token", }, { status: 401 }
+        { message: "Authentication required. Please login." },
+        { status: 401 }
       );
     }
 
-    const allChronicles = await UserVibesModel.find({
-      user: userData.userId, // ✅ Correct field
-    });
+    const userData = await verifyToken(token);
+    if (!userData) {
+      return NextResponse.json(
+        { message: "Invalid or expired token." },
+        { status: 401 }
+      );
+    }
+
+    // 3. Validate required parameters
+    if (!username) {
+      return NextResponse.json(
+        { message: "Username is required." },
+        { status: 400 }
+      );
+    }
+
+    // 4. Connect to database
+    await connectToDatabase();
+
+    // 5. Find user by username first
+    const user = await UserModel.findOne({ username }).lean();
+    
+    if (!user) {
+      return NextResponse.json(
+        { message: "User not found." },
+        { status: 404 }
+      );
+    }
+
+    // 6. Fetch chronicles for this user
+    const allChronicles = await UserVibesModel.find({ user: user._id })
+      .populate("user", "firstname lastname username email avatar") // Populate user details
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .lean();
+
+    // 7. Return success response
     return NextResponse.json(
       {
-        message: "Welcome back!",
-        allChronicles,
+        success: true,
+        message: "Chronicles fetched successfully.",
+        data: allChronicles,
+        count: allChronicles.length,
+        user: {
+          id: user._id,
+          username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
+        },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("GET /api/user-chronicles Error:", error);
+    
     return NextResponse.json(
       {
-        message: "Internal server error",
+        success: false,
+        message: "Failed to fetch chronicles.",
+        error: process.env.NODE_ENV === "development" 
+          ? (error as Error).message 
+          : undefined,
       },
       { status: 500 }
     );

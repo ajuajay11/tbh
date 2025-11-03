@@ -4,6 +4,8 @@ import UserVibesModel from "@/models/chroniclesSchema";
 import connectToDatabase from "@/lib/db";
 import { verifyToken } from "@/utils/auth"; // Adjust path as needed
 import User from "@/models/users";
+import { Filter } from "bad-words";
+import sanitizeHtml from "sanitize-html";
 
 interface RequestBody {
   yourStoryTitle: string;
@@ -11,12 +13,14 @@ interface RequestBody {
   replyAllowed: boolean;
   emailAllowed: boolean;
   comments: boolean;
-  incidentFrom:string
+  incidentFrom: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
+    const filter = new Filter();
+    console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
 
     const body: RequestBody = await request.json();
     const {
@@ -27,7 +31,27 @@ export async function POST(request: NextRequest) {
       comments,
       incidentFrom,
     } = body;
+    const safeTitle = sanitizeHtml(yourStoryTitle, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+    const safeChronicles = sanitizeHtml(chroniclesOfYou, {
+      allowedTags: [],
+      allowedAttributes: {},
+    });
+   if (!safeTitle.trim()) {
+  return NextResponse.json(
+    { message: "Title cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
+}
 
+  if (!safeChronicles.trim()) {
+  return NextResponse.json(
+    { message: "Story content cannot be empty or contain only HTML tags" },
+    { status: 400 }
+  );
+}
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ message: "No token found" }, { status: 401 });
@@ -45,13 +69,14 @@ export async function POST(request: NextRequest) {
     }
 
     const newdarktruth = new UserVibesModel({
-      yourStoryTitle,
-      chroniclesOfYou,
+      yourStoryTitle: filter.clean(safeTitle),
+      chroniclesOfYou: filter.clean(safeChronicles),
       replyAllowed,
       emailAllowed,
       comments,
       incidentFrom,
       user: userDetail._id,
+      userName:userDetail.username
     });
 
     await newdarktruth.save();
@@ -61,8 +86,8 @@ export async function POST(request: NextRequest) {
         message: "Congragulation you done it",
         story: {
           _id: newdarktruth._id,
-          yourStoryTitle,
-          chroniclesOfYou,
+          yourStoryTitle: newdarktruth.yourStoryTitle,
+          chroniclesOfYou: newdarktruth.chroniclesOfYou,
           replyAllowed,
           emailAllowed,
           comments,
@@ -70,6 +95,7 @@ export async function POST(request: NextRequest) {
           createdAt: newdarktruth.createdAt,
           user: {
             userId: userDetail._id,
+             userName:userDetail.username,
             email: userDetail.email,
           },
         },
@@ -78,35 +104,6 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("POST error:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
-  }
-}
-
-
-export async function GET(request: NextRequest) {
-  try {
-    await connectToDatabase();
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json({ message: "No token found" }, { status: 401 });
-    }
-    const token = authHeader.slice(7); // Remove 'Bearer ' prefix
-    console.log(token, "token");
-    const userData = await verifyToken(token);
-    if(!userData){
-      return NextResponse.json({message:"please login"},{status:401})
-    }
-    const getUser = await User.findById(userData?.userId);
-    const getID = getUser?._id?.toString();
-    console.log(getID, "getID");
-    const userStories = await UserVibesModel.find({ user: getID }).populate("user","firstname lastname email role");    
-    console.log("User Story Title:", userStories);
-    return NextResponse.json(
-      { message: "Congragulation you done it",userStories },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.log(error, "error");
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

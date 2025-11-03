@@ -1,53 +1,71 @@
-'use client'
-import { HeartHandshake, Heart } from 'lucide-react';
-import Cookies from 'js-cookie';
-import { UserLike } from "../../types/chronicle";
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-interface CommentsProps {
-  userLikesData: UserLike[]; // Array of comments
-  pid:string
- }
-export default function Comments({pid,   userLikesData }: CommentsProps) {
-  const [hasLiked, setHasLiked] = useState(false)
-  const UserId = Cookies.get('userId');
-  const token = Cookies.get('token');
-  const nextLike = !hasLiked
+"use client";
+import { Heart } from "lucide-react";
+import Cookies from "js-cookie";
+import { getBaseUrl } from "@/lib/getBaseUrl";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { UserLike } from "@/app/types/chronicle";
+import { usePathname } from "next/navigation"; // ✅ Import this
+
+interface LikesProps {
+  userLikesData: UserLike[] | string[];  // Array of Pid strings
+  Pid: string;
+}
+export default function Likes({ Pid, userLikesData }: LikesProps) {
+    const pathname = usePathname(); // ✅ Get the current route
+
+  const UserId = Cookies.get("userId");
+  const token = Cookies.get("token");
+  const [hasLiked, setHasLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
   useEffect(() => {
-    setHasLiked(userLikesData.some(user => user.user.userId == UserId));
-  }, [userLikesData, UserId]);
- 
-  const likedFn = async() => {
-     try {
-      const res = await axios.post(`/api/addChronicles/${pid}/isLiked`, {
-        isLiked: nextLike,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+    if (!UserId || !userLikesData) return;
+
+    const filterLike = userLikesData.some((like) => like === UserId);
+
+    setLikeCount(userLikesData.length);
+    setHasLiked(filterLike);
+  }, [UserId, userLikesData]);
+
+
+  const toggleLike = async () => {
+    const newLikedState = !hasLiked;
+    setHasLiked(newLikedState);
+    try {
+      const res = await axios.post(
+        `${getBaseUrl()}/api/addChronicles/${Pid}/isLiked`,
+        {
+          isLiked: newLikedState,
         },
-      });
-      console.log(res,'res');
-      
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setLikeCount(
+        res?.data.likeCount ?? (newLikedState ? likeCount + 1 : likeCount - 1)
+      );
     } catch (err) {
       console.error("API error, reverting like", err);
+      setHasLiked(!newLikedState);
     }
-  }
+  };
+  const layoutClass =
+    pathname === "/chronicles"
+      ? "flex-col"
+      : "flex";
   return (
-
     <>
-      <div className="comments mt-1 bg-sky-300 p-4">
-        <button style={{cursor:'pointer'}} onClick={likedFn}>{hasLiked ? (
-          <HeartHandshake />
-        ) : (
-          <Heart />
-        )}
+      <div className={`p-3 rounded-full shadow-lg flex flex-col items-center gap-0 ${hasLiked ? "text-red-500" : "text-[#a1a1a1]"}`}>
+        <button onClick={toggleLike} className={`${layoutClass} m-0 gap-1`} >
+          {hasLiked ? <Heart fill="red" /> : <Heart />}
+          <span className="text-[#a1a1a1] m-0 ">{likeCount === 0 ? null : likeCount}</span>
         </button>
-
-        {userLikesData.length} Likes
       </div>
     </>
   );
 }
-
-

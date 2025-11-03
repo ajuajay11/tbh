@@ -1,19 +1,39 @@
+// app/dashboard/layout.tsx
+import { getBaseUrl } from "@/lib/getBaseUrl";
+import { cookies } from "next/headers";
+import { Chronicle, User } from "../types/chronicle";
+import { UserProvider } from "./components/useContext";
 
- import ImageVariation from "../components/authentication/ImageVariation";
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
- 
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+  const urlParams = new URLSearchParams(window.location.search);
+  console.log(urlParams);
+ return null;
+  const res = await fetch(`${getBaseUrl()}/api/getChroniclesByID?username=${user}`, {
+    cache: "no-store",
+    headers,
+  });
+  const userRes = await fetch(`${getBaseUrl()}/api/user`, {
+    cache: "no-store",
+    headers,
+  });
+  
+  if (!res.ok || !userRes.ok) {
+    throw new Error("Failed to fetch chronicles");
+  }
+  
+  const userResult = await userRes.json();
+  const result = await res.json();
+  
+  const chronicles: Chronicle[] = result.data ?? [];
+  const userData: User = userResult.getUser ?? {};
+  console.log(result,'userData');
+  
   return (
-    <div className="h-screen w-full flex items-center justify-center overflow-y-auto scrollYTBH">
-      <div className="flex h-full w-full max-w-[1600px]">
-        <div className="w-1/3 hidden lg:block">
-        <ImageVariation />
-        </div>
-        <div className="w-3/3 lg:w-2/3 h-full px-2 lg:px-0">
-          <main className="flex mt-20 justify-start h-full">
-            {children}
-          </main>
-        </div>
-      </div>
-    </div>
-  )
+    <UserProvider chronicles={chronicles} userData={userData}>
+      {children}
+    </UserProvider>
+  );
 }

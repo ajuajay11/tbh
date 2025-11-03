@@ -5,11 +5,8 @@ import toast from 'react-hot-toast';
 
 export default function SuccessMsg({ successMsg }: { successMsg?: string | null }) {
   useEffect(() => {
-    console.log('mda myre');
-    
     if (successMsg) {
-    console.log('mda myre');
-      
+ 
       toast.success(successMsg);
     }
   }, [successMsg]);

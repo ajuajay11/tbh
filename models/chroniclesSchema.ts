@@ -10,17 +10,10 @@ export interface IUserComment {
   createdAt?: Date;
 }
 
-export interface IUserLikes {
-  user: {
-    userId: string;
-    name?: string;
-  };
-  like: boolean;
-  createdAt?: Date;
-}
+ 
 
 export interface IReportEntry {
-   user: {
+  user: {
     userId: string;
     name?: string;
   };
@@ -34,7 +27,7 @@ export interface IUserStory extends Document {
   replyAllowed: boolean;
   incidentFrom: string;
   UserComments: IUserComment[];
-  UserLikes: IUserLikes[];
+  UserLikes: string[]; //
   comments: boolean;
   reportedBy: IReportEntry[];
   emailAllowed: boolean;
@@ -64,17 +57,9 @@ const DarkTruth: Schema<IUserStory> = new Schema(
       ],
       default: [],
     },
+
     UserLikes: {
-      type: [
-        {
-          user: {
-            userId: { type: String },
-            name: { type: String },
-          },
-          like: { type: Boolean, default: false },
-          createdAt: { type: Date, default: Date.now },
-        },
-      ],
+      type: [String],
       default: [],
     },
     likeCount: { type: Number, default: 0 },
@@ -83,7 +68,7 @@ const DarkTruth: Schema<IUserStory> = new Schema(
     createdAt: { type: Date, default: Date.now },
     status: { type: Number, default: 1 },
     reportedBy: {
-       type: [
+      type: [
         {
           user: {
             userId: { type: String },
@@ -99,6 +84,8 @@ const DarkTruth: Schema<IUserStory> = new Schema(
   { timestamps: true }
 );
 
-const UserVibesModel = mongoose.models?.DarkTruth || mongoose.model<IUserStory>("DarkTruth", DarkTruth);
+const UserVibesModel =
+  mongoose.models?.DarkTruth ||
+  mongoose.model<IUserStory>("DarkTruth", DarkTruth);
 
 export default UserVibesModel;

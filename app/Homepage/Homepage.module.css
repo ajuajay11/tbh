@@ -1,0 +1,43 @@
+.wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0; /* fill parent */
+  background-size: auto;
+  background-position: left;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1s ease-in-out; /* fade */
+  
+ }
+@media screen and (max-width: 767px) {
+  .bg {
+     left: -50px;
+  }
+ }
+.visible {
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.hidden {
+  opacity: 0;
+  z-index: 0;
+}
+.content {
+  position: relative;
+  z-index: 9; 
+}
+
+.gradient_text {
+  display: block;
+  background: linear-gradient(to right, #dc2626, #9333ea); /* red-600 → purple-600 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* fallback */
+  color: transparent;
+  font-weight: 900;
+}

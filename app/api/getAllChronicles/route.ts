@@ -5,12 +5,12 @@ import { verifyToken } from "@/utils/auth";
 import { FilterQuery } from "mongoose";
 // import BadWordsNext from "bad-words-next";
 // import en from "bad-words-next/lib/en";
-import "@/models/users"; // ✅ Register the Users model
+import "@/models/users";
 
 export async function GET(request: NextRequest) {
   // const badwords = new BadWordsNext({ data: en });
   // console.log(badwords);
-   const { searchParams } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const country = searchParams.get("country");
   const id = searchParams.get("id");
   const search = searchParams.get("search");
@@ -36,7 +36,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
-      baseQuery.$or = [{ yourStoryTitle: { $regex: search, $options: "i" } }];
+      baseQuery.$or = [
+        { yourStoryTitle: { $regex: search, $options: "i" } },
+        // Filter by username
+        { "user.username": { $regex: search, $options: "i" } },
+      ];
     }
     if (id) {
       baseQuery._id = id;
@@ -49,9 +53,10 @@ export async function GET(request: NextRequest) {
 
     if (!token) {
       const limitedChronicles = await UserVibesModel.find(baseQuery)
-      .populate("user", "username firstname lastname" )
+        .populate("user", "username firstname lastname")
         .sort(sortObj)
         .limit(6);
+      console.log(limitedChronicles, "limitedChronicles");
 
       const total = await UserVibesModel.countDocuments(baseQuery);
 
@@ -61,8 +66,8 @@ export async function GET(request: NextRequest) {
           limitedChronicles,
           pagination: {
             total,
-            page: 1, 
-            limit: 6,  
+            page: 1,
+            limit: 6,
             totalPages: Math.ceil(total / 6), // Total pages if they had full access
           },
         },
@@ -81,7 +86,6 @@ export async function GET(request: NextRequest) {
       reportedBy: { $ne: userData.id }, // ✅ exclude reported stories
     };
 
-    // Count total documents matching query for pagination meta
     const total = await UserVibesModel.countDocuments(query);
 
     const filtered = await UserVibesModel.find(query)
@@ -112,5 +116,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
- 
