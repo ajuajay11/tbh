@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
       comments,
       incidentFrom,
       user: userDetail._id,
+      userName:userDetail.username
     });
 
     await newdarktruth.save();
@@ -94,6 +95,7 @@ export async function POST(request: NextRequest) {
           createdAt: newdarktruth.createdAt,
           user: {
             userId: userDetail._id,
+             userName:userDetail.username,
             email: userDetail.email,
           },
         },

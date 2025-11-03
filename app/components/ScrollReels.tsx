@@ -1,15 +1,17 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
 import { Chronicle, User, UserLike, UserComment } from "@/app/types/chronicle";
-import Likes from "@/app/chronicles/components/Likes";
 import Styles from "@/app/chronicles/chronicle.module.css";
-import { truncatedDesc } from "@/utils/truncatedText";
- import Link from "next/link";
-import Comments from "@/app/chronicles/components/Comments";
 import Image from "next/image";
+import Link from "next/link";
+import Likes from "@/app/chronicles/components/Likes";
+import Comments from "@/app/chronicles/components/Comments";
 import ReportAProblem from "@/app/chronicles/components/ReportAProblem";
+import ShareComp from "../chronicles/components/ShareComp";
 import { getTimeAgo } from "@/utils/timeAgo";
 import img1 from "@/public/tbh.png";
-import ShareComp from "../chronicles/components/ShareComp";
+import { truncatedDesc } from "@/utils/truncatedText";
+
 interface ChronicleWithUser extends Chronicle {
   user: User;
   createdAt: string;
@@ -17,22 +19,95 @@ interface ChronicleWithUser extends Chronicle {
   UserComments?: UserComment[];
 }
 interface ScrollReelsProps {
-  chronicles: ChronicleWithUser[];
+  initialChronicles : ChronicleWithUser[];
 }
 
-export default function ScrollReels({ chronicles }: ScrollReelsProps) {
+export default function ScrollReels({ initialChronicles  }: ScrollReelsProps) {
+ const [chronicles, setChronicles] = useState(initialChronicles);
+  const [visibleIndex, setVisibleIndex] = useState(0);
+  const [page, setPage] = useState(1);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const loadingRef = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.getAttribute("data-index"));
+            setVisibleIndex(index);
+          }
+        });
+      },
+      {
+        root: null,
+        threshold: 0.6,
+      }
+    );
+
+    itemRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      itemRefs.current.forEach((el) => {
+        if (el) observer.unobserve(el);
+      });
+    };
+  }, [chronicles.length]); // Re-observe when chronicles change
+
+  useEffect(() => {
+    if (visibleIndex >= chronicles.length - 2 && !loading && !loadingRef.current && hasMore) {
+      loadNextPage();
+    }
+  }, [visibleIndex, chronicles.length]);
+
+  const loadNextPage = async () => {
+    if (loadingRef.current) return;
+    
+    loadingRef.current = true;
+    setLoading(true);
+    
+    try {
+      const token = localStorage.getItem("token");
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`/api/getAllChronicles?page=${page + 1}&limit=20`, {
+        headers,
+      });
+      if (!res.ok) throw new Error("Failed to fetch next page");
+
+      const result = await res.json();
+      const newChronicles: ChronicleWithUser[] = result.data ?? [];
+
+      if (newChronicles.length > 0) {
+        setChronicles((prev) => [...prev, ...newChronicles]);
+        setPage((prev) => prev + 1);
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      loadingRef.current = false;
+    }
+  };
   return (
     <>
-      {chronicles && chronicles.length > 0 ? (
+      {initialChronicles  && initialChronicles .length > 0 ? (
         <div className={Styles.reel_container}>
-          {chronicles.map((item) => (
-            <article key={item._id} className={Styles.reel_item}>
+          {chronicles.map((item, index) => (
+           <article
+          key={item._id}
+          ref={(el) => { itemRefs.current[index] = el; }}
+          data-index={index}
+          className={Styles.reel_item}
+        >
               <div className="relative w-full h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
-                {/* Top Header Bar */}
                 <div className="absolute w-full bg-gradient-to-b from-black/80 to-transparent left-0 top-0 flex items-center justify-between px-4 py-3 z-50">
-                  {/* Left side - User info */}
                   <div className="flex items-center gap-3">
-                    {/* Profile Image */}
                     <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#980000]">
                       <Image
                         src={img1}
@@ -100,26 +175,26 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
 
                 <div className="absolute right-3 bottom-16 flex flex-col items-center gap-1 text-white">
                   <div>
-                    <Likes
-                      Pid={item._id || ""}
-                      userLikesData={item.UserLikes || []}
-                    />
+                    <Likes Pid={item._id || ""} userLikesData={item.UserLikes || []} />
                   </div>
                   <div>
-                    <Comments
+                    {item.comments && <Comments
                       Pid={item._id || ""}
                       userCommentsData={item.UserComments || []}
-                    />
+                    />} 
+                    
                   </div>
                   <div>
-                    <ShareComp Pid={item._id || ""} Title={item.yourStoryTitle || ""}/>
-                     
+                    <ShareComp Pid={item._id || ""} Title={item.yourStoryTitle || ""} />
+
                   </div>
                 </div>
               </div>
             </article>
           ))}
+          {loading && <p>Loading more...</p>}
         </div>
+        
       ) : (
         <section className="h-screen flex items-center justify-center flex-col">
           <p className="text-center text-gray-400 p-8">
@@ -132,6 +207,7 @@ export default function ScrollReels({ chronicles }: ScrollReelsProps) {
           </div>
         </section>
       )}
+
     </>
   );
 }

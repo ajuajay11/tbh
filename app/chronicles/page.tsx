@@ -18,7 +18,7 @@ export default async function Chronicles() {
   const headers: HeadersInit = token
     ? { Authorization: `Bearer ${token}` }
     : {};
-  const res = await fetch(`${getBaseUrl()}/api/getAllChronicles`, {
+  const res = await fetch(`${getBaseUrl()}/api/getAllChronicles?page=1&limit=20?search=neymarjr1645`, {
     cache: "no-store",
     headers,
   });
@@ -33,7 +33,7 @@ export default async function Chronicles() {
     
   return (
     <div className="p-0">
-     <ScrollReels chronicles={chronicles}/>
+     <ScrollReels initialChronicles ={chronicles}/>
     </div>
   );
 }

@@ -36,7 +36,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
-      baseQuery.$or = [{ yourStoryTitle: { $regex: search, $options: "i" } }];
+      baseQuery.$or = [
+        { yourStoryTitle: { $regex: search, $options: "i" } },
+        // Filter by username
+        { "user.username": { $regex: search, $options: "i" } },
+      ];
     }
     if (id) {
       baseQuery._id = id;
