@@ -60,7 +60,7 @@ export default function Likes({ Pid, userLikesData }: LikesProps) {
       : "flex";
   return (
     <>
-      <div className={`p-3 rounded-full shadow-lg flex flex-col items-center gap-0 ${hasLiked ? "text-red-500" : "text-[#a1a1a1]"}`}>
+      <div className={`p-3 bg-[#fffff0] rounded-full shadow-lg flex flex-col items-center gap-0 ${hasLiked ? "text-red-500" : "text-[#a1a1a1]"}`}>
         <button onClick={toggleLike} className={`${layoutClass} m-0 gap-1`} >
           {hasLiked ? <Heart fill="red" /> : <Heart />}
           <span className="text-[#a1a1a1] m-0 ">{likeCount === 0 ? null : likeCount}</span>

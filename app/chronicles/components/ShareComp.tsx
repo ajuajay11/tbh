@@ -25,7 +25,7 @@ export default function ShareComp({ Pid, Title }: ShareProps) {
   return (
     <button
       onClick={handleShare}
-      className="p-3 text-white rounded-full shadow-lg"
+      className="bg-[#fffff0] p-3 text-white rounded-full shadow-lg"
     >
       🔗
     </button>

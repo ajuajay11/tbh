@@ -75,7 +75,7 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
 
   return (
     <>
-      <button onClick={toggleComments} className={`p-3 text-[#a1a1a1] rounded-full shadow-lg items-center ${layoutClass} gap-1`}>
+      <button onClick={toggleComments} className={`p-3 bg-[#fffff0] text-[#a1a1a1] rounded-full shadow-lg items-center ${layoutClass} gap-1`}>
         <MessageCircle className="w-6 h-6" />
         <span className="text-[#a1a1a1] m-0">{allComments?.length || null}</span>
       </button>

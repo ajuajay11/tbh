@@ -129,7 +129,7 @@ export default function ScrollReels({ initialChronicles }: ScrollReelsProps) {
                       />
                     </div>
                     <div className="flex flex-col">
-                      <Link href={`/dashboard?user=${item?.user?.username}`} className="flex items-center gap-2">
+                      <Link href={`/user?user=${item?.user?.username}`} className="flex items-center gap-2">
                         <span className="text-white font-semibold text-sm">
                           {item?.user?.firstname} {item?.user?.lastname}
                         </span>
