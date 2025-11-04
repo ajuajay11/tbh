@@ -1,6 +1,6 @@
 'use client'
 import axios from "axios";
- import { useState, FormEvent, useRef, Dispatch, SetStateAction } from "react";
+ import { useState, FormEvent, useRef, Dispatch, SetStateAction, useEffect } from "react";
 import SuccessMsg from "../../../components/SuccessMsg";
 import ErrorMessage from "../../../components/ErrorMessage";
  import Styles from "../../auth.module.css";
@@ -20,6 +20,7 @@ export default function OtpBox(props: OtpBoxProps) {
     three: "",
     four: "",
   })
+  const [timer, setTimer] = useState(59);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key: string, index: number) => {
@@ -32,8 +33,19 @@ export default function OtpBox(props: OtpBoxProps) {
       inputsRef.current[index + 1]?.focus();
     }
   };
- 
+ useEffect(() => {
+    if (timer === 0) return;
+   const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timer]);
+
     const resendOtp = async () => {
+      setTimer(59);
      try {
       const response = await axios.post('/api/user/sendOtp', { email: props.email });
       console.log(response,'responseresponse');
@@ -63,8 +75,7 @@ export default function OtpBox(props: OtpBoxProps) {
       alert("Please enter a 4-digit OTP");
       return;
     }
-
-    try {
+     try {
       const response = await fetch("/api/user/verifyOtp", {
         method: "POST",
         headers: {
@@ -109,8 +120,12 @@ export default function OtpBox(props: OtpBoxProps) {
           <button className="tbh_button">Submit</button>
         </form>
          <div className="flex justify-between gap-20 pt-5">
-            <span>0:00</span>
-            <button onClick={resendOtp}>Resend</button>
+            <span className=" p-2 rounded-xl">{timer} s</span>
+            {timer === 0 ? (
+              <button onClick={resendOtp} className="text-white-600 underline">Resend OTP</button>
+            ) : (
+              <span className="text-gray-500">Resend OTP</span>
+            )}
           </div>
           <ErrorMessage message={error} />
       </div>
