@@ -90,9 +90,22 @@ body {
   }
   .authorandDashboardScroll{
   scroll-behavior: smooth;
-  min-height: 450px;
-  max-height: 650px;
+  
   overflow-y: auto;
+}
+}
+@media screen and (max-height: 700px) {
+  
+  .authorandDashboardScroll{
+ min-height: 450px;
+  max-height: 480px;
+}
+}
+@media screen and (min-height: 700px) {
+  
+  .authorandDashboardScroll{
+ min-height: 450px;
+  max-height: 650px;
 }
 }
 .mock-neomorphism:hover {
