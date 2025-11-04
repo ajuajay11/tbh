@@ -3,6 +3,8 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import "../app/globals.css";
 import AosInit from "./components/AosInit";
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 // import Image from "next/image";
 // import logo from "../public/logo.png"
 import { Toaster } from 'react-hot-toast';
@@ -59,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="w-full p-0 max-w-[1600px]" data-aos="fade-in">
                 <Toaster position="top-center" />
                 {children}
+                <SpeedInsights />
               </div>
             </main>
             <Footer />

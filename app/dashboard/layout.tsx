@@ -3,6 +3,7 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
 import { Chronicle, User } from "../types/chronicle";
 import { UserProvider } from "./components/useContext";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
@@ -32,6 +33,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <UserProvider chronicles={chronicles} userData={userData}>
       {children}
+      <SpeedInsights />
     </UserProvider>
   );
 }
