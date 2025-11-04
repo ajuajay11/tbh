@@ -6,13 +6,9 @@ import { cookies } from "next/headers";
 import { Chronicle, User } from "../types/chronicle";
 import { UserProvider } from "./components/useContext";
 
-export default async function UserPage({ 
-  searchParams 
-}: { 
-  searchParams: Promise<{ user?: string }>
-}) {
+export default async function UserPage({ searchParams }: { searchParams: Promise<{ u?: string }> }) {
   const params = await searchParams;
- const username = params.user;
+  const username = params.u;
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   
@@ -40,11 +36,11 @@ export default async function UserPage({
     throw new Error("Failed to fetch chronicles");
   }
   
-  const userResult = await userRes.json();
-  const result = await res.json();
+   const result = await res.json();
+  console.log(result,'use rpage');
   
   const chronicles: Chronicle[] = result.data ?? [];
-  const userData: User = userResult.getUser ?? {};
+  const userData: User = result.user ?? {};
   
   console.log(result, 'userData');
   

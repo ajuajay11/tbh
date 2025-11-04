@@ -115,29 +115,20 @@ export default function ScrollReels({ initialChronicles }: ScrollReelsProps) {
                 itemRefs.current[index] = el;
               }}
               data-index={index}
-              className={Styles.reel_item}
+              className={`bg-[#fffff0] lg:bg-[#000] ${Styles.reel_item}`}
             >
               <div className="relative w-full h-[96vh] md:h-full flex justify-center items-center bg-[#fffff0] text-[#2d2d2d]">
                 <div className="absolute w-full bg-gradient-to-b from-black/80 to-transparent left-0 top-0 flex items-center justify-between px-4 py-3 z-50">
                   <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#980000]">
-                      <Image
-                        src={img1}
-                        alt="profile"
-                        fill
-                        className="object-cover bg-[#000]"
-                      />
+                      <Image src={img1} alt="profile" fill className="object-cover bg-[#000]" />
                     </div>
                     <div className="flex flex-col">
-                      <Link href={`/user?user=${item?.user?.username}`} className="flex items-center gap-2">
+                      <Link href={`/author?u=${item?.user?.username}`} className="flex items-center gap-2">
                         <span className="text-white font-semibold text-sm">
                           {item?.user?.firstname} {item?.user?.lastname}
                         </span>
-                        <svg
-                          className="w-4 h-4 text-blue-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
+                        <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20" >
                           <path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                         </svg>
                       </Link>
@@ -156,10 +147,7 @@ export default function ScrollReels({ initialChronicles }: ScrollReelsProps) {
                   </div>
                 </div>
 
-                <Link
-                  href={`/chronicles/${item._id}`}
-                  className="max-w-[400px] w-full text-center px-4"
-                >
+                <Link href={`/chronicles/${item._id}`} className="max-w-[400px] w-full text-center px-4" >
                   <h2 className="font_two font-semibold mb-3">
                     {item.yourStoryTitle}
                   </h2>
