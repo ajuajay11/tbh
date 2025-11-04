@@ -3,14 +3,11 @@ import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
 import { verifyToken } from "@/utils/auth";
 import { FilterQuery } from "mongoose";
-// import BadWordsNext from "bad-words-next";
-// import en from "bad-words-next/lib/en";
+ 
 import "@/models/users";
 
 export async function GET(request: NextRequest) {
-  // const badwords = new BadWordsNext({ data: en });
-  // console.log(badwords);
-  const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(request.url);
   const country = searchParams.get("country");
   const id = searchParams.get("id");
   const search = searchParams.get("search");
@@ -83,7 +80,7 @@ export async function GET(request: NextRequest) {
     // For authenticated users: add the reportedBy filter and use full pagination
     const query: FilterQuery<typeof UserVibesModel> = {
       ...baseQuery,
-      reportedBy: { $ne: userData.id }, // ✅ exclude reported stories
+      "reportedBy.user.userId": { $ne: userData.userId },
     };
 
     const total = await UserVibesModel.countDocuments(query);

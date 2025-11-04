@@ -6,7 +6,11 @@ import NormalNode from "../components/NormalMode";
 import Cookies from "js-cookie";
 import { Chronicle } from "@/app/types/chronicle";
 
-export default function DiaryTabs({ params }: { params: Promise<{ id: string }> }) {
+export default function DiaryTabs({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const [tabIndex, setTabIndex] = useState(0);
   const [chronicleDiary, setChronicleDiary] = useState<Chronicle | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,25 +49,35 @@ export default function DiaryTabs({ params }: { params: Promise<{ id: string }> 
 
     fetchData();
   }, [params]);
-
-  console.log(tabIndex);
-
-  if (loading) return <div>Loading...</div>;
-  if (error || !chronicleDiary) return <div>Post not found</div>;
+ 
+  if (loading)
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <span className="animate-pulse text-gray-400 text-lg">loading...</span>
+      </div>
+    );
+  if (error || !chronicleDiary)
+    return (
+      <div className="w-full flex h-screen items-center justify-center">
+        Post not found
+      </div>
+    );
 
   return (
     <div className="max-w-2xl mx-auto mt-12">
-      <div className="flex gap-4 mb-4 justify-center fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-[#0a0a0a]/80 backdrop-blur-md rounded-full shadow-lg">
+      <div className="flex gap-4 mb-4 mt-2 justify-center fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-[#0a0a0a]/80 backdrop-blur-md rounded-full shadow-lg">
         <button
-          className={`px-4 py-2 rounded-xl font_two  ${tabIndex !== 0 ? "bg-black/60 text-white" : "bg-white/80 text-black"
-            }`}
+          className={`px-4 py-2 rounded-xl font_two  ${
+            tabIndex !== 0 ? "bg-black/60 text-white" : "bg-white/80 text-black"
+          }`}
           onClick={() => setTabIndex(0)}
         >
           Normal
         </button>
         <button
-          className={`px-4 py-2 rounded-xl font_two ${tabIndex !== 1 ? "bg-black/60 text-white" : "bg-white/80 text-black"
-            }`}
+          className={`px-4 py-2 rounded-xl font_two ${
+            tabIndex !== 1 ? "bg-black/60 text-white" : "bg-white/80 text-black"
+          }`}
           onClick={() => setTabIndex(1)}
         >
           Diary

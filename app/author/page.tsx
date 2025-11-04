@@ -13,7 +13,7 @@ export default async function UserPage({ searchParams }: { searchParams: Promise
   const token = cookieStore.get("token")?.value;
   
   if (!username) {
-    return <div>No user specified</div>;
+    return <div className="h-screen flex justify-center items-center">No user specified</div>;
   }
   
   const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
@@ -37,13 +37,11 @@ export default async function UserPage({ searchParams }: { searchParams: Promise
   }
   
    const result = await res.json();
-  console.log(result,'use rpage');
-  
+   
   const chronicles: Chronicle[] = result.data ?? [];
   const userData: User = result.user ?? {};
   
-  console.log(result, 'userData');
-  
+   
   return (
     <UserProvider chronicles={chronicles} userData={userData}>
       <AuthorHome />

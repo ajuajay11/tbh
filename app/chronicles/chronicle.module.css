@@ -22,8 +22,12 @@
   .reel_item > div {
     max-width: 420px;
     width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
+     overflow: hidden; 
+  }
+}
+@media (min-height: 915px) {
+  .reel_item > div {
+   max-height: 920px;
   }
 }
 

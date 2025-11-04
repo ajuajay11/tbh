@@ -88,6 +88,12 @@ body {
     box-shadow: 10px 10px 20px #1a1a1a, -10px -10px 40px #4d4d4d75, inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
      justify-content:center;
   }
+  .authorandDashboardScroll{
+  scroll-behavior: smooth;
+  min-height: 450px;
+  max-height: 650px;
+  overflow-y: auto;
+}
 }
 .mock-neomorphism:hover {
   box-shadow: 15px 15px 30px #1a1a1a, -15px -15px 30px #4d4d4d,
@@ -213,3 +219,4 @@ body {
 .custom-ease {
   transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
+

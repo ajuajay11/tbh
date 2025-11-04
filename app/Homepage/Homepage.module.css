@@ -17,6 +17,10 @@
   .bg {
      left: -50px;
   }
+  .content {
+  margin: 0px 10px;
+  width: 100%;
+}
  }
 .visible {
   opacity: 0.6;
@@ -30,7 +34,7 @@
 .content {
   position: relative;
   z-index: 9; 
-}
+ }
 
 .gradient_text {
   display: block;

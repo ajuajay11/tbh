@@ -8,7 +8,7 @@ import {
   BookOpenText,
   UserRoundPen,
   ListCollapse,X,
-  Menu,
+  Menu,BookText
 } from "lucide-react";
 import Link from "next/link";
 import Cookies from "js-cookie";
@@ -62,7 +62,7 @@ export default function Header() {
         ) : null
       }
       {togglemenu && (
-        <div data-aos="fade-in" className="fixed top-2 right-2 w-2/3 bg-zinc-950 border-slate-50 text-white p-6 z-50 shadow-lg animate-slide-in" style={{borderRadius:"10px"}}>
+        <div data-aos="fade-in" className="fixed top-2 right-2 w-1/3 lg:w-1/1 bg-zinc-950 border-slate-50 text-white p-6 z-50 shadow-lg animate-slide-in" style={{borderRadius:"10px"}}>
          
           <nav className="flex flex-col space-y-4">
             <Link href="/" onClick={togglemenuFn}>Home</Link>
@@ -104,7 +104,7 @@ export default function Header() {
                     </Link>
                   ) : (
                     <Link className="mock" href={`/dashboard?user=${username}`}>
-                      <UserRoundPen />
+                      <BookText />
                     </Link>
                   )}
                   <LogOut />

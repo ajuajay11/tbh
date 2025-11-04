@@ -26,8 +26,7 @@ export default async function Chronicles() {
     throw new Error("Failed to fetch chronicles");
   }
   const result = await res.json();
-  console.log(result);
-  const chronicles: ChronicleWithUser[] = token
+   const chronicles: ChronicleWithUser[] = token
     ? result.data ?? []
     : result.limitedChronicles ?? [];
     

@@ -1,4 +1,3 @@
- 
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
@@ -28,6 +27,7 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       );
     }
+    const userId = userData.userId;
 
     // 3. Validate required parameters
     if (!username) {
@@ -42,16 +42,16 @@ export async function GET(request: NextRequest) {
 
     // 5. Find user by username first
     const user = await UserModel.findOne({ username }).lean();
-    
-    if (!user) {
-      return NextResponse.json(
-        { message: "User not found." },
-        { status: 404 }
-      );
-    }
 
-    // 6. Fetch chronicles for this user
-    const allChronicles = await UserVibesModel.find({ user: user._id })
+    if (!user) {
+      return NextResponse.json({ message: "User not found." }, { status: 404 });
+    }
+    // 6. Fetch chronicles for this user, EXCLUDING ones reported by the current user
+    const allChronicles = await UserVibesModel.find({
+      user: user._id,
+      // Exclude stories where the current user has reported them
+      "reportedBy.user.userId": { $ne: userId },
+    })
       .populate("user", "firstname lastname username email avatar") // Populate user details
       .sort({ createdAt: -1 }) // Sort by newest first
       .lean();
@@ -68,20 +68,17 @@ export async function GET(request: NextRequest) {
           username: user.username,
           firstname: user.firstname,
           lastname: user.lastname,
+          profilePicture: user.profilePicture,
         },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("GET /api/user-chronicles Error:", error);
-    
     return NextResponse.json(
       {
         success: false,
         message: "Failed to fetch chronicles.",
-        error: process.env.NODE_ENV === "development" 
-          ? (error as Error).message 
-          : undefined,
+        error: (error as Error).message,
       },
       { status: 500 }
     );

@@ -20,17 +20,9 @@ export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
     const filter = new Filter();
-    console.log(filter.clean("Don't be an ash0le")); //Don't be an ******
 
     const body: RequestBody = await request.json();
-    const {
-      yourStoryTitle,
-      chroniclesOfYou,
-      emailAllowed,
-      replyAllowed,
-      comments,
-      incidentFrom,
-    } = body;
+    const { yourStoryTitle, chroniclesOfYou, emailAllowed, replyAllowed, comments, incidentFrom } = body;
     const safeTitle = sanitizeHtml(yourStoryTitle, {
       allowedTags: [],
       allowedAttributes: {},

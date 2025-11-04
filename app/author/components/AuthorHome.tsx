@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "./useContext";
-import { truncatedDesc } from "@/utils/truncatedText";
+ import UserProfileScroll from "@/app/components/UserProfileScroll";
 
 function DashboardHome() {
   const { chronicles, userData } = useUser();
@@ -15,7 +15,7 @@ function DashboardHome() {
   const searchParams = useSearchParams();
  useEffect(() => {
     setIsMounted(true);
-    const profile = Cookies.get("avatar");
+   const profile = userData?.profilePicture;
     if (profile) {
       try {
         // Ensure the avatar is a valid URL or file path
@@ -42,8 +42,7 @@ function DashboardHome() {
       <div className="px-4 py-6">
         <div className="flex items-center gap-5 lg:gap-10 mb-6">
           <div className="flex-shrink-0">
-            <Image
-              width={90}
+            <Image width={90}
               height={90}
               alt="profile"
               className="rounded-full border"
@@ -59,7 +58,7 @@ function DashboardHome() {
               {user === userName && (
                 <Link
                   href="/dashboard/my-profile"
-                  className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold hover:bg-blue-600"
+                  className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold "
                 >
                   edit
                 </Link>
@@ -83,28 +82,9 @@ function DashboardHome() {
         </div>
       </div>
 
-      <div>
-        {chronicles && chronicles.length > 0 ? (
-          <div className="grid grid-cols-3 gap-1" >
-            {chronicles.map((item) => (
-              <Link
-                  href={`/chronicles/${item._id}`}
-                key={item._id}
-                className="aspect-square relative group cursor-pointer overflow-hidden"
-              >
-                <div className="w-full h-full bg-zinc-950 flex items-center justify-center p-4">
-                  <p className="capitalize text-center">
-                    {truncatedDesc(item.yourStoryTitle, 20)}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="py-16 text-center">
-            <p className="text-gray-400 text-sm">No posts yet</p>
-          </div>
-        )}
+      <div className="authorandDashboardScroll">
+                   <UserProfileScroll chronicles={chronicles} />
+       
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { usePathname } from "next/navigation"; // ✅ Import this
 
 interface ShareProps {
   Pid: string;
@@ -6,6 +7,8 @@ interface ShareProps {
 }
 
 export default function ShareComp({ Pid, Title }: ShareProps) {
+    const pathname = usePathname(); // ✅ Get the current route
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -25,7 +28,7 @@ export default function ShareComp({ Pid, Title }: ShareProps) {
   return (
     <button
       onClick={handleShare}
-      className="bg-[#fffff0] p-3 text-white rounded-full shadow-lg"
+      className={`${pathname=='/chronicles' ? 'bg-[#fffff0]' : ''} p-3 text-[#a1a1a1] rounded-full shadow-lg`}
     >
       🔗
     </button>
