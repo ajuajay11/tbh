@@ -1,7 +1,7 @@
 "use client";
 
 import ImageCom from "@/app/components/ImageCom";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Styles from "../dashboard.module.css";
 import { countries } from "@/lib/countries";
 import Cookies from "js-cookie";
@@ -32,14 +32,18 @@ function Page() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [title, setTitleCount] = useState<number>(0);
+  const [description, setDescriptionCount] = useState<number>(0);
 
+  useEffect(() => {
+   setTitleCount(addChronicle.yourStoryTitle.length);
+    setDescriptionCount(addChronicle.chroniclesOfYou.length);
+  }, [addChronicle.yourStoryTitle, addChronicle.chroniclesOfYou]);
+  
   // ✅ Handles both text/select and checkbox inputs
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleChange = ( e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> ) => {
     const { name, value, type } = e.target;
-    const newValue =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+    const newValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
     setAddChronicle((prev) => ({
       ...prev,
       [name]: newValue,
@@ -48,12 +52,9 @@ function Page() {
   const submitChronicle = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
     const token = Cookies.get("token");
-
     try {
-      const response = await axios.post(
-        `${getBaseUrl()}/api/addChronicles`,
+      const response = await axios.post( `${getBaseUrl()}/api/addChronicles`,
         addChronicle,
         {
           headers: {
@@ -66,14 +67,10 @@ function Page() {
         const successMsg = response?.data?.message;
         window.location.href = "/dashboard";
         setSuccess(successMsg);
-      }
-
-      // alert('Profile updated successfully!');
+      }  
     } catch (err: unknown) {
       console.log(err);
-
       let message = "Unexpected error";
-
       if (axios.isAxiosError(err)) {
         message = err.response?.data?.message || err.message;
       } else if (err instanceof Error) {
@@ -87,29 +84,21 @@ function Page() {
   return (
     <>
       <SuccessMsg successMsg={success} />
-      <div
-        className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`}
-        style={{ height: "100 vh" }}
-      >
-        <form
-          onSubmit={submitChronicle}
-          className={`${Styles.my_profile}  w-full h-full lg:h-auto pb-20`}
-        >
+      <div className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`} style={{ height: "100 vh" }} >
+        <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto pb-20`} >
           {/* Title */}
-          <div className="my-5">
-            <label htmlFor="yourStoryTitle" className="block mb-1  capitalize">
+          <div className="my-3">
+            <label htmlFor="yourStoryTitle" className="block mb-1 capitalize">
               {" "}
               Title{" "}
             </label>
-            <input
-              type="text"
-              name="yourStoryTitle"
-              value={addChronicle.yourStoryTitle}
-              onChange={handleChange}
-              placeholder="Enter your story title"
-              className="w-full rounded-lg p-3 outline-none"
+            <input type="text" name="yourStoryTitle" value={addChronicle.yourStoryTitle} onChange={handleChange} placeholder="Enter your story title"
+              className="w-full rounded-lg p-3 outline-none" minLength={20} maxLength={150}
               required
             />
+            <div className="flex justify-between mt-1" style={{fontSize:"10px"}}>
+              <p className={`${title >= 20 ? "text-green-500" : "text-red-500"}`}>{title} / 150</p> (Minimum 20 characters)
+            </div>
           </div>
 
           {/* Category */}
@@ -118,16 +107,18 @@ function Page() {
               {" "}
               chronicles Of You{" "}
             </label>
-            <textarea
-              required
-              name="chroniclesOfYou"
+            <textarea required name="chroniclesOfYou"
               value={addChronicle.chroniclesOfYou}
               onChange={handleChange} // pass the event directly
               placeholder="Enter your story title"
-              className="w-full border border-gray-700 outline-none transition-all duration-200 placeholder-gray-500 resize-none px-3 py-5"
+              className="w-full border border-gray-700 outline-none transition-all duration-200 placeholder-gray-500 resize-none px-3 py-5" minLength={200} maxLength={1000}
               rows={7}
             />
-          </div>
+            <div className="flex justify-between mb-1" style={{fontSize:"10px"}}>
+
+            <p className={`${description >= 200 ? "text-green-500" : "text-red-500"}`} >{description} / 1000</p> (Minimum 200 characters)
+            </div>
+           </div>
           <div>
             <label htmlFor="yourStoryTitle" className="block mb-1 capitalize">
               {" "}
@@ -154,7 +145,7 @@ function Page() {
           {/* ✅ Checkboxes Section */}
 
           <div className="my-4 flex flex-col lg:flex-row lg:gap-5 text-xl font_three">
-            <label className="custom-checkbox">
+            {/* <label className="custom-checkbox">
               <input
                 type="checkbox"
                 name="replyAllowed"
@@ -163,9 +154,9 @@ function Page() {
               />
               <span className="checkmark"></span>
               <span>Allow Replies</span>
-            </label>
+            </label> */}
 
-            <label className="custom-checkbox">
+            {/* <label className="custom-checkbox">
               <input
                 type="checkbox"
                 name="emailAllowed"
@@ -175,7 +166,7 @@ function Page() {
               />
               <span className="checkmark"></span>
               Allow Emails
-            </label>
+            </label> */}
 
             <label className="custom-checkbox">
               <input

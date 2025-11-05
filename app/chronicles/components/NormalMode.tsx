@@ -44,12 +44,18 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
     comments: chronicle.comments,
     incidentFrom: chronicle.incidentFrom,
   });
-
+  const [title, setTitleCount] = useState<number>(0);
+  const [description, setDescriptionCount] = useState<number>(0);
   useEffect(() => {
     const userId = Cookies.get("userId");
     setIsOwner(userId === chronicle.user?._id);
   }, [chronicle.user?._id]);
 
+  useEffect(() => {
+   setTitleCount(addChronicle.yourStoryTitle.length);
+    setDescriptionCount(addChronicle.chroniclesOfYou.length);
+  }, [addChronicle.yourStoryTitle, addChronicle.chroniclesOfYou]);
+  
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -161,8 +167,11 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
                     onChange={handleChange}
                     placeholder="Enter your story title"
                     className="w-full rounded-lg p-3 outline-none border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                    required
+                    required minLength={20} maxLength={150}
                   />
+                  <div className="flex justify-between mt-1" style={{fontSize:"10px"}}>
+              <p className={`${title >= 20 ? "text-green-500" : "text-red-500"}`}>{title} / 150</p> (Minimum 20 characters)
+            </div>
                 </div>
                 <div className="mb-5">
                   <label
@@ -178,9 +187,13 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
                     onChange={handleChange}
                     placeholder="Share your story..."
                     className="w-full rounded-lg p-3 border border-gray-300 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all placeholder-gray-400 resize-none"
-                    rows={10}
+                    rows={10} minLength={200} maxLength={1000}
                   />
+                  <div className="flex justify-between mb-1" style={{fontSize:"10px"}}>
+                      <p className={`${description >= 200 ? "text-green-500" : "text-red-500"}`} >{description} / 1000</p> (Minimum 200 characters)
+                  </div>
                 </div>
+                
                 <div className="mb-5">
                   <label
                     htmlFor="incidentFrom"
@@ -217,7 +230,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
                   <span>Allow Replies</span>
                 </label> */}
 
-                  <label className="custom-checkbox">
+                  {/* <label className="custom-checkbox">
                     <input
                       type="checkbox"
                       name="emailAllowed"
@@ -227,7 +240,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
                     />
                     <span className="checkmark"></span>
                     Allow Emails
-                  </label>
+                  </label> */}
 
                   <label className="custom-checkbox">
                     <input
@@ -262,7 +275,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
           </section>
         ) : (
           <div className="py-5 lg:h-screen ">
-            <div className="bg-[#000] border text-white h-full max-h-screen overflow-y-auto rounded-2xl shadow-lg p-6 flex flex-col justify-between">
+            <div className="bg-[#000] border lg:border-none text-white h-full max-h-screen overflow-y-auto rounded-2xl shadow-lg p-6 flex flex-col justify-between lg:justify-start">
               {/* Header */}
               {isOwner && (
                 <div className="flex justify-center gap-3">
@@ -280,7 +293,7 @@ export default function ChronicleCard({ chronicle }: ChronicleCardProps) {
                   </button>
                 </div>
               )}
-              <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-3">
+              <div className="flex flex-col lg:flex-row gap-2 justify-between items-center mb-3 lg:mt-10">
                 <div className="mb-1">
                   <h2 className="font_two font-semibold text-[#fafafa] capitalize">
                     {chronicle.yourStoryTitle}
