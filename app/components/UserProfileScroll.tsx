@@ -11,9 +11,9 @@ export default function UserProfileScroll({chronicles}: {chronicles: Chronicle[]
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:gap-1">
             {chronicles.map((item) => (
               <Link href={`/chronicles/${item._id}`} key={item._id}
-                className="lg:aspect-square relative group cursor-pointer overflow-hidden"
+                className="lg:aspect-square relative group cursor-pointer overflow-hidden p-1"
               >
-                <div className="w-full flex-col rounded-xl lg:h-full bg-zinc-950 flex items-center lg:justify-center p-10">
+                <div className="w-full flex-col rounded-xl lg:h-full bg-zinc-950 flex items-center lg:justify-center p-10 lg:p-5">
                   <h2 className="uppercase text-start lg:text-center font-bold">
                     {truncatedDesc(item.yourStoryTitle, 50)}
                   </h2>

@@ -16,7 +16,7 @@ function DashboardHome() {
  useEffect(() => {
     setIsMounted(true);
      
-    const profile = userData?.profilePicture || Cookies.get("avatar");
+    const profile = userData?.profilePicture;
  
     if (profile) {
       try {
@@ -32,7 +32,7 @@ function DashboardHome() {
         }
       }
     }
-  }, [searchParams]);
+  }, [userData?.profilePicture]);
 
   if (!isMounted) return null;
 
@@ -41,56 +41,54 @@ function DashboardHome() {
 
   return (
     <section className="max-w-4xl mx-auto">
-      <div className="px-4 py-6">
-        <div className="flex items-center gap-5 lg:gap-10 mb-6">
-          <div className="flex-shrink-0">
-            <Image
-              width={90}
-              height={90}
-              alt="profile"
-              className="rounded-full border"
-              src={profileSrc}
-            />
-          </div>
-
-          <div className="flex-1">
-            <div className="flex items-center gap-6 lg:gap-40 justify-between">
-              <h1 className="font_three ">
-                {userData?.username || "to Be Honest"}
-              </h1>
-              {user === userName && (
-                <Link
-                  href="/dashboard/my-profile"
-                  className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold "
-                >
-                  edit
-                </Link>
-              )}
-            </div>
-
-            <div className="flex gap-8 mb-2">
-              <div className="text-center">
-                <span className="font-semibold">{chronicles?.length || 0}</span>
-                <span className="text-gray-600 ml-1">posts</span>
+          <div className="px-4 pb-6">
+            <div className="flex items-center gap-5 lg:gap-10">
+              <div className="flex-shrink-0">
+                <Image width={90}
+                  height={90}
+                  alt="profile"
+                  className="rounded-full border mt-10"
+                  src={profileSrc}
+                />
+              </div>
+    
+              <div className="flex-1">
+                <div className="flex items-center gap-6 lg:gap-40 justify-between">
+                  <h1 className="font_three ">
+                    {userData?.username || "to Be Honest"}
+                  </h1>
+                  {user === userName && (
+                    <Link
+                      href="/dashboard/my-profile"
+                      className="px-3 py-1.5 tbh_button text-white rounded-lg text-sm font-semibold "
+                    >
+                      edit
+                    </Link>
+                  )}
+                </div>
+    
+                <div className="flex gap-8 mb-2">
+                  <div className="text-center">
+                    <span className="font-semibold">{chronicles?.length || 0}</span>
+                    <span className="text-gray-600 ml-1">posts</span>
+                  </div>
+                </div>
+    
+                <div className="text-sm">
+                  {/* <p className="font-semibold capitalize">
+                    {userData?.firstname} {userData?.lastname}
+                  </p> */}
+                  <p className="text-gray-600 ">{userData?.email}</p>
+                </div>
               </div>
             </div>
-
-            <div className="text-sm">
-              {/* <p className="font-semibold capitalize">
-                {userData?.firstname} {userData?.lastname}
-              </p> */}
-              <p className="text-gray-600 ">{userData?.email}</p>
-            </div>
           </div>
-        </div>
-      </div>
-
-      <div className="authorandDashboardScroll">
-        
-            <UserProfileScroll chronicles={chronicles} />
+    
+          <div className="scrollbar-none authorandDashboardScroll mb-5">
+                       <UserProfileScroll chronicles={chronicles} />
            
-      </div>
-    </section>
+          </div>
+        </section>
   );
 }
 

@@ -35,6 +35,9 @@ function Login() {
         Cookies.set('userId', response.data.user.id, { expires: 12 });
         Cookies.set('avatar', response.data.user.avatar, { expires: 12 });
         Cookies.set('username', response.data.user.username, { expires: 12 });
+        if(response.data.user.role === "subscribed"){
+           Cookies.set('role', response.data.user.role, { expires: 12 });
+        }
         const successMsg = response?.data?.message;
         setSuccess(successMsg)
         setTimeout(() => {

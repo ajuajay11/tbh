@@ -189,7 +189,7 @@ function Page() {
   return (
     <>
       <SuccessMsg successMsg={success} />
-      <div className="w-full max-w-2xl pt-20 lg:pt-1 overflow-y-scroll scrollbar-none " style={{height:"100vh"}} ref={divRef}
+      <div className="w-full max-w-2xl pt-20 lg:pt-1 overflow-y-scroll scrollbar-none " style={{height:"95vh"}} ref={divRef}
          >
         <div  >
           {/* Header Section */}

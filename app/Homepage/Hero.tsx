@@ -25,7 +25,7 @@ function Hero() {
                     <p className="text-gray-400 mb-8"> Discover amazing experiences and connect with like-minded people. Start your adventure today. </p>
                 </div>
                 <form onSubmit={emailRegistration} className="flex gap-2">
-                    <input className="lg:w-[50%] p-3 customBox" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" required />
+                    <input className="w-full lg:w-[50%] p-3 customBox" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" required />
                     <button type="submit" className="text-nowrap tbh_button m-0"> Get Started </button>
                 </form>
             </section>

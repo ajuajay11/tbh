@@ -30,7 +30,7 @@ function DashboardHome() {
         }
       }
     }
-  }, [searchParams]);
+  }, [userData?.profilePicture]);
 
   if (!isMounted) return null;
 
@@ -39,13 +39,13 @@ function DashboardHome() {
 
   return (
     <section className="max-w-4xl mx-auto">
-      <div className="px-4 py-6">
-        <div className="flex items-center gap-5 lg:gap-10 mb-6">
+      <div className="px-4 pb-6">
+        <div className="flex items-center gap-5 lg:gap-10">
           <div className="flex-shrink-0">
             <Image width={90}
               height={90}
               alt="profile"
-              className="rounded-full border"
+              className="rounded-full border mt-10"
               src={profileSrc}
             />
           </div>
@@ -82,7 +82,7 @@ function DashboardHome() {
         </div>
       </div>
 
-      <div className="authorandDashboardScroll">
+      <div className="scrollbar-none authorandDashboardScroll mb-5">
                    <UserProfileScroll chronicles={chronicles} />
        
       </div>

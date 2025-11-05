@@ -1,21 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import UserVibesModel from "@/models/chroniclesSchema";
-import UserModel from "@/models/users"; // Import User model
+import UserModel from "@/models/users";
 import { verifyToken } from "@/utils/auth";
 
 export async function GET(request: NextRequest) {
   try {
-    // 1. Extract parameters
     const searchParams = request.nextUrl.searchParams;
     const username = searchParams.get("username");
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
 
-    // 2. Validate token first (authentication)
+    // 🧩 1. Auth check
     if (!token) {
       return NextResponse.json(
-        { message: "Authentication required. Please login." },
+        { success: false, message: "Authentication required. Please login." },
         { status: 401 }
       );
     }
@@ -23,45 +22,54 @@ export async function GET(request: NextRequest) {
     const userData = await verifyToken(token);
     if (!userData) {
       return NextResponse.json(
-        { message: "Invalid or expired token." },
+        { success: false, message: "Invalid or expired token." },
         { status: 401 }
       );
     }
-    const userId = userData.userId;
 
-    // 3. Validate required parameters
+    const userId = userData.userId;
     if (!username) {
       return NextResponse.json(
-        { message: "Username is required." },
+        { success: false, message: "Username is required." },
         { status: 400 }
       );
     }
 
-    // 4. Connect to database
+    // 🧩 2. Connect to DB (cached)
     await connectToDatabase();
 
-    // 5. Find user by username first
-    const user = await UserModel.findOne({ username }).lean();
-
-    if (!user) {
-      return NextResponse.json({ message: "User not found." }, { status: 404 });
-    }
-    // 6. Fetch chronicles for this user, EXCLUDING ones reported by the current user
-    const allChronicles = await UserVibesModel.find({
-      user: user._id,
-      // Exclude stories where the current user has reported them
-      "reportedBy.user.userId": { $ne: userId },
-    })
-      .populate("user", "firstname lastname username email avatar") // Populate user details
-      .sort({ createdAt: -1 }) // Sort by newest first
+    // 🧩 3. Get the user by username
+    const user = await UserModel.findOne({ username })
+      .select("_id username firstname lastname profilePicture")
       .lean();
 
-    // 7. Return success response
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not found." },
+        { status: 404 }
+      );
+    }
+
+    // 🧩 4. Fetch chronicles (excluding reported ones)
+    const allChronicles = await UserVibesModel.find({
+      user: user._id,
+      "reportedBy.user.userId": { $ne: userId }, // exclude reported ones
+      status: 1, // optional filter: only active ones
+    })
+      .populate({
+        path: "user",
+        select: "firstname lastname username profilePicture",
+        options: { lean: true },
+      })
+      .sort({ createdAt: -1 }) // newest first
+      .limit(20) // optional pagination control
+      .lean();
+
+    // 🧩 5. Return success response
     return NextResponse.json(
       {
         success: true,
         message: "Chronicles fetched successfully.",
-        data: allChronicles,
         count: allChronicles.length,
         user: {
           id: user._id,
@@ -70,10 +78,12 @@ export async function GET(request: NextRequest) {
           lastname: user.lastname,
           profilePicture: user.profilePicture,
         },
+        data: allChronicles,
       },
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error fetching chronicles:", error);
     return NextResponse.json(
       {
         success: false,

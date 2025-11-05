@@ -2,7 +2,7 @@
 "use client";
 
  
-export default function TermsPage() {
+export default function page() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-12 text-gray-200">
       <h1 className="text-4xl font-bold mb-6 text-white">

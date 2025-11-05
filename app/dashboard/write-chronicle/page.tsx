@@ -84,7 +84,7 @@ function Page() {
   return (
     <>
       <SuccessMsg successMsg={success} />
-      <div className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`} style={{ height: "100 vh" }} >
+      <div className={`overflow-y-scroll scrollbar-none  ${Styles.glass_card}`} style={{ height: "95vh" }} >
         <form onSubmit={submitChronicle} className={`${Styles.my_profile}  w-full h-full lg:h-auto pb-20`} >
           {/* Title */}
           <div className="my-3">

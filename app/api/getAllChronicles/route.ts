@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     if (!token) {
       const limitedChronicles = await UserVibesModel.find(baseQuery)
-        .populate("user", "username firstname lastname")
+        .populate("user", "username firstname lastname profilePicture")
         .sort(sortObj)
         .limit(6);
       console.log(limitedChronicles, "limitedChronicles");
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
       .sort(sortObj)
       .skip(skip)
       .limit(limit)
-      .populate("user", "firstname lastname username")
+      .populate("user", "firstname lastname username profilePicture")
       .lean();
 
     return NextResponse.json(

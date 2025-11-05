@@ -88,11 +88,11 @@ body {
     box-shadow: 10px 10px 20px #1a1a1a, -10px -10px 40px #4d4d4d75, inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #4d4d4d;
      justify-content:center;
   }
-  .authorandDashboardScroll{
-  scroll-behavior: smooth;
-  
-  overflow-y: auto;
+ 
 }
+ .authorandDashboardScroll{
+  scroll-behavior: smooth;
+  overflow-y: auto;
 }
 @media screen and (max-height: 700px) {
   
