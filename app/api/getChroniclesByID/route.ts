@@ -51,19 +51,39 @@ export async function GET(request: NextRequest) {
     }
 
     // 🧩 4. Fetch chronicles (excluding reported ones)
-    const allChronicles = await UserVibesModel.find({
+  const allChronicles = await UserVibesModel.aggregate([
+  {
+    $match: {
       user: user._id,
-      "reportedBy.user.userId": { $ne: userId }, // exclude reported ones
-      status: 1, // optional filter: only active ones
-    })
-      .populate({
-        path: "user",
-        select: "firstname lastname username profilePicture",
-        options: { lean: true },
-      })
-      .sort({ createdAt: -1 }) // newest first
-      .limit(20) // optional pagination control
-      .lean();
+      "reportedBy.user.userId": { $ne: userId },
+      status: 1,
+    },
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "user",
+      foreignField: "_id",
+      as: "user",
+    },
+  },
+  { $unwind: "$user" },
+  {
+    $project: {
+      yourStoryTitle: 1,
+      createdAt: 1,
+      status: 1,
+      likeCount: 1,
+      "user.username": 1,
+      "user.firstname": 1,
+      "user.lastname": 1,
+      "user.profilePicture": 1,
+    },
+  },
+  { $sort: { createdAt: -1 } },
+  { $limit: 20 },
+]);
+
 
     // 🧩 5. Return success response
     return NextResponse.json(

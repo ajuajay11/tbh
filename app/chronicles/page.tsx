@@ -1,5 +1,4 @@
 import { Chronicle, User, UserLike, UserComment } from "../types/chronicle";
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
  import { getBaseUrl } from "@/lib/getBaseUrl";
 import { cookies } from "next/headers";
@@ -27,14 +26,14 @@ export default async function Chronicles() {
     throw new Error("Failed to fetch chronicles");
   }
   const result = await res.json();
-   const chronicles: ChronicleWithUser[] = token
+  console.log(result);
+  const chronicles: ChronicleWithUser[] = token
     ? result.data ?? []
     : result.limitedChronicles ?? [];
     
   return (
     <div className="p-0">
      <ScrollReels initialChronicles ={chronicles}/>
-      <SpeedInsights />
     </div>
   );
 }

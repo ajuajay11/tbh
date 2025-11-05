@@ -1,16 +1,31 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const connextDb = async (): Promise<void> => {
-    if (!process.env.MONGO_URL) {
-        throw new Error('MONGO_URL environment variable is not defined');
-    }
-    try {
-        await mongoose.connect(process.env.MONGO_URL);
-        console.log("hello mongoose");
-    } catch (error) {
-        console.error("Database connection failed:", (error as Error).message);
-        process.exit(1);
-    }
-}
+let isConnected = false; // connection state cache
 
-export default connextDb;
+const connectToDatabase = async (): Promise<void> => {
+  if (isConnected) {
+    // Already connected — skip re-connecting
+    // console.log("✅ MongoDB already connected");
+    return;
+  }
+
+  if (!process.env.MONGO_URL) {
+    throw new Error("❌ MONGO_URL is not defined in environment variables");
+  }
+
+  try {
+    // Connect only once per runtime
+    await mongoose.connect(process.env.MONGO_URL, {
+      bufferCommands: false,
+      maxPoolSize: 10, // reuse up to 10 connections
+    });
+
+    isConnected = true;
+    console.log("✅ MongoDB Connected Successfully");
+  } catch (error) {
+    console.error("❌ MongoDB Connection Failed:", (error as Error).message);
+    throw new Error("Database connection failed");
+  }
+};
+
+export default connectToDatabase;

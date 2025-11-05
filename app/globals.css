@@ -12,7 +12,7 @@ body {
 }
 /* fonts/ */
 .font_one {
-  font-size: clamp(40px, 4vw, 60px);
+  font-size: clamp(36px, 4vw, 60px);
 }
 .font_two {
   font-size: clamp(20px, 4vw, 30px);
