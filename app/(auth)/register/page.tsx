@@ -20,14 +20,24 @@ function RegisterForm() {
   const [eyes, setEyes] = useState(false); // false = password hidden, true = visible
 
   const [error, setError] = useState<string | null>(null);
-  const [register, setRegister] = useState({
+  type RegisterState = {
+    firstname: string;
+    lastname: string;
+    age: string; // keep as string so input can be cleared
+    email: string;
+    gender: string;
+    password: string;
+    type: string;
+  };
+
+  const [register, setRegister] = useState<RegisterState>({
     firstname: "",
     lastname: "",
-    age: 0,
+    age: "",
     email: "",
     gender: "",
     password: "",
-    type:"register"
+    type: "register",
   });
   const [steps, setSteps] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,21 +45,21 @@ function RegisterForm() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setRegister(prev => ({
+    setRegister((prev) => ({
       ...prev,
-      [name]: name === 'age' ? Number(value) : value
-    }));
+      [name]: value,
+    } as unknown as RegisterState));
   };
 
   const closeButton = () => {
     setModalOpen(false);
-    
+
   }
   const sendMail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
     try {
-      const res = await axios.post(`${getBaseUrl()}/api/user/sendOtp`, { email: register.email,type:register.type });
+      const res = await axios.post(`${getBaseUrl()}/api/user/sendOtp`, { email: register.email, type: register.type });
       if (res.status === 200) {
         setModalOpen(true);
       }
@@ -90,14 +100,20 @@ function RegisterForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoader(true);
+    setError(null);
     try {
-      const response = await axios.post('/api/user/register', register);
+      // convert age to number before sending
+      const payload = { ...register, age: register.age ? Number(register.age) : undefined };
+      const response = await axios.post('/api/user/register', payload);
       if (response.status === 200) {
         router.push('/login');
       }
     } catch (error: unknown) {
       const err = error as AxiosError<{ message?: string }>;
       setError(err.response?.data?.message || err.message || 'Unexpected error');
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -109,7 +125,7 @@ function RegisterForm() {
 
       )}
       <div className="lg:me-60 p-4">
-        {steps === 1 ? (
+ {steps === 1 ? (
           <section className={`${Styles.glassCard} backdrop-blur-md`}>
             <form onSubmit={sendMail} className="space-y-3 lg:space-y-6">
               <h2 className="text-2xl font-bold text-white text-center">Step 1: Verify Your Email</h2>
@@ -123,8 +139,9 @@ function RegisterForm() {
             </form>
           </section>
         ) : (
-          <section className={`${Styles.glassCard} `}>
-            <form onSubmit={handleSubmit} className="space-y-6">
+        <section className={`${Styles.glassCard} `}>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col md:flex-row lg:justify-between gap-2">
               <div>
                 <label htmlFor="firstname" className="block text-white font-medium  ">Firstname:</label>
                 <input type="text" id="firstname" name="firstname" value={register.firstname} onChange={handleChange} required className="w-full p-3 customBox" placeholder="Enter your first name" />
@@ -133,42 +150,48 @@ function RegisterForm() {
                 <label htmlFor="lastname" className="block text-white font-medium  ">Lastname:</label>
                 <input type="text" id="lastname" name="lastname" value={register.lastname} onChange={handleChange} required className="w-full p-3 customBox" placeholder="Enter your last name" />
               </div>
+            </div>
+            <div className="flex flex-col md:flex-row lg:justify-between gap-2">
               <div>
                 <label htmlFor="email" className="block text-white font-medium  ">Email:</label>
                 <input type="email" id="email" name="email" value={register.email} disabled required className="w-full p-3 rounded-lg customBox" />
               </div>
               <div className="relative">
                 <label htmlFor="password" className="block text-white font-medium  ">Password:</label>
-                <input  type={eyes ? "text" : "password"} id="password" name="password" value={register.password} onChange={handleChange} required
+                <input type={eyes ? "text" : "password"} id="password" name="password" value={register.password} onChange={handleChange} required
                   className="w-full p-3 customBox"
                   placeholder="Create a password"
                 />
                 <ToggleEyes eyes={eyes} setEyes={setEyes} />
               </div>
-              <div>
-                <label htmlFor="gender" className="block text-white font-medium  ">Gender:</label>
-                <select id="gender" name="gender" value={register.gender} onChange={handleChange} className="w-full p-3 rounded-lg bg-white/70 text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="age" className="block text-white font-medium  ">Age:</label>
-                <input type="number" id="age" name="age"
-                  value={register.age} onChange={handleChange} required
-                  className="w-full p-3 customBox"
-                  placeholder="Enter your age"
-                />
-              </div>
+            </div>
+            <div>
+              <label htmlFor="gender" className="block text-white font-medium  ">Gender:</label>
+              <select id="gender" name="gender" value={register.gender} onChange={handleChange} className="w-full p-3 rounded-lg bg-white/70 text-black focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="age" className="block text-white font-medium  ">Age:</label>
+              <input type="number" id="age" name="age"
+                value={register.age} onChange={handleChange} required
+                className="w-full p-3 customBox"
+                placeholder="Enter your age"
+              />
+            </div>
+            {loader ? (
+              <ButtonLoading />
+            ) : (
               <button type="submit" className="tbh_button">
                 Register
               </button>
-              <ErrorMessage message={error} />
-            </form>
-          </section>
-
+            )}
+            <ErrorMessage message={error} />
+          </form>
+        </section>
         )}
       </div>
     </>

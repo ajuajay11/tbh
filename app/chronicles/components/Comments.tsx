@@ -14,9 +14,9 @@ interface CommentsProps {
 }
 
 export default function Comments({ Pid, userCommentsData }: CommentsProps) {
-  const pathname = usePathname(); // ✅ Get the current route
-
+  const pathname = usePathname(); 
   const token = Cookies.get("token");
+  const userId = Cookies.get("userId");
   const [comment, setComment] = useState("");
   const [isCommentOpen, setCommentOpen] = useState(false);
   const [allComments, setAllComments] = useState<UserComment[]>(userCommentsData);
@@ -79,6 +79,7 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
         <MessageCircle className="w-6 h-6" />
         <span className="text-[#a1a1a1] m-0">{allComments?.length || null}</span>
       </button>
+      {console.log(allComments)}
       {isCommentOpen && (
         <>
           {/* Backdrop */}
@@ -127,7 +128,7 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
                     </p>
 
                     {/* Delete icon on hover */}
-                    {comment._id ? <button
+                    {comment.user.userId ===  userId? <button
                       onClick={() => deleteComment(comment._id)}
                       className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-neutral-500 hover:text-red-600"
                       title="Delete comment"

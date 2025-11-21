@@ -14,8 +14,9 @@ export default function UserProfileScroll({chronicles}: {chronicles: Chronicle[]
                 className="lg:aspect-square relative group cursor-pointer overflow-hidden p-1"
               >
                 <div className="w-full flex-col rounded-xl lg:h-full bg-zinc-950 flex items-center lg:justify-center p-10 lg:p-5">
-                  <h2 className="uppercase text-start lg:text-center font-bold">
-                    {truncatedDesc(item.yourStoryTitle, 50)}
+                  <h2 className=" uppercase font-bold break-all
+">
+                    {truncatedDesc(item.yourStoryTitle, 45)}
                   </h2>
                   <p className="capitalize text-start lg:text-center mt-4">
                     {truncatedDesc(item.chroniclesOfYou, 80)}
