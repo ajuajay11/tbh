@@ -16,7 +16,7 @@ export default function withImageCom<P extends object>(
       const timer = setTimeout(() => {
         setShowSecond(true);
       }, 2000);
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer); 
     }, []);
     const contentClass = pathname === "/dashboard" || pathname === "/dashboard/write-chronicle" ? `${styles.content} w-full lg:w-[50%] items-start h-full lg:top-20` : `${styles.content}`;
     return (
