@@ -10,7 +10,7 @@ export const metadata = {
   title: "ToBeHonest – Share Your Truth",
   description: "Anonymous chronicles and stories",
   manifest: "/manifest.json",
-  themeColor: "#980000",
+   
   icons: {
     icon: "/favicon.ico",
   },
