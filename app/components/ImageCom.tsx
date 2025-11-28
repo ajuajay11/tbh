@@ -9,33 +9,48 @@ export default function withImageCom<P extends object>(
   WrappedComponent: React.ComponentType<P>
 ) {
   const ImageComWrapper = (props: P) => {
-    const [showSecond, setShowSecond] = useState(false);
-    const pathname = usePathname(); // ✅ current route
+    const [loadedSecond, setLoadedSecond] = useState(false);
+    const pathname = usePathname();
 
+    // Step 1: Preload the second image without blocking UI
     useEffect(() => {
-      const timer = setTimeout(() => {
-        setShowSecond(true);
-      }, 2000);
-      return () => clearTimeout(timer); 
+      const img = new Image();
+      img.src = heroImg.src;
+
+      img.onload = () => {
+        // fade only after image is fully downloaded
+        setLoadedSecond(true);
+      };
     }, []);
-    const contentClass = pathname === "/dashboard" || pathname === "/dashboard/write-chronicle" ? `${styles.content} w-full lg:w-[50%] items-start h-full lg:top-20` : `${styles.content}`;
+
+    const contentClass =
+      pathname === "/dashboard" || pathname === "/dashboard/write-chronicle"
+        ? `${styles.content} w-full lg:w-[50%] items-start h-full lg:top-20`
+        : `${styles.content}`;
+
     return (
-      <div className={`${styles.wrapper} h-screen flex justify-center items-center lg:justify-end lg:items-center`} >
-        <div className={`${styles.bg} ${!showSecond ? styles.visible : styles.hidden  }`}
+      <div className={`${styles.wrapper} min-h-screen flex justify-center items-center lg:justify-end lg:items-center`}>
+        
+        {/* FIRST IMAGE (immediately visible) */}
+        <div
+          className={`${styles.bg} ${!loadedSecond ? styles.visible : styles.hidden}`}
           style={{ backgroundImage: `url(${heroImgTwo.src})` }}
         />
-        <div className={`${styles.bg} ${showSecond ? styles.visible : styles.hidden }`}
+
+        {/* SECOND IMAGE (fades in AFTER loading) */}
+        <div
+          className={`${styles.bg} ${loadedSecond ? styles.visible : styles.hidden}`}
           style={{ backgroundImage: `url(${heroImg.src})` }}
         />
-        <div className={`${styles.content, contentClass}`}>
+
+        {/* CONTENT */}
+        <div className={contentClass}>
           <WrappedComponent {...props} />
         </div>
       </div>
     );
   };
 
-  const wrappedName =
-    WrappedComponent.displayName || WrappedComponent.name || "Component";
-  ImageComWrapper.displayName = `withImageCom(${wrappedName})`;
+  ImageComWrapper.displayName = `withImageCom(${WrappedComponent.displayName || "Component"})`;
   return React.memo(ImageComWrapper);
 }
