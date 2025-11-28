@@ -1,21 +1,24 @@
- import Script from "next/script";
+import Script from "next/script";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import "../app/globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "react-hot-toast";
+import GlobalAOS from "./components/GlobalAOS";
 
- 
 export const metadata = {
   title: "ToBeHonest – Share Your Truth",
   description: "Anonymous chronicles and stories",
-  openGraph: {
-    title: "ToBeHonest",
-    description: "Anonymous stories",
-    url: "https://www.tobehonest.club",
-    siteName: "ToBeHonest",
-  }, 
-
+  manifest: "/manifest.json",
+  themeColor: "#980000",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  applicationName: "Tell Behind Here",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport = {
@@ -24,29 +27,19 @@ export const viewport = {
   themeColor: "#980000",
 };
 
-export const dynamic = "force-dynamic";
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const data = { mode: false };
 
   return (
     <html lang="en">
-      <head>
-        {/* Manifest and meta */}
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="theme-color" content="#980000" />
-        <meta name="application-name" content="Tell Behind Here" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      </head>
+      <body className="bg-black">
 
-      <body className={` bg-black`}>
-         <Script
+        {/* Google Analytics (optimized) */}
+        <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-4B1Z5TXWKT"
           strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="lazyOnload">
+        <Script id="ga" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -54,23 +47,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'G-4B1Z5TXWKT');
           `}
         </Script>
+<GlobalAOS />
         {data.mode ? (
           <main className="flex justify-center items-center min-h-screen text-white">
-            <p>Site is currently under maintenance. </p>
+            <p>Site is currently under maintenance.</p>
           </main>
         ) : (
           <>
             <Header />
             <main className="w-full flex justify-center">
-              <div className="w-full p-0 max-w-[1600px]">
+              <div className="w-full max-w-[1600px]">
                 <Toaster position="top-center" />
                 {children}
-                <SpeedInsights />
               </div>
             </main>
             <Footer />
           </>
         )}
+
+        <SpeedInsights />
       </body>
     </html>
   );
