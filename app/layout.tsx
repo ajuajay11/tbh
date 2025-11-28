@@ -15,7 +15,8 @@ export const metadata = {
     description: "Anonymous stories",
     url: "https://www.tobehonest.club",
     siteName: "ToBeHonest",
-  },
+  }, 
+
 };
 
 export const viewport = {
@@ -60,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AosInit />
         {data.mode ? (
           <main className="flex justify-center items-center min-h-screen text-white">
-            <p>Site is currently under maintenance.</p>
+            <p>Site is currently under maintenance. </p>
           </main>
         ) : (
           <>
