@@ -14,14 +14,14 @@ export interface IUser extends Document {
 }
 
 const UserSchema: Schema<IUser> = new Schema({
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true, index:true },
   password: { type: String, required: true },
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   gender: { type: String, required: true },
   profilePicture: { type: String },
   age: { type: Number },
-  username:{type:String},
+  username:{type:String, index:true},
   role: { type: String, enum: ['unsubscribed', 'subscribed'], default: 'unsubscribed' },
   createdAt: { type: Date, default: Date.now }
 });
