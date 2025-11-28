@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-Disallow: /dashboard/
-Disallow: /dashboard/my-profile
-Disallow: /dashboard/write-chronicle
-
-# Sitemap
-Sitemap: https://www.tobehonest.club/sitemap.xml
