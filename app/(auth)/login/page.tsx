@@ -11,6 +11,7 @@ import ButtonLoading from "@/app/components/ButtonLoading";
 import Styles from "../auth.module.css";
 import { getBaseUrl } from "@/lib/getBaseUrl";
 
+ 
 function Login() {
   const [login, setLogin] = useState({
     email: "",
@@ -83,7 +84,7 @@ function Login() {
          <div className="mt-6 text-center space-y-2 text-sm">
           <p className="text-gray-300"> Don&apos;t have an account? <Link href="/register" className="text-blue-400 "> Register </Link> </p>
           <p> <Link href="/forgot-password" className="text-blue-400  "> Forgot your password? </Link> </p>
-          <p className="text-gray-400 text-xs"> By signing in, you agree to our  <Link href="/terms-and-condition" className="underline hover:text-white"> Terms & Conditions  </Link> . </p>
+          <p className="text-gray-400 text-xs"> By signing in, you agree to our  <Link href="/terms-and-conditions" className="underline hover:text-white"> Terms & Conditions  </Link> . </p>
         </div>
       </div>
 

@@ -2,7 +2,35 @@
 
 import Link from "next/link";
 import { UndoDot } from 'lucide-react';
-
+export const metadata = {
+  title: "Why TBH? | To Be Honest",
+  description:
+    "Discover why TBH (To Be Honest) exists — a safe, anonymous platform for sharing your deepest thoughts, emotions, and real-life stories without judgment.",
+  keywords: [
+    "TBH",
+    "To Be Honest",
+    "Why TBH",
+    "anonymous stories",
+    "mental health sharing",
+    "emotional support",
+    "share your story",
+  ],
+  robots: "index, follow",
+  openGraph: {
+    title: "Why TBH? | To Be Honest",
+    description:
+      "TBH is a safe space to express your emotions, thoughts, and real stories — anonymously or openly.",
+    url: "https://yourdomain.com/why-tbh",
+    siteName: "TBH",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Why TBH? | To Be Honest",
+    description:
+      "A platform where your feelings matter. Share your truth without fear.",
+  },
+};
 export default function WhyTbh() {
   return (
     <>

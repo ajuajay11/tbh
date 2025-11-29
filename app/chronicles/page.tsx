@@ -10,7 +10,34 @@ interface ChronicleWithUser extends Chronicle {
   userLikesData?: UserLike[];
   UserComments?: UserComment[];
 }
-
+export const metadata = {
+  title: "Chronicles | Explore Anonymous Stories",
+  description:
+    "Browse real anonymous stories shared by people around the world. Scroll through Chronicles and discover thoughts, emotions, confessions, and experiences.",
+  keywords: [
+    "chronicles",
+    "anonymous stories",
+    "real stories",
+    "confessions",
+    "scroll reels",
+    "anonymous platform",
+  ],
+  robots: "index, follow",
+  openGraph: {
+    title: "Chronicles | Explore Anonymous Stories",
+    description:
+      "Scroll through powerful anonymous stories and experiences shared on Chronicles.",
+    url: "https://yourdomain.com/chronicles",
+    siteName: "Chronicles",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Chronicles | Explore Anonymous Stories",
+    description:
+      "Discover real anonymous stories shared by users on Chronicles.",
+  },
+};
 export default async function Chronicles() {
   const cookieStore = await cookies();
 
@@ -18,7 +45,7 @@ export default async function Chronicles() {
   const headers: HeadersInit = token
     ? { Authorization: `Bearer ${token}` }
     : {};
-  const res = await fetch(`${getBaseUrl()}/api/getAllChronicles?page=1&limit=20?search=neymarjr1645`, {
+  const res = await fetch(`${getBaseUrl()}/api/getAllChronicles?page=1&limit=20`, {
     cache: "no-store",
     headers,
   });

@@ -190,7 +190,7 @@ function Page() {
             <span className="checkmark"></span>
                I agree to the{" "}
               <Link
-                href="/terms-and-condition"
+                href="/terms-and-conditions"
                 className="underline text-blue-400 hover:text-blue-300 transition-colors"
               >
                 Terms & Conditions

@@ -11,6 +11,7 @@ import ButtonLoading from "@/app/components/ButtonLoading";
 import Styles from "../auth.module.css"
 import { getBaseUrl } from "@/lib/getBaseUrl";
 
+ 
 
 // Inner component that uses useSearchParams
 function RegisterForm() {

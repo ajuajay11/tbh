@@ -2,9 +2,30 @@
 export const metadata = {
   title: "Privacy Policy | Chronicles",
   description:
-    "Learn how Chronicles collects, uses, and protects your personal information.",
+    "Learn how Chronicles collects, uses, and protects your personal information. Understand your privacy rights and how your data is handled safely.",
+  keywords: [
+    "Chronicles privacy policy",
+    "privacy policy",
+    "anonymous stories privacy",
+    "data protection",
+    "user privacy",
+  ],
+  robots: "index, follow",
+  openGraph: {
+    title: "Privacy Policy | Chronicles",
+    description:
+      "Details about how Chronicles collects, processes, and protects user data.",
+    url: "https://www.tobehonest.club/privacy-policy",
+    siteName: "Chronicles",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy | Chronicles",
+    description:
+      "Learn how Chronicles protects your personal information.",
+  },
 };
-
 export default function page() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-12 text-gray-800 leading-relaxed">

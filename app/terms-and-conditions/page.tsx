@@ -1,7 +1,26 @@
 // app/terms/page.tsx
-"use client";
-
  
+export const metadata = {
+  title: "Terms & Conditions | Chronicles",
+  description:
+    "Read the official Terms & Conditions for using Chronicles — an anonymous storytelling platform focused on privacy, safety, and authenticity.",
+  keywords: [
+    "Chronicles terms",
+    "terms and conditions",
+    "anonymous stories",
+    "Chronicles policy",
+    "user agreement",
+  ],
+  robots: "index, follow",
+  openGraph: {
+    title: "Terms & Conditions | Chronicles",
+    description:
+      "Official Terms & Conditions for using the Chronicles anonymous storytelling platform.",
+    url: "https://www.tobehonest.club/terms-and-conditions",
+    siteName: "Chronicles",
+    type: "article",
+  },
+};
 export default function page() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-12 text-gray-200">
