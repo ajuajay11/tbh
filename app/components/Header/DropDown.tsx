@@ -31,11 +31,11 @@ export default function DropDown() {
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
-      <button onClick={() => setOpen(o => !o)} className="focus:outline-none">
+      <button onClick={() => setOpen(o => !o)} className="focus:outline-none" aria-label='image'>
         {avatarUrl ? (
           <Image src={avatarUrl} alt="User Avatar" width={32} height={32} className="rounded-full" />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-gray-300" />
+          <div aria-label="avatar" className="w-8 h-8 rounded-full bg-gray-300" />
         )}
       </button>
 

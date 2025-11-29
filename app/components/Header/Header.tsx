@@ -56,7 +56,7 @@ export default function Header() {
       </div>
       {
         pathname !== "/chronicles" ? (
-          <button onClick={togglemenuFn} className="fixed right-5 top-3" style={{ zIndex: "99" }}>
+          <button onClick={togglemenuFn} aria-label="togglemenu" className="fixed right-5 top-3" style={{ zIndex: "99" }}>
             <div data-aos="fade-in">{!togglemenu ?<Menu /> : <X />}</div>
           </button>
         ) : null

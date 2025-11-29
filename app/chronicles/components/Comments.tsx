@@ -97,8 +97,8 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
             {/* Top handle + close */}
             <div className="flex justify-between items-center px-4 pt-4 pb-2 ">
               <div className="w-12 h-1 bg-neutral-600 rounded-full mx-auto"></div>
-              <button
-                onClick={toggleComments}
+              <button  
+                onClick={toggleComments} aria-label="close"
                 className="absolute right-4 top-4 text-neutral-400 hover:text-white transition"
               >
                 <X size={22} />
@@ -129,7 +129,7 @@ export default function Comments({ Pid, userCommentsData }: CommentsProps) {
 
                     {/* Delete icon on hover */}
                     {comment.user.userId ===  userId? <button
-                      onClick={() => deleteComment(comment._id)}
+                      onClick={() => deleteComment(comment._id)} aria-label="trash"
                       className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-neutral-500 hover:text-red-600"
                       title="Delete comment"
                     >

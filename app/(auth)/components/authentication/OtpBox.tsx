@@ -106,7 +106,7 @@ export default function OtpBox(props: OtpBoxProps) {
      <SuccessMsg successMsg={success}/>
     <div className={`${Styles.otpBox} ease-in-expo`}>
       <div className="flex items-center justify-end">
-        <button className="p-3" onClick={props?.closeBtn}><X/></button>
+        <button aria-label="close" className="p-3" onClick={props?.closeBtn}><X/></button>
       </div>
       <div className="flex flex-col justify-center items-center h-full text-dark">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
