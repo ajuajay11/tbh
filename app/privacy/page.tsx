@@ -78,9 +78,12 @@ export default function page() {
       <p>
         If you have any questions or concerns about this Privacy Policy,
         please contact us at{" "}
-        <a href="mailto:support@chronicles.app" className="text-blue-600 underline">
-          support@chronicles.app
-        </a>.
+         <a
+            href="mailto:chronicleofstrangers@gmail.com"
+            className="text-blue-400 underline"
+          >
+            info@chronicleofstrangers.cl
+          </a>.
       </p>
 
       <p className="mt-8 text-sm text-gray-500">Last Updated: November 2025</p>

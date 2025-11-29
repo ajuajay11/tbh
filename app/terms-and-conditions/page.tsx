@@ -101,10 +101,10 @@ export default function page() {
         <p>
           For questions or reports, please contact us at{" "}
           <a
-            href="mailto:contact@chronicles.app"
+            href="mailto:chronicleofstrangers@gmail.com"
             className="text-blue-400 underline"
           >
-            contact@chronicles.app
+            info@chronicleofstrangers.cl
           </a>
           .
         </p>
