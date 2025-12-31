@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🖤 To Be Honest (TBH)
 
-## Getting Started
+**To Be Honest (TBH)** is an anonymous storytelling platform where people can share real thoughts, emotions, and life experiences without fear, judgment, or identity exposure.
 
-First, run the development server:
+In a world that demands perfection, TBH is a space to simply be human.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [https://tobehonest.club](https://tobehonest.club) with your browser to see the result.
+## 🌱 Why TBH?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Do you have stories you’ve never told anyone?  
+Thoughts you keep hidden because you’re afraid of being judged?
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+TBH was created for those moments.
 
-## Learn More
+It allows people to speak freely — with or without a name — and connect through honesty, not popularity.
 
-To learn more about Next.js, take a look at the following resources:
+**No followers. No filters. No pressure.**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ✨ What Makes TBH Different
 
-## Deploy on Vercel
+- Anonymous-by-default storytelling  
+- No popularity metrics or social pressure  
+- Privacy-first design  
+- Focus on honesty, healing, and empathy  
+- Safe community with moderation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+TBH is not social media.  
+It’s a place for truth.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🛠️ Features
+
+- Anonymous story posting  
+- Likes & comments  
+- Report system for harmful content  
+- Moderation & safety controls  
+- Secure authentication  
+- Clean, distraction-free UI  
+
+---
+
+## 🔐 Privacy & Safety
+
+- Stories are shown anonymously  
+- User identities are never exposed publicly  
+- Metadata (IP, device info) may be stored internally for security and abuse prevention  
+- Content is moderated to protect the community  
+
+Your privacy matters.
+
+---
+
+## 🚫 Community Guidelines
+
+We ask users to share responsibly and kindly.
+
+**Prohibited content includes:**
+- Hate speech or harassment  
+- Threats or illegal content  
+- Sharing personal data of others  
+- Spam or deceptive links  
+- Copyright violations  
+
+Repeated violations may lead to suspension or permanent bans.
+
+---
+
+## 📜 Terms & Conditions
+
+Read the full Terms & Conditions here:  
+👉 https://www.tobehonest.club/Terms
+
+_Last updated: October 30, 2025_
+
+---
+
+## 📩 Contact
+
+For support or questions:  
+📧 info@chronicleofstrangers.cl
+
+---
+
+## ❤️ Final Note
+
+Sometimes, being honest — even behind a mask —  
+can be the most powerful thing you ever do.
+
+Welcome to **To Be Honest (TBH)**.
