@@ -1776,6 +1776,7 @@ packages:
 
   bad-words-next@3.1.1:
     resolution: {integrity: sha512-u0PSwEJijXlcz9X4bEXdR4rbOLZQVqMgY7QgJkpFa/VLrVrr+N7poT7pAHy2LcwOYNSBEF9Jnvk5G2sig5SYlg==}
+    deprecated: This version is deprecated. Please upgrade to 3.2.0
 
   bad-words@4.0.0:
     resolution: {integrity: sha512-fLjG/I0N3I7xhurqGnGitSRD10UeEE63a7hyXtutQDpxo4+Eal+i7veWeZxZJPNtsl6X1mUIoWPwt8gQ7NMQUw==}
@@ -2904,6 +2905,7 @@ packages:
 
   moize@6.1.6:
     resolution: {integrity: sha512-vSKdIUO61iCmTqhdoIDrqyrtp87nWZUmBPniNjO0fX49wEYmyDO4lvlnFXiGcaH1JLE/s/9HbiK4LSHsbiUY6Q==}
+    deprecated: This library has been deprecated in favor of micro-memoize, which as-of version 5 incorporates most of the functionality that this library offers at nearly half the size and better speed.
 
   mongodb-connection-string-url@3.0.2:
     resolution: {integrity: sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==}
